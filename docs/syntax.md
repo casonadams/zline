@@ -69,7 +69,24 @@ zline init
 
 ---
 
-## 4. Execution Model
+## 4. Global Style Flags
+
+You can customize prompt behavior using flags on `zline preset` or `zline style`:
+
+| Flag | Description |
+| :--- | :--- |
+| `--transient` | Automatically collapses past prompts into a minimal `❯` symbol on Enter. |
+| `--frame <none\|left\|full>` | Renders corner frame connectors (`╭─`, `╰─`). |
+| `--connect <char>` | Draws a connecting line (`·`, `─`) between left and right prompts on multiline layouts. |
+| `--connect-color <col>` | Color of the connecting line (default: `8` / grey). |
+| `--hyperlinks` | Formats directory paths and Git repositories as clickable OSC 8 hyperlinks. |
+| `--title` | Automatically updates terminal tab/window titles with current path and running commands. |
+| `--ascii` | Replaces all Nerd Font symbols and Powerline glyphs with pure ASCII fallbacks. |
+| `--no-osc` | Disables OSC 133 and OSC 7 terminal escape codes. |
+
+---
+
+## 5. Execution Model
 
 - **Compile Once**: When `zline init` runs, it tokenizes all arguments into internal arrays once during shell launch (< 0.2 ms).
 - **Zero-Cost Renders**: On every Enter keystroke, `zline` does **zero** flag parsing and **zero** subshell forks, directly invoking the pre-compiled segment handlers in microseconds.

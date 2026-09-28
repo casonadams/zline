@@ -43,3 +43,6 @@ jobs:
 
       - name: Run performance benchmarks
         run: zsh benchmark/bench.zsh
+
+      - name: Master Specification Verification (All Gates)
+        run: zsh test/verify_all.zsh

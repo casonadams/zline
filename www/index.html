@@ -74,12 +74,22 @@
     <!-- Playground Controls -->
     <div class="controls-grid">
       <div class="control-group">
-        <h3>Theme Preset</h3>
+        <h3>Theme & Frame</h3>
         <select id="presetSelect">
           <option value="powerline" selected>Powerline (Arrows)</option>
           <option value="lean">Lean (Flat & Minimal)</option>
           <option value="rainbow">Rainbow (High Contrast)</option>
           <option value="pure">Pure (Clean 2-Line)</option>
+        </select>
+        <select id="frameSelect" style="margin-top:0.4rem;">
+          <option value="none" selected>No Frame</option>
+          <option value="left">Left Frame (╭─ ╰─)</option>
+          <option value="full">Full Frame</option>
+        </select>
+        <select id="connectSelect" style="margin-top:0.4rem;">
+          <option value="none" selected>No Connect Line</option>
+          <option value="dots">Dots (····)</option>
+          <option value="line">Solid Line (───)</option>
         </select>
       </div>
 
@@ -109,7 +119,11 @@
         <label><input type="checkbox" id="optExec" checked> Exec Duration (2.4s)</label>
         <label><input type="checkbox" id="optStatus"> Command Failure (✘ 1)</label>
         <label><input type="checkbox" id="optVenv"> Python Venv (my-env)</label>
+        <label><input type="checkbox" id="optRust"> Rust Toolchain (1.78)</label>
+        <label><input type="checkbox" id="optGo"> Go Version (1.22)</label>
+        <label><input type="checkbox" id="optDocker"> Docker (desktop-linux)</label>
         <label><input type="checkbox" id="optK8s"> Kubernetes (prod-k8s)</label>
+        <label><input type="checkbox" id="optTime"> Current Time (14:30)</label>
       </div>
     </div>
 
@@ -180,6 +194,8 @@
     });
 
     const presetSelect = document.getElementById("presetSelect");
+    const frameSelect = document.getElementById("frameSelect");
+    const connectSelect = document.getElementById("connectSelect");
     const optDir = document.getElementById("optDir");
     const optAnchor = document.getElementById("optAnchor");
     const dirShorten = document.getElementById("dirShorten");
@@ -188,7 +204,11 @@
     const optExec = document.getElementById("optExec");
     const optStatus = document.getElementById("optStatus");
     const optVenv = document.getElementById("optVenv");
+    const optRust = document.getElementById("optRust");
+    const optGo = document.getElementById("optGo");
+    const optDocker = document.getElementById("optDocker");
     const optK8s = document.getElementById("optK8s");
+    const optTime = document.getElementById("optTime");
     const promptPreview = document.getElementById("promptPreview");
     const configCode = document.getElementById("configCode");
     const copyBtn = document.getElementById("copyBtn");
@@ -224,8 +244,17 @@
         if (optGit.checked) {
           leftHtml += `<span class="seg seg-git ${gitClass}">  ${gitText}</span>`;
         }
+        if (optRust.checked) {
+          rightHtml += `<span class="seg" style="background:#ef4444;color:#fff">🦀 1.78</span>`;
+        }
+        if (optGo.checked) {
+          rightHtml += `<span class="seg" style="background:#06b6d4;color:#000">🐹 1.22</span>`;
+        }
         if (optVenv.checked) {
           rightHtml += `<span class="seg seg-venv">🐍 my-env</span>`;
+        }
+        if (optDocker.checked) {
+          rightHtml += `<span class="seg" style="background:#3b82f6;color:#fff">󰡨 swarm</span>`;
         }
         if (optK8s.checked) {
           rightHtml += `<span class="seg" style="background:#06b6d4;color:#000">⎈ prod-k8s</span>`;
@@ -236,6 +265,9 @@
         if (optExec.checked) {
           rightHtml += `<span class="seg seg-exec"> 2.4s</span>`;
         }
+        if (optTime.checked) {
+          rightHtml += `<span class="seg" style="background:#1e293b;color:#fff"> 14:30</span>`;
+        }
       } else {
         if (optDir.checked) {
           leftHtml += `<span style="color:#38bdf8"> ${dirText}</span> `;
@@ -244,8 +276,17 @@
           const col = gitClass === "dirty" ? "#f59e0b" : "#10b981";
           leftHtml += `<span style="color:${col}"> ${gitText}</span> `;
         }
+        if (optRust.checked) {
+          rightHtml += `<span style="color:#ef4444">🦀 1.78</span> `;
+        }
+        if (optGo.checked) {
+          rightHtml += `<span style="color:#06b6d4">🐹 1.22</span> `;
+        }
         if (optVenv.checked) {
           rightHtml += `<span style="color:#a855f7">🐍 my-env</span> `;
+        }
+        if (optDocker.checked) {
+          rightHtml += `<span style="color:#38bdf8">󰡨 swarm</span> `;
         }
         if (optK8s.checked) {
           rightHtml += `<span style="color:#06b6d4">⎈ prod-k8s</span> `;
@@ -256,17 +297,36 @@
         if (optExec.checked) {
           rightHtml += `<span style="color:#f59e0b"> 2.4s</span> `;
         }
+        if (optTime.checked) {
+          rightHtml += `<span style="color:#94a3b8"> 14:30</span> `;
+        }
+      }
+
+      let frameTop = "";
+      let frameBot = "";
+      if (frameSelect.value === "left" || frameSelect.value === "full") {
+        frameTop = `<span style="color:#64748b">╭─ </span>`;
+        frameBot = `<span style="color:#64748b">╰─ </span>`;
+      }
+
+      let connectHtml = "";
+      if (connectSelect.value === "dots") {
+        connectHtml = `<span style="flex-grow:1;border-bottom:2px dotted #64748b;margin:0 0.75rem;"></span>`;
+      } else if (connectSelect.value === "line") {
+        connectHtml = `<span style="flex-grow:1;border-bottom:1px solid #64748b;margin:0 0.75rem;"></span>`;
       }
 
       const charClass = optStatus.checked ? "prompt-char error" : "prompt-char";
-      const charSym = preset === "pure" ? "❯" : "❯";
+      const charSym = "❯";
 
       promptPreview.innerHTML = `
         <div class="prompt-line-top">
-          <div class="prompt-left">${leftHtml}</div>
+          <div class="prompt-left">${frameTop}${leftHtml}</div>
+          ${connectHtml}
           <div class="prompt-right">${rightHtml}</div>
         </div>
         <div style="display:flex;align-items:center;">
+          ${frameBot}
           <span class="${charClass}">${charSym}</span>
           <span style="color:#f8fafc">cargo test</span>
         </div>
@@ -284,13 +344,22 @@
       leftSegs.push("prompt_char");
 
       let rightSegs = [];
+      if (optRust.checked) rightSegs.push("rust");
+      if (optGo.checked) rightSegs.push("golang");
       if (optVenv.checked) rightSegs.push("venv");
+      if (optDocker.checked) rightSegs.push("docker");
       if (optK8s.checked) rightSegs.push("k8s");
       if (optStatus.checked) rightSegs.push("'status --hide-zero'");
       if (optExec.checked) rightSegs.push("'exec_time --min 2'");
+      if (optTime.checked) rightSegs.push("time");
+
+      let flags = ["--transient"];
+      if (frameSelect.value !== "none") flags.push(`--frame ${frameSelect.value}`);
+      if (connectSelect.value === "dots") flags.push('--connect "·"');
+      if (connectSelect.value === "line") flags.push('--connect "─"');
 
       const code = `# Source zline (e.g. via zload casonadams/zline)
-zline preset ${preset} --transient
+zline preset ${preset} ${flags.join(" ")}
 
 zline_left=(
   ${leftSegs.join("\n  ")}
@@ -305,7 +374,7 @@ zline init`;
       configCode.textContent = code;
     }
 
-    [presetSelect, optDir, optAnchor, dirShorten, optGit, gitState, optExec, optStatus, optVenv, optK8s].forEach(el => {
+    [presetSelect, frameSelect, connectSelect, optDir, optAnchor, dirShorten, optGit, gitState, optExec, optStatus, optVenv, optRust, optGo, optDocker, optK8s, optTime].forEach(el => {
       el.addEventListener("change", updatePreview);
     });
 

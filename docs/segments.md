@@ -128,3 +128,143 @@ Displays active Kubernetes context from `$KUBECONFIG` or `~/.kube/config` with z
 ```zsh
 k8s --color 6
 ```
+
+---
+
+## `time` (Current Time)
+
+Displays current time formatted via `strftime` with zero subprocess forks.
+
+```zsh
+time --format "%H:%M:%S" --color 8
+```
+
+---
+
+## `jobs` (Background Jobs)
+
+Displays count of active background jobs tracked by `$jobstates`.
+
+```zsh
+jobs --color 11
+```
+
+---
+
+## `aws` (AWS Profile & Region)
+
+Displays active AWS profile and region from `$AWS_PROFILE` and `$AWS_REGION`.
+
+```zsh
+aws --color 3
+```
+
+---
+
+## `rust` (Rust Toolchain)
+
+Displays Rust toolchain version from `rust-toolchain`, `rust-toolchain.toml`, or `Cargo.toml`.
+
+```zsh
+rust --color 1
+```
+
+---
+
+## `golang` (Go Version)
+
+Displays Go version from `go.mod`.
+
+```zsh
+golang --color 6
+```
+
+---
+
+## `terraform` (Terraform Workspace)
+
+Displays active Terraform workspace from `$TF_WORKSPACE` or `.terraform/environment`.
+
+```zsh
+terraform --color 5
+```
+
+---
+
+## `docker` (Docker Context)
+
+Displays active Docker context from `$DOCKER_CONTEXT`, `$DOCKER_HOST`, or `~/.docker/config.json`.
+
+```zsh
+docker --color 4
+```
+
+---
+
+## `package` (Project Version)
+
+Displays project version extracted from `package.json` or `Cargo.toml`.
+
+```zsh
+package --color 8
+```
+
+---
+
+## `user_host` (SSH & Root Context)
+
+Displays `user@host` only during remote SSH sessions or when root (`EUID == 0`).
+
+```zsh
+user_host --color 8 --ssh-color 11 --root-color 9
+```
+
+---
+
+## `battery` (Battery Monitoring)
+
+Displays battery level and charging state (reads `/sys/class/power_supply` on Linux, `pmset` on macOS).
+
+```zsh
+battery --color 10 --warn 9
+```
+
+---
+
+## `ruby` (Ruby Version)
+
+Displays Ruby version from `.ruby-version` or `Gemfile`.
+
+```zsh
+ruby --color 1
+```
+
+---
+
+## `php` (PHP Version)
+
+Displays PHP version from `.php-version` or `composer.json`.
+
+```zsh
+php --color 5
+```
+
+---
+
+## `java` (Java Version)
+
+Displays Java version from `.java-version`, `pom.xml`, or `build.gradle`.
+
+```zsh
+java --color 3
+```
+
+---
+
+## `dotnet` (.NET Version)
+
+Displays .NET version from `global.json` or `*.csproj`.
+
+```zsh
+dotnet --color 5
+```
