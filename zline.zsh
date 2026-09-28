@@ -178,6 +178,11 @@ zline() {
       _zline_instant_save
       ;;
     bench)
+      if [[ "$1" == "--startup" ]]; then
+        shift
+        zsh "${ZLINE_DIR}/benchmark/startup.zsh" "$@"
+        return 0
+      fi
       if [[ "$1" == "--profile" ]]; then
         shift
         local -i iters="${1:-500}"
