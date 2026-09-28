@@ -90,7 +90,7 @@ _zline_worker_start() {
   local res_pipe="${_zline_worker_tmpdir}/res"
   mkfifo "$req_pipe" "$res_pipe"
 
-  ( _zline_worker_loop "$req_pipe" "$res_pipe" ) &!
+  ( _zline_worker_loop "$req_pipe" "$res_pipe" ) </dev/null >/dev/null 2>&1 &!
   _zline_worker_pid=$!
 
   exec {_zline_worker_req_fd}>"$req_pipe"
