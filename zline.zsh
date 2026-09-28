@@ -8,6 +8,11 @@ source "${ZLINE_DIR}/lib/color.zsh"
 source "${ZLINE_DIR}/lib/hooks.zsh"
 source "${ZLINE_DIR}/lib/render.zsh"
 
+for _zline_seg in "${ZLINE_DIR}"/segments/*.zsh(N); do
+  source "$_zline_seg"
+done
+unset _zline_seg
+
 zline() {
   local cmd="$1"
   shift
