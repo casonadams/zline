@@ -7,6 +7,9 @@ typeset -ga zline_right=()
 typeset -gU manpath
 manpath=("${ZLINE_DIR}/man" "${manpath[@]}")
 
+typeset -gU fpath
+fpath=("${ZLINE_DIR}/completion" "${fpath[@]}")
+
 source "${ZLINE_DIR}/lib/color.zsh"
 source "${ZLINE_DIR}/lib/hooks.zsh"
 source "${ZLINE_DIR}/lib/render.zsh"
@@ -19,6 +22,7 @@ source "${ZLINE_DIR}/lib/configure.zsh"
 source "${ZLINE_DIR}/lib/compile.zsh"
 source "${ZLINE_DIR}/lib/migrate.zsh"
 source "${ZLINE_DIR}/lib/title.zsh"
+source "${ZLINE_DIR}/lib/update.zsh"
 
 for _zline_seg in "${ZLINE_DIR}"/segments/*.zsh(N); do
   source "$_zline_seg"
@@ -146,6 +150,9 @@ zline() {
       ;;
     migrate)
       zline_migrate "$@"
+      ;;
+    update)
+      zline_update "$@"
       ;;
     *)
       print -u2 -r -- "zline: unknown command: $cmd"

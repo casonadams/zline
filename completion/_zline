@@ -1,0 +1,82 @@
+#compdef zline
+
+_zline() {
+  local -a subcommands=(
+    'preset:Load a built-in visual preset'
+    'style:Configure prompt styling and options'
+    'init:Compile segments and initialize prompt hooks'
+    'bench:Run execution latency benchmarks'
+    'doctor:Run health and environment diagnostics'
+    'configure:Run interactive configuration wizard'
+    'compile:Pre-compile scripts to Zsh wordcode (.zwc)'
+    'clean:Remove compiled .zwc wordcode files'
+    'migrate:Translate Powerlevel10k configuration to zline'
+    'update:Update zline to the latest version'
+    'version:Display zline version'
+  )
+
+  local -a presets=(
+    'powerline:Classic background blocks with Powerline arrow glyphs'
+    'lean:Modern, flat, space-separated layout'
+    'rainbow:High-contrast vivid color blocks'
+    'pure:Minimalist two-line prompt'
+  )
+
+  _arguments -C \
+    '1: :->command' \
+    '*:: :->args'
+
+  case "$state" in
+    command)
+      _describe -t commands 'zline command' subcommands
+      ;;
+    args)
+      case "$words[1]" in
+        preset)
+          _arguments \
+            '1:preset:->preset_name' \
+            '--transient[Enable transient prompt]' \
+            '--no-transient[Disable transient prompt]' \
+            '--frame[Select frame connector style]:frame:(none left full)' \
+            '--ascii[Enable pure ASCII mode]' \
+            '--nerdfont[Enable Nerd Fonts v3 mode]' \
+            '--no-osc[Disable OSC 133/7 escape sequences]' \
+            '--title[Enable terminal tab title manager]' \
+            '--no-title[Disable terminal tab title manager]'
+          case "$state" in
+            preset_name)
+              _describe -t presets 'preset' presets
+              ;;
+          esac
+          ;;
+        style)
+          _arguments \
+            '1:style:(powerline lean rainbow pure)' \
+            '--transient[Enable transient prompt]' \
+            '--frame[Select frame connector style]:frame:(none left full)' \
+            '--ascii[Enable pure ASCII mode]' \
+            '--no-osc[Disable OSC escape sequences]' \
+            '--title[Enable terminal tab title manager]'
+          ;;
+        bench)
+          _arguments '1:iterations:(100 500 1000 5000)'
+          ;;
+        configure)
+          _arguments \
+            '--style[Set preset style]:style:(powerline lean rainbow pure)' \
+            '--shorten[Set path shortening level]:level:(0 1 2)' \
+            '--anchor[Set Git anchor]:anchor:(git none)' \
+            '--transient[Enable transient prompt]' \
+            '--out[Output configuration file]:file:_files'
+          ;;
+        migrate)
+          _arguments \
+            '1:p10k_file:_files' \
+            '2:output_file:_files'
+          ;;
+      esac
+      ;;
+  esac
+}
+
+_zline "$@"

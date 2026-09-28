@@ -8,10 +8,17 @@ typeset -gi _zline_worker_seq=0
 typeset -gi _zline_worker_last_acked=0
 typeset -gi _zline_worker_pending=0
 typeset -g _zline_worker_pending_dir=""
+typeset -g _zline_git_provider="cli"
 
 _zline_worker_git_task() {
   local seq="$1"
   local dir="$2"
+
+  if [[ "$_zline_git_provider" != "cli" && $+functions[_zline_git_provider_${_zline_git_provider}] -eq 1 ]]; then
+    "_zline_git_provider_${_zline_git_provider}" "$seq" "$dir"
+    return $?
+  fi
+
   local -i staged=0 unstaged=0 untracked=0 ahead=0 behind=0 conflicts=0
   local branch=""
 
