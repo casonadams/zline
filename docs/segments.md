@@ -687,6 +687,22 @@ pulumi --color 13
 
 ---
 
+## `cmake` (CMake C/C++ Build Environment)
+
+Displays active CMake project name from `CMakeLists.txt` or `CMakePresets.json`.
+
+```zsh
+cmake --color 4
+```
+
+| Flag | Default | Description |
+| :--- | :--- | :--- |
+| `--color <col>` | `4` (blue) | Foreground text / icon color. |
+| `--bg <col>` | `4` | Background block color in Powerline/Rainbow modes. |
+| `--icon <sym>` | ` ` | CMake segment icon (`cmake:` in ASCII mode). |
+
+---
+
 ## Universal `.tool-versions` Detection
 
 Language runtime segments (`node`, `rust`, `golang`, `ruby`, `php`, `java`, `dotnet`, `venv`, `lua`, `zig`, `bun`, `deno`, `elixir`, `crystal`, `haskell`, `scala`, `kotlin`, `swift`, `dart`, `julia`, `ocaml`) automatically resolve versions defined in `.tool-versions` (used by `asdf`, `mise`, and `rtx`) in pure Zsh without executing external subshells.

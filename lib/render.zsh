@@ -58,6 +58,7 @@ typeset -gA _zline_registered_segments=(
   ocaml 1
   helm 1
   pulumi 1
+  cmake 1
   newline 1
 )
 

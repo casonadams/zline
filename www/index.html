@@ -140,6 +140,7 @@
         <label><input type="checkbox" id="optAzure"> Azure (Production)</label>
         <label><input type="checkbox" id="optHelm"> Helm (web:1.2.0)</label>
         <label><input type="checkbox" id="optPulumi"> Pulumi (infra:prod)</label>
+        <label><input type="checkbox" id="optCmake"> CMake (my_app)</label>
         <label><input type="checkbox" id="optViMode"> Vi-Mode (NOR)</label>
         <label><input type="checkbox" id="optOs"> OS (macOS)</label>
         <label><input type="checkbox" id="optContainer"> Container (docker)</label>
@@ -246,6 +247,7 @@
     const optAzure = document.getElementById("optAzure");
     const optHelm = document.getElementById("optHelm");
     const optPulumi = document.getElementById("optPulumi");
+    const optCmake = document.getElementById("optCmake");
     const optViMode = document.getElementById("optViMode");
     const optOs = document.getElementById("optOs");
     const optContainer = document.getElementById("optContainer");
@@ -352,6 +354,9 @@
         if (optPulumi.checked) {
           rightHtml += `<span class="seg" style="background:#a855f7;color:#fff"> infra:prod</span>`;
         }
+        if (optCmake.checked) {
+          rightHtml += `<span class="seg" style="background:#3b82f6;color:#fff"> my_app</span>`;
+        }
         if (optViMode.checked) {
           rightHtml += `<span class="seg" style="background:#eab308;color:#000">NOR</span>`;
         }
@@ -447,6 +452,9 @@
         if (optPulumi.checked) {
           rightHtml += `<span style="color:#c084fc"> infra:prod</span> `;
         }
+        if (optCmake.checked) {
+          rightHtml += `<span style="color:#38bdf8"> my_app</span> `;
+        }
         if (optViMode.checked) {
           rightHtml += `<span style="color:#eab308">NOR</span> `;
         }
@@ -534,6 +542,7 @@
       if (optAzure.checked) rightSegs.push("azure");
       if (optHelm.checked) rightSegs.push("helm");
       if (optPulumi.checked) rightSegs.push("pulumi");
+      if (optCmake.checked) rightSegs.push("cmake");
       if (optViMode.checked) rightSegs.push("'vi_mode --hide-insert'");
       if (optOs.checked) rightSegs.push("os");
       if (optContainer.checked) rightSegs.push("container");
@@ -563,7 +572,7 @@ zline init`;
       configCode.textContent = code;
     }
 
-    [presetSelect, frameSelect, connectSelect, optDir, optAnchor, dirShorten, optGit, gitState, optExec, optStatus, optVenv, optRust, optGo, optDocker, optK8s, optNix, optLua, optBun, optDeno, optElixir, optCrystal, optHaskell, optScala, optKotlin, optSwift, optDart, optJulia, optOcaml, optGcp, optAzure, optHelm, optPulumi, optViMode, optOs, optContainer, optShlvl, optTime].forEach(el => {
+    [presetSelect, frameSelect, connectSelect, optDir, optAnchor, dirShorten, optGit, gitState, optExec, optStatus, optVenv, optRust, optGo, optDocker, optK8s, optNix, optLua, optBun, optDeno, optElixir, optCrystal, optHaskell, optScala, optKotlin, optSwift, optDart, optJulia, optOcaml, optGcp, optAzure, optHelm, optPulumi, optCmake, optViMode, optOs, optContainer, optShlvl, optTime].forEach(el => {
       el.addEventListener("change", updatePreview);
     });
 
