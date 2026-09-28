@@ -18,6 +18,7 @@ source "${ZLINE_DIR}/lib/doctor.zsh"
 source "${ZLINE_DIR}/lib/configure.zsh"
 source "${ZLINE_DIR}/lib/compile.zsh"
 source "${ZLINE_DIR}/lib/migrate.zsh"
+source "${ZLINE_DIR}/lib/title.zsh"
 
 for _zline_seg in "${ZLINE_DIR}"/segments/*.zsh(N); do
   source "$_zline_seg"
@@ -48,6 +49,8 @@ zline() {
           --ascii) _zline_mode="ascii" ;;
           --nerdfont) _zline_mode="nerdfont" ;;
           --frame) shift; _zline_frame="$1" ;;
+          --title) _zline_title_enabled=1 ;;
+          --no-title) _zline_title_enabled=0 ;;
         esac
         shift
       done
@@ -83,6 +86,16 @@ zline() {
             ;;
           --nerdfont)
             _zline_mode="nerdfont"
+            ;;
+          --title)
+            _zline_title_enabled=1
+            ;;
+          --no-title)
+            _zline_title_enabled=0
+            ;;
+          --title-format)
+            shift
+            _zline_title_format="$1"
             ;;
           --frame)
             shift

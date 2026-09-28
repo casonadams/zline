@@ -126,6 +126,30 @@ Active Node.js version from \fI.node-version\fR, \fI.nvmrc\fR, or \fB$NODE_VERSI
 .TP
 .B k8s
 Active Kubernetes context extracted from \fB$KUBECONFIG\fR or \fI~/.kube/config\fR.
+.TP
+.B time
+Formatted current timestamp without subprocess forks.
+.TP
+.B jobs
+Count of running background jobs from \fB$jobstates\fR.
+.TP
+.B aws
+Active AWS profile and region.
+.TP
+.B rust
+Active Rust toolchain or version from \fIrust-toolchain\fR or \fICargo.toml\fR.
+.TP
+.B golang
+Active Go version from \fIgo.mod\fR.
+.TP
+.B terraform
+Active Terraform workspace from \fB$TF_WORKSPACE\fR or \fI.terraform/environment\fR.
+.TP
+.B docker
+Active Docker context from \fB$DOCKER_CONTEXT\fR or \fI~/.docker/config.json\fR.
+.TP
+.B package
+Project version from \fIpackage.json\fR or \fICargo.toml\fR.
 
 .SH COLOR PALETTE
 \fBzline\fR standardizes on Base16 / Term16 colors (0\(en15) to guarantee seamless harmony with any terminal color scheme:
@@ -174,6 +198,21 @@ Runs execution latency benchmark over \fIiterations\fR (default: 1000).
 .TP
 \fBzline version\fR
 Prints active version.
+.TP
+\fBzline doctor\fR
+Runs comprehensive health and environment diagnostics.
+.TP
+\fBzline configure\fR [\fIoptions...\fR]
+Interactive setup wizard and config generator.
+.TP
+\fBzline compile\fR
+Pre-compiles scripts to memory-mapped Zsh wordcode (.zwc).
+.TP
+\fBzline clean\fR
+Removes compiled .zwc wordcode files.
+.TP
+\fBzline migrate\fR [\fIp10k_file\fR] [\fIoutput_file\fR]
+Automatically translates Powerlevel10k configuration to zline.
 
 .SH AUTHORS
 Cason Adams <https://github.com/casonadams/zline>
