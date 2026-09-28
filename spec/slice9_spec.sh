@@ -21,12 +21,16 @@ Describe 'zline extended segments & compilation'
 
   Describe 'frame connectors'
     It 'renders top and bottom frame glyphs'
-      _zline_frame="left"
-      zline preset powerline --no-osc
-      zline init
+      _test_frame() {
+        _zline_frame="left"
+        zline preset powerline --no-osc
+        zline init
+        _zline_hooks_uninstall
+        _zline_frame="none"
+      }
+      When call _test_frame
       The variable PROMPT should include "╭─"
       The variable PROMPT should include "╰─"
-      _zline_frame="none"
     End
   End
 End
