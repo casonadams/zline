@@ -29,8 +29,15 @@ typeset -gA _zline_registered_segments=(
   package 1
   user_host 1
   battery 1
+  ruby 1
+  php 1
+  java 1
+  dotnet 1
   newline 1
 )
+
+typeset -g _zline_connect_char=""
+typeset -g _zline_connect_color="8"
 
 _zline_visual_len() {
   local str="$1"
@@ -335,12 +342,6 @@ zline_render() {
   zline_hook run pre_render
   _zline_render_left
   local left_body="$REPLY"
-  _zline_osc_prompt_prefix
-  local osc_pre="$REPLY"
-  _zline_osc_prompt_suffix
-  local osc_suf="$REPLY"
-  PROMPT="${osc_pre}${left_body}${osc_suf}"
-
   _zline_render_right
   local right_body="$REPLY"
 
@@ -351,10 +352,29 @@ zline_render() {
     _zline_visual_len "$right_body"
     local -i right_len=$REPLY
 
-    if (( left_len + right_len + 2 >= COLUMNS )); then
+    if [[ -n "$_zline_connect_char" && "$left_body" == *$'\n'* ]]; then
+      local -i rem=$(( COLUMNS - left_len - right_len - 2 ))
+      if (( rem > 2 )); then
+        local -a fill_chars=()
+        local -i fi
+        for (( fi = 1; fi <= rem; fi++ )); do
+          fill_chars+="$_zline_connect_char"
+        done
+        local filler="${(j::)fill_chars}"
+        local left_bot="${left_body#*$'\n'}"
+        left_body="${left_top} %F{${_zline_connect_color}}${filler}%f ${right_body}"$'\n'"${left_bot}"
+        right_body=""
+      fi
+    elif (( left_len + right_len + 2 >= COLUMNS )); then
       right_body=""
     fi
   fi
+
+  _zline_osc_prompt_prefix
+  local osc_pre="$REPLY"
+  _zline_osc_prompt_suffix
+  local osc_suf="$REPLY"
+  PROMPT="${osc_pre}${left_body}${osc_suf}"
 
   RPROMPT="$right_body"
   zline_hook run post_render

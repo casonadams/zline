@@ -70,7 +70,7 @@ zline_segment_git() {
     -clean:=opts -dirty:=opts -ahead:=opts -color:=opts \
     -fg:=opts -bg:=opts -icon:=opts
 
-  _zline_find_git_root "$PWD"
+  _zline_find_git_root "$PWD" || true
   local git_root="$REPLY"
   if [[ -z "$git_root" ]]; then
     _zline_ret_content=""

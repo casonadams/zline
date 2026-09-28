@@ -39,7 +39,7 @@ _zline_dir_format_path() {
 
   local git_rel=""
   if [[ "$anchor" == "git" ]]; then
-    _zline_find_git_root "$raw"
+    _zline_find_git_root "$raw" || true
     if [[ -n "$REPLY" ]]; then
       git_rel="${REPLY/#$HOME/~}"
     fi

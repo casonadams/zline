@@ -57,6 +57,8 @@ zline() {
           --no-title) _zline_title_enabled=0 ;;
           --hyperlinks) _zline_osc_hyperlinks=1 ;;
           --no-hyperlinks) _zline_osc_hyperlinks=0 ;;
+          --connect) shift; _zline_connect_char="$1" ;;
+          --connect-color) shift; _zline_connect_color="$1" ;;
         esac
         shift
       done
@@ -112,6 +114,14 @@ zline() {
           --frame)
             shift
             _zline_frame="$1"
+            ;;
+          --connect)
+            shift
+            _zline_connect_char="$1"
+            ;;
+          --connect-color)
+            shift
+            _zline_connect_color="$1"
             ;;
         esac
         shift
