@@ -311,7 +311,12 @@ _zline_render_right() {
 zline_render() {
   zline_hook run pre_render
   _zline_render_left
-  PROMPT="$REPLY"
+  local left_body="$REPLY"
+  _zline_osc_prompt_prefix
+  local osc_pre="$REPLY"
+  _zline_osc_prompt_suffix
+  local osc_suf="$REPLY"
+  PROMPT="${osc_pre}${left_body}${osc_suf}"
   _zline_render_right
   RPROMPT="$REPLY"
   zline_hook run post_render

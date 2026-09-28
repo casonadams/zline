@@ -7,6 +7,7 @@ SCRIPT_DIR="${${(%):-%x}:A:h}"
 REPO_ROOT="${SCRIPT_DIR:h}"
 
 source "${REPO_ROOT}/zline.zsh"
+_zline_osc=0
 
 typeset -i passed=0
 typeset -i failed=0

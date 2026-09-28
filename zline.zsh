@@ -8,6 +8,9 @@ source "${ZLINE_DIR}/lib/color.zsh"
 source "${ZLINE_DIR}/lib/hooks.zsh"
 source "${ZLINE_DIR}/lib/render.zsh"
 source "${ZLINE_DIR}/lib/worker.zsh"
+source "${ZLINE_DIR}/lib/osc.zsh"
+source "${ZLINE_DIR}/lib/transient.zsh"
+source "${ZLINE_DIR}/lib/instant.zsh"
 
 for _zline_seg in "${ZLINE_DIR}"/segments/*.zsh(N); do
   source "$_zline_seg"
@@ -27,6 +30,23 @@ zline() {
         case "$1" in
           --transient)
             _zline_transient=1
+            ;;
+          --no-transient)
+            _zline_transient=0
+            ;;
+          --no-osc)
+            _zline_osc=0
+            ;;
+          --no-instant)
+            _zline_instant_enabled=0
+            ;;
+          --transient-symbol)
+            shift
+            _zline_transient_symbol="$1"
+            ;;
+          --transient-color)
+            shift
+            _zline_transient_color="$1"
             ;;
           --ascii)
             _zline_mode="ascii"
@@ -48,7 +68,10 @@ zline() {
       zline_compile
       _zline_hooks_install
       _zline_worker_start
+      _zline_instant_restore
+      _zline_transient_install
       zline_render
+      _zline_instant_save
       ;;
     bench)
       local -i iters="${1:-1000}"
