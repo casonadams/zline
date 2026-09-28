@@ -45,6 +45,9 @@ typeset -gA _zline_registered_segments=(
   gcp 1
   azure 1
   elixir 1
+  os 1
+  container 1
+  shlvl 1
   newline 1
 )
 

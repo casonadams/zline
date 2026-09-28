@@ -48,6 +48,9 @@ typeset -a hot_files=(
   "${REPO_ROOT}/segments/gcp.zsh"
   "${REPO_ROOT}/segments/azure.zsh"
   "${REPO_ROOT}/segments/elixir.zsh"
+  "${REPO_ROOT}/segments/os.zsh"
+  "${REPO_ROOT}/segments/container.zsh"
+  "${REPO_ROOT}/segments/shlvl.zsh"
 )
 
 typeset -i subshell_count=0

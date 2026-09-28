@@ -477,6 +477,56 @@ elixir --color 5
 
 ---
 
+## `os` (Operating System / Distro Badge)
+
+Displays host operating system or Linux distribution icon and optional name.
+
+```zsh
+os --text
+```
+
+| Flag | Default | Description |
+| :--- | :--- | :--- |
+| `--text` | `false` | Displays OS or distribution name alongside icon. |
+| `--symbol <sym>` | Auto-detected | Custom OS symbol override. |
+| `--color <col>` | Auto-detected | Custom foreground color override. |
+| `--bg <col>` | Auto-detected | Background block color in Powerline/Rainbow modes. |
+
+---
+
+## `container` (Container & Sandbox Indicator)
+
+Detects containerized environments (Docker, Podman, WSL, Flatpak, Snap).
+
+```zsh
+container --color 14
+```
+
+| Flag | Default | Description |
+| :--- | :--- | :--- |
+| `--color <col>` | `14` (cyan) | Foreground text / icon color. |
+| `--bg <col>` | `14` | Background block color in Powerline/Rainbow modes. |
+| `--icon <sym>` | `⬢ ` | Container segment icon (`box:` in ASCII mode). |
+
+---
+
+## `shlvl` (Shell Nesting Depth)
+
+Displays a visual warning when shell nesting depth exceeds a threshold.
+
+```zsh
+shlvl --threshold 2 --warn 9
+```
+
+| Flag | Default | Description |
+| :--- | :--- | :--- |
+| `--threshold <int>` | `2` | Minimum `$SHLVL` required to display segment. |
+| `--color <col>` | `11` (yellow) | Color applied at initial threshold. |
+| `--warn <col>` | `9` (red) | Color applied at deep nesting levels (`>= threshold + 1`). |
+| `--icon <sym>` | `↕ ` | Shell depth icon (`shlvl:` in ASCII mode). |
+
+---
+
 ## Universal `.tool-versions` Detection
 
 Language runtime segments (`node`, `rust`, `golang`, `ruby`, `php`, `java`, `dotnet`, `venv`, `lua`, `zig`, `bun`, `deno`, `elixir`) automatically resolve versions defined in `.tool-versions` (used by `asdf`, `mise`, and `rtx`) in pure Zsh without executing external subshells.

@@ -131,6 +131,9 @@
         <label><input type="checkbox" id="optGcp"> GCP (my-project)</label>
         <label><input type="checkbox" id="optAzure"> Azure (Production)</label>
         <label><input type="checkbox" id="optViMode"> Vi-Mode (NOR)</label>
+        <label><input type="checkbox" id="optOs"> OS (macOS)</label>
+        <label><input type="checkbox" id="optContainer"> Container (docker)</label>
+        <label><input type="checkbox" id="optShlvl"> Shell Depth (↕ 2)</label>
         <label><input type="checkbox" id="optTime"> Current Time (14:30)</label>
       </div>
     </div>
@@ -224,6 +227,9 @@
     const optGcp = document.getElementById("optGcp");
     const optAzure = document.getElementById("optAzure");
     const optViMode = document.getElementById("optViMode");
+    const optOs = document.getElementById("optOs");
+    const optContainer = document.getElementById("optContainer");
+    const optShlvl = document.getElementById("optShlvl");
     const optTime = document.getElementById("optTime");
     const promptPreview = document.getElementById("promptPreview");
     const configCode = document.getElementById("configCode");
@@ -299,6 +305,15 @@
         if (optViMode.checked) {
           rightHtml += `<span class="seg" style="background:#eab308;color:#000">NOR</span>`;
         }
+        if (optOs.checked) {
+          rightHtml += `<span class="seg" style="background:#f1f5f9;color:#000"></span>`;
+        }
+        if (optContainer.checked) {
+          rightHtml += `<span class="seg" style="background:#06b6d4;color:#000">⬢ docker</span>`;
+        }
+        if (optShlvl.checked) {
+          rightHtml += `<span class="seg" style="background:#eab308;color:#000">↕ 2</span>`;
+        }
         if (optStatus.checked) {
           rightHtml += `<span class="seg seg-status">✘ 1</span>`;
         }
@@ -354,6 +369,15 @@
         }
         if (optViMode.checked) {
           rightHtml += `<span style="color:#eab308">NOR</span> `;
+        }
+        if (optOs.checked) {
+          rightHtml += `<span style="color:#f8fafc"></span> `;
+        }
+        if (optContainer.checked) {
+          rightHtml += `<span style="color:#06b6d4">⬢ docker</span> `;
+        }
+        if (optShlvl.checked) {
+          rightHtml += `<span style="color:#eab308">↕ 2</span> `;
         }
         if (optStatus.checked) {
           rightHtml += `<span style="color:#ef4444">✘ 1</span> `;
@@ -421,6 +445,9 @@
       if (optGcp.checked) rightSegs.push("gcp");
       if (optAzure.checked) rightSegs.push("azure");
       if (optViMode.checked) rightSegs.push("'vi_mode --hide-insert'");
+      if (optOs.checked) rightSegs.push("os");
+      if (optContainer.checked) rightSegs.push("container");
+      if (optShlvl.checked) rightSegs.push("shlvl");
       if (optStatus.checked) rightSegs.push("'status --hide-zero'");
       if (optExec.checked) rightSegs.push("'exec_time --min 2'");
       if (optTime.checked) rightSegs.push("time");
@@ -446,7 +473,7 @@ zline init`;
       configCode.textContent = code;
     }
 
-    [presetSelect, frameSelect, connectSelect, optDir, optAnchor, dirShorten, optGit, gitState, optExec, optStatus, optVenv, optRust, optGo, optDocker, optK8s, optNix, optLua, optBun, optDeno, optElixir, optGcp, optAzure, optViMode, optTime].forEach(el => {
+    [presetSelect, frameSelect, connectSelect, optDir, optAnchor, dirShorten, optGit, gitState, optExec, optStatus, optVenv, optRust, optGo, optDocker, optK8s, optNix, optLua, optBun, optDeno, optElixir, optGcp, optAzure, optViMode, optOs, optContainer, optShlvl, optTime].forEach(el => {
       el.addEventListener("change", updatePreview);
     });
 
