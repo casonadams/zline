@@ -176,6 +176,19 @@ _zline_render_left() {
   local count=${#_zline_compiled_left_names}
   local -i i
 
+  local frame_top=""
+  local frame_bot=""
+  if [[ "$_zline_frame" == "left" || "$_zline_frame" == "full" ]]; then
+    if [[ "$_zline_mode" == "ascii" ]]; then
+      frame_top="+- "
+      frame_bot="+- "
+    else
+      frame_top="%F{8}"$'\u256D\u2500'"%f "
+      frame_bot="%F{8}"$'\u2570\u2500'"%f "
+    fi
+    out+="$frame_top"
+  fi
+
   for (( i = 1; i <= count; i++ )); do
     local name="${_zline_compiled_left_names[i]}"
     local raw_args="${_zline_compiled_left_args[i]}"
@@ -191,6 +204,7 @@ _zline_render_left() {
         fi
       fi
       out+=$'\n'
+      [[ -n "$frame_bot" ]] && out+="$frame_bot"
       continue
     fi
 
@@ -317,7 +331,22 @@ zline_render() {
   _zline_osc_prompt_suffix
   local osc_suf="$REPLY"
   PROMPT="${osc_pre}${left_body}${osc_suf}"
+
   _zline_render_right
-  RPROMPT="$REPLY"
+  local right_body="$REPLY"
+
+  if [[ -n "$right_body" && -n "$COLUMNS" && $COLUMNS -gt 0 ]]; then
+    local left_top="${left_body%%$'\n'*}"
+    _zline_visual_len "$left_top"
+    local -i left_len=$REPLY
+    _zline_visual_len "$right_body"
+    local -i right_len=$REPLY
+
+    if (( left_len + right_len + 2 >= COLUMNS )); then
+      right_body=""
+    fi
+  fi
+
+  RPROMPT="$right_body"
   zline_hook run post_render
 }
