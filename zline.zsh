@@ -4,6 +4,9 @@ typeset -g ZLINE_DIR="${${(%):-%x}:A:h}"
 typeset -ga zline_left=()
 typeset -ga zline_right=()
 
+typeset -gU manpath
+manpath=("${ZLINE_DIR}/man" "${manpath[@]}")
+
 source "${ZLINE_DIR}/lib/color.zsh"
 source "${ZLINE_DIR}/lib/hooks.zsh"
 source "${ZLINE_DIR}/lib/render.zsh"

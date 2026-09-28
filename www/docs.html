@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Documentation · zline</title>
+  <meta name="description" content="Complete documentation and user guides for zline prompt engine.">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="stylesheet" href="css/style.css">
+  <script>
+    (function() {
+      const saved = localStorage.getItem("zline:theme");
+      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      document.documentElement.dataset.theme = saved || (prefersDark ? "dark" : "light");
+    })();
+  </script>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container navbar-inner">
+      <a href="index.html" class="brand">
+        <svg class="brand-icon" viewBox="0 0 100 100" fill="none">
+          <rect width="100" height="100" rx="22" fill="#0f172a"/>
+          <path d="M24 30H76L34 70H76" stroke="#38bdf8" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M46 50L64 50" stroke="#10b981" stroke-width="8" stroke-linecap="round"/>
+          <path d="M68 62L78 70L68 78" stroke="#f59e0b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span>zline</span>
+      </a>
+
+      <div class="nav-actions">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="https://github.com/casonadams/zline" target="_blank" rel="noopener" class="btn-icon" aria-label="GitHub">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+        </a>
+        <button id="themeToggle" class="btn-icon" aria-label="Toggle Theme">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container" style="padding: 3rem 1.5rem; max-width: 900px;">
+    <h1 style="font-size: 2.5rem; margin-bottom: 1rem;">zline Documentation</h1>
+    <p style="color: var(--text-secondary); margin-bottom: 2rem;">Fast, modern, and flexible pure-Zsh prompt engine.</p>
+
+    <div class="feature-card" style="margin-bottom: 2rem;">
+      <h2 style="margin-bottom: 0.75rem;">Installation</h2>
+      <p style="margin-bottom: 1rem;">With <strong>zload</strong> (recommended):</p>
+      <div class="code-box" style="margin-bottom: 1rem;">
+        <div class="code-content">plugins=(
+  casonadams/zline
+)
+zload "${plugins[@]}"</div>
+      </div>
+      <p style="margin-bottom: 1rem;">Or manual git clone:</p>
+      <div class="code-box">
+        <div class="code-content">git clone https://github.com/casonadams/zline.git ~/.zline
+echo 'source ~/.zline/zline.zsh' >> ~/.zshrc
+echo 'zline preset powerline --transient' >> ~/.zshrc
+echo 'zline init' >> ~/.zshrc</div>
+      </div>
+    </div>
+
+    <div class="feature-card" style="margin-bottom: 2rem;">
+      <h2 style="margin-bottom: 0.75rem;">Command Line Interface</h2>
+      <ul style="margin-left: 1.5rem; color: var(--text-secondary); line-height: 1.8;">
+        <li><code style="color:var(--accent)">zline preset &lt;name&gt;</code>: Load built-in preset (<code style="color:var(--text-primary)">powerline</code>, <code style="color:var(--text-primary)">lean</code>, <code style="color:var(--text-primary)">rainbow</code>, <code style="color:var(--text-primary)">pure</code>).</li>
+        <li><code style="color:var(--accent)">zline style &lt;name&gt;</code>: Set prompt styling flags (<code style="color:var(--text-primary)">--transient</code>, <code style="color:var(--text-primary)">--ascii</code>, <code style="color:var(--text-primary)">--no-osc</code>).</li>
+        <li><code style="color:var(--accent)">zline init</code>: Pre-compile segments and attach lifecycle hooks.</li>
+        <li><code style="color:var(--accent)">zline bench [iters]</code>: Run execution latency benchmark (< 1.5 ms assertion).</li>
+        <li><code style="color:var(--accent)">zline version</code>: Print current version.</li>
+      </ul>
+    </div>
+
+    <div class="feature-card">
+      <h2 style="margin-bottom: 0.75rem;">Built-in Segments</h2>
+      <ul style="margin-left: 1.5rem; color: var(--text-secondary); line-height: 1.8;">
+        <li><strong>dir</strong>: Path shortening (<code style="color:var(--accent)">--shorten 1</code>), Git root anchor (<code style="color:var(--accent)">--anchor git</code>), path aliases (<code style="color:var(--accent)">--alias github.com=gith</code>).</li>
+        <li><strong>git</strong>: Instant branch read (< 0.1 ms) + async dirty counts (<code style="color:var(--accent)">--clean 2 --dirty 3</code>).</li>
+        <li><strong>status</strong>: Exit code failure badge (<code style="color:var(--accent)">--hide-zero</code>).</li>
+        <li><strong>exec_time</strong>: Duration thresholding (<code style="color:var(--accent)">--min 2</code>).</li>
+        <li><strong>prompt_char</strong>: Dynamic symbol with error and Vi-mode tracking (<code style="color:var(--accent)">--symbol '❯'</code>).</li>
+        <li><strong>venv</strong>: Virtualenv, Conda, and Poetry environment detection.</li>
+        <li><strong>node</strong>: Node.js version detection from <code style="color:var(--text-primary)">.node-version</code> or <code style="color:var(--text-primary)">.nvmrc</code>.</li>
+        <li><strong>k8s</strong>: Current Kubernetes context from <code style="color:var(--text-primary)">~/.kube/config</code>.</li>
+      </ul>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>Released under the MIT License · Built with pure Zsh by Cason Adams</p>
+    </div>
+  </footer>
+
+  <script>
+    const themeToggle = document.getElementById("themeToggle");
+    themeToggle.addEventListener("click", () => {
+      const current = document.documentElement.dataset.theme;
+      const next = current === "dark" ? "light" : "dark";
+      document.documentElement.dataset.theme = next;
+      localStorage.setItem("zline:theme", next);
+    });
+  </script>
+</body>
+</html>

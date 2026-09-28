@@ -1,0 +1,179 @@
+.TH ZLINE 1 "September 2026" "zline 0.1.0" "User Commands"
+.SH NAME
+zline \- fast, modern, and flexible pure-Zsh prompt engine
+.SH SYNOPSIS
+.B zline
+\fICOMMAND\fR [\fIARGS\fR...]
+.br
+.B zline preset
+\fIPRESET\fR [\fIFLAGS\fR...]
+.br
+.B zline style
+\fISTYLE\fR [\fIFLAGS\fR...]
+.br
+.B zline init
+.SH DESCRIPTION
+\fBzline\fR is an ultra-fast, modern, and flexible pure-Zsh prompt engine designed as a streamlined replacement for Powerlevel10k.
+It delivers sub-millisecond synchronous rendering (< 0.7 ms) with zero subprocess forks on the critical prompt path,
+relying exclusively on native Zsh parameter expansions, built-in modules, and an event-driven architecture.
+.PP
+Heavy background operations (such as full Git working tree status) are computed asynchronously
+via non-blocking pipes and ZLE file descriptor handlers (\fBzle -F\fR), ensuring the interactive shell
+never stutters or drops user keystrokes.
+
+.SH CONFIGURATION
+Configuration in \fBzline\fR is declarative and concise, avoiding the need for hundreds of global environment variables.
+Prompts are defined using standard Zsh arrays:
+.RS
+.nf
+# Set visual preset
+zline preset powerline --transient
+
+# Define left prompt segments
+zline_left=(
+  'dir --shorten 1 --alias github.com=gith --anchor git'
+  'git --clean 2 --dirty 3'
+  newline
+  prompt_char
+)
+
+# Define right prompt segments
+zline_right=(
+  'status --hide-zero'
+  'exec_time --min 2'
+)
+
+# Initialize prompt engine
+zline init
+.fi
+.RE
+
+.SH PRESETS
+\fBzline\fR includes four built-in presets:
+.TP
+.B powerline
+Classic multi-colored background blocks joined by Powerline arrow glyphs (U+E0B0, U+E0B2).
+.TP
+.B lean
+Modern, flat, space-separated layout with crisp foreground colors.
+.TP
+.B rainbow
+High-contrast, vivid powerline blocks designed for rapid visual parsing.
+.TP
+.B pure
+Minimalist two-line prompt inspired by Sindre Sorhus's Pure prompt.
+
+.SH BUILT-IN SEGMENTS
+.TP
+.B dir
+Displays current working directory.
+.RS
+.IP "\fB--shorten\fR \fIN\fR"
+Shortens intermediate directory components to \fIN\fR characters (e.g. \fB--shorten 1\fR produces \fB~/s/g/c/zline\fR).
+.IP "\fB--keep-last\fR \fIN\fR"
+Number of trailing directory components to keep full (default: 1).
+.IP "\fB--alias\fR \fIpattern=replacement\fR"
+Substitutes matching path components (e.g. \fB--alias github.com=gith\fR).
+.IP "\fB--anchor\fR \fIgit\fR"
+Anchors at Git repository root, shortening paths above the repository but keeping the repository name full.
+.IP "\fB--format\fR \fIfunc_name\fR"
+Delegates path formatting to a custom Zsh function setting \fB$REPLY\fR.
+.RE
+.TP
+.B git
+Fast Git status segment.
+.RS
+.IP "\fB--clean\fR \fIcolor\fR"
+Color used when working tree is clean (default: 2 / green).
+.IP "\fB--dirty\fR \fIcolor\fR"
+Color used when working tree has changes (default: 3 / yellow).
+.IP "\fB--ahead\fR \fIcolor\fR"
+Color used when branch is ahead of remote (default: 12 / bright-blue).
+.RE
+.TP
+.B status
+Command exit status indicator.
+.RS
+.IP "\fB--hide-zero\fR"
+Hides status badge when command succeeded (exit code 0).
+.IP "\fB--show-zero\fR"
+Displays 0 in green when command succeeded.
+.RE
+.TP
+.B exec_time
+Execution duration for previous command.
+.RS
+.IP "\fB--min\fR \fIN\fR"
+Minimum duration in seconds before displaying execution time (default: 2).
+.RE
+.TP
+.B prompt_char
+Active prompt symbol.
+.RS
+.IP "\fB--symbol\fR \fIsym\fR"
+Character to display (default: ❯).
+.IP "\fB--root\fR \fIsym\fR"
+Character to display for root user (default: #).
+.IP "\fB--error\fR \fIcolor\fR"
+Color to display when previous command failed (default: 9 / bright-red).
+.RE
+.TP
+.B venv
+Python virtualenv, Conda, or Poetry active environment.
+.TP
+.B node
+Active Node.js version from \fI.node-version\fR, \fI.nvmrc\fR, or \fB$NODE_VERSION\fR.
+.TP
+.B k8s
+Active Kubernetes context extracted from \fB$KUBECONFIG\fR or \fI~/.kube/config\fR.
+
+.SH COLOR PALETTE
+\fBzline\fR standardizes on Base16 / Term16 colors (0\(en15) to guarantee seamless harmony with any terminal color scheme:
+.IP "0 / 8"
+black / bright-black (grey)
+.IP "1 / 9"
+red / bright-red (errors, root)
+.IP "2 / 10"
+green / bright-green (clean git, success)
+.IP "3 / 11"
+yellow / bright-yellow (dirty git, warnings)
+.IP "4 / 12"
+blue / bright-blue (directory, branch)
+.IP "5 / 13"
+magenta / bright-magenta (language runtimes)
+.IP "6 / 14"
+cyan / bright-cyan (cloud environments)
+.IP "7 / 15"
+white / bright-white (primary prompt symbol)
+
+.SH MODERN TERMINAL PROTOCOLS
+\fBzline\fR natively integrates modern terminal standards:
+.TP
+.B OSC 133
+Semantic shell integration markings (prompt start, command start, command output, return code) for Ghostty, Kitty, WezTerm, iTerm2, and VS Code.
+.TP
+.B OSC 7
+Current working directory reporting for automatic directory inheritance across tabs and splits.
+.TP
+.B OSC 8
+Terminal hyperlinks for clickable file paths and Git repositories.
+
+.SH CLI COMMANDS
+.TP
+\fBzline preset\fR \fIname\fR [\fIoptions...\fR]
+Loads a preset theme configuration.
+.TP
+\fBzline style\fR \fIname\fR [\fIoptions...\fR]
+Configures visual styling (\fB--transient\fR, \fB--ascii\fR, \fB--no-osc\fR).
+.TP
+\fBzline init\fR
+Compiles segments and initializes hooks.
+.TP
+\fBzline bench\fR [\fIiterations\fR]
+Runs execution latency benchmark over \fIiterations\fR (default: 1000).
+.TP
+\fBzline version\fR
+Prints active version.
+
+.SH AUTHORS
+Cason Adams <https://github.com/casonadams/zline>
