@@ -22,6 +22,7 @@ source "${ZLINE_DIR}/lib/configure.zsh"
 source "${ZLINE_DIR}/lib/compile.zsh"
 source "${ZLINE_DIR}/lib/migrate.zsh"
 source "${ZLINE_DIR}/lib/title.zsh"
+source "${ZLINE_DIR}/lib/notify.zsh"
 source "${ZLINE_DIR}/lib/update.zsh"
 source "${ZLINE_DIR}/lib/compare.zsh"
 
@@ -85,6 +86,14 @@ zline() {
           --frame) shift; _zline_frame="$1" ;;
           --title) _zline_title_enabled=1 ;;
           --no-title) _zline_title_enabled=0 ;;
+          --notify)
+            _zline_notify_enabled=1
+            if [[ -n "$2" && "$2" == <-> ]]; then
+              shift
+              _zline_notify_threshold="$1"
+            fi
+            ;;
+          --no-notify) _zline_notify_enabled=0 ;;
           --hyperlinks) _zline_osc_hyperlinks=1 ;;
           --no-hyperlinks) _zline_osc_hyperlinks=0 ;;
           --connect) shift; _zline_connect_char="$1" ;;
@@ -136,6 +145,16 @@ zline() {
             ;;
           --no-title)
             _zline_title_enabled=0
+            ;;
+          --notify)
+            _zline_notify_enabled=1
+            if [[ -n "$2" && "$2" == <-> ]]; then
+              shift
+              _zline_notify_threshold="$1"
+            fi
+            ;;
+          --no-notify)
+            _zline_notify_enabled=0
             ;;
           --title-format)
             shift
@@ -248,6 +267,9 @@ zline() {
       ;;
     update)
       zline_update "$@"
+      ;;
+    notify)
+      _zline_notify_cmd "$@"
       ;;
     *)
       print -u2 -r -- "zline: unknown command: $cmd"

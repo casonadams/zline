@@ -13,6 +13,7 @@ _zline() {
     'migrate:Translate Powerlevel10k configuration to zline'
     'compare:Run prompt architecture comparison benchmark'
     'update:Update zline to the latest version'
+    'notify:Configure long-running command desktop notifications'
     'version:Display zline version'
   )
 
@@ -50,7 +51,9 @@ _zline() {
             '--nerdfont[Enable Nerd Fonts v3 mode]' \
             '--no-osc[Disable OSC 133/7 escape sequences]' \
             '--title[Enable terminal tab title manager]' \
-            '--no-title[Disable terminal tab title manager]'
+            '--no-title[Disable terminal tab title manager]' \
+            '--notify[Enable long-running command desktop notifications]' \
+            '--no-notify[Disable desktop notifications]'
           case "$state" in
             preset_name)
               _describe -t presets 'preset' presets
@@ -64,7 +67,9 @@ _zline() {
             '--frame[Select frame connector style]:frame:(none left full)' \
             '--ascii[Enable pure ASCII mode]' \
             '--no-osc[Disable OSC escape sequences]' \
-            '--title[Enable terminal tab title manager]'
+            '--title[Enable terminal tab title manager]' \
+            '--notify[Enable long-running command desktop notifications]' \
+            '--no-notify[Disable desktop notifications]'
           ;;
         bench)
           _arguments '1:iterations:(100 500 1000 5000)'
@@ -81,6 +86,11 @@ _zline() {
           _arguments \
             '1:p10k_file:_files' \
             '2:output_file:_files'
+          ;;
+        notify)
+          _arguments \
+            '1:action:(on off threshold status)' \
+            '2:threshold:(5 10 15 30 60)'
           ;;
       esac
       ;;

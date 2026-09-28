@@ -39,6 +39,8 @@ typeset -gA _zline_registered_segments=(
   direnv 1
   lua 1
   zig 1
+  bun 1
+  deno 1
   newline 1
 )
 

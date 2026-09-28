@@ -377,6 +377,38 @@ zig --color 3
 
 ---
 
+## `bun` (Bun Runtime)
+
+Displays active Bun runtime version from `.tool-versions` or detects `bun.lockb` / `bunfig.toml`.
+
+```zsh
+bun --color 15
+```
+
+| Flag | Default | Description |
+| :--- | :--- | :--- |
+| `--color <col>` | `15` (white) | Foreground text / icon color. |
+| `--bg <col>` | `15` | Background block color in Powerline/Rainbow modes. |
+| `--icon <sym>` | `🥟 ` | Bun segment icon (`bun:` in ASCII mode). |
+
+---
+
+## `deno` (Deno Runtime)
+
+Displays active Deno runtime version from `.tool-versions` or detects `deno.json` / `deno.lock`.
+
+```zsh
+deno --color 10
+```
+
+| Flag | Default | Description |
+| :--- | :--- | :--- |
+| `--color <col>` | `10` (green) | Foreground text / icon color. |
+| `--bg <col>` | `10` | Background block color in Powerline/Rainbow modes. |
+| `--icon <sym>` | `🦕 ` | Deno segment icon (`deno:` in ASCII mode). |
+
+---
+
 ## Universal `.tool-versions` Detection
 
-Language runtime segments (`node`, `rust`, `golang`, `ruby`, `php`, `java`, `dotnet`, `venv`, `lua`, `zig`) automatically resolve versions defined in `.tool-versions` (used by `asdf`, `mise`, and `rtx`) in pure Zsh without executing external subshells.
+Language runtime segments (`node`, `rust`, `golang`, `ruby`, `php`, `java`, `dotnet`, `venv`, `lua`, `zig`, `bun`, `deno`) automatically resolve versions defined in `.tool-versions` (used by `asdf`, `mise`, and `rtx`) in pure Zsh without executing external subshells.

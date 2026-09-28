@@ -20,16 +20,22 @@ Describe 'zline developer environments and universal tool-versions'
   End
 
   Describe 'universal tool-versions reader'
-    It 'parses target tool version'
+    test_universal_tool() {
+      local orig_dir="$PWD"
+      local t_dir
       t_dir=$(mktemp -d)
-      cd "$t_dir"
+      cd "$t_dir" || return 1
       printf "nodejs 20.10.0\nrust 1.75.0\n" > .tool-versions
-      _test_tool() {
-        _zline_read_tool_version "rust"
-      }
-      When call _test_tool
-      The variable REPLY should eq "1.75.0"
+      _zline_read_tool_version "rust"
+      local res="$REPLY"
+      cd "$orig_dir" || true
       rm -rf "$t_dir"
+      REPLY="$res"
+    }
+
+    It 'parses target tool version'
+      When call test_universal_tool
+      The variable REPLY should eq "1.75.0"
     End
   End
 End

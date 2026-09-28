@@ -198,6 +198,12 @@ Active Lua runtime version from \fI.lua-version\fR, \fI.tool-versions\fR, or pro
 .TP
 .B zig
 Active Zig version from \fI.zigversion\fR, \fI.tool-versions\fR, or \fIbuild.zig\fR.
+.TP
+.B bun
+Active Bun runtime indicator or version from \fIbun.lockb\fR, \fIbunfig.toml\fR, or \fI.tool-versions\fR.
+.TP
+.B deno
+Active Deno runtime indicator or version from \fIdeno.json\fR, \fIdeno.lock\fR, or \fI.tool-versions\fR.
 
 .SH COLOR PALETTE
 \fBzline\fR standardizes on Base16 / Term16 colors (0\(en15) to guarantee seamless harmony with any terminal color scheme:
@@ -242,7 +248,7 @@ Lists all available presets and curated themes.
 Displays configuration source of specified preset.
 .TP
 \fBzline style\fR \fIname\fR [\fIoptions...\fR]
-Configures visual styling (\fB--transient\fR, \fB--transient-dir\fR, \fB--ascii\fR, \fB--no-osc\fR).
+Configures visual styling (\fB--transient\fR, \fB--transient-dir\fR, \fB--ascii\fR, \fB--no-osc\fR, \fB--notify\fR).
 .TP
 \fBzline init\fR
 Compiles segments and initializes hooks.
@@ -273,6 +279,9 @@ Runs performance comparison benchmark against other prompt architectures.
 .TP
 \fBzline update\fR
 Pulls the latest release and recompiles bytecode.
+.TP
+\fBzline notify\fR [\fIon\fR [\fIseconds\fR] | \fIoff\fR | \fIthreshold\fR \fIseconds\fR | \fIstatus\fR]
+Configures long-running command desktop notifications via OSC 777 and OSC 9 escape sequences.
 
 .SH AUTHORS
 Cason Adams <https://github.com/casonadams/zline>

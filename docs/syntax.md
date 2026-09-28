@@ -82,6 +82,7 @@ You can customize prompt behavior using flags on `zline preset` or `zline style`
 | `--connect-color <col>` | Color of the connecting line (default: `8` / grey). |
 | `--hyperlinks` | Formats directory paths and Git repositories as clickable OSC 8 hyperlinks. |
 | `--title` | Automatically updates terminal tab/window titles with current path and running commands. |
+| `--notify [secs]` | Enables desktop notifications via OSC 777 / OSC 9 when commands exceed duration threshold. |
 | `--ascii` | Replaces all Nerd Font symbols and Powerline glyphs with pure ASCII fallbacks. |
 | `--no-osc` | Disables OSC 133 and OSC 7 terminal escape codes. |
 
@@ -103,6 +104,7 @@ You can customize prompt behavior using flags on `zline preset` or `zline style`
 | `zline migrate <p10k_file>` | Automatically translates Powerlevel10k configurations into idiomatic `zline` syntax. |
 | `zline compile` / `clean` | Manages memory-mapped `.zwc` wordcode compilation. |
 | `zline update` | Pulls the latest release and recompiles bytecode. |
+| `zline notify [on\|off\|threshold\|status]` | Configures long-running command desktop notifications (OSC 777 / OSC 9). |
 | `zline version` | Prints active `zline` release version. |
 
 ---

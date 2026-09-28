@@ -31,6 +31,7 @@ typeset -a hot_files=(
   "${REPO_ROOT}/lib/render.zsh"
   "${REPO_ROOT}/lib/color.zsh"
   "${REPO_ROOT}/lib/osc.zsh"
+  "${REPO_ROOT}/lib/notify.zsh"
   "${REPO_ROOT}/segments/dir.zsh"
   "${REPO_ROOT}/segments/git.zsh"
   "${REPO_ROOT}/segments/status.zsh"
@@ -41,6 +42,8 @@ typeset -a hot_files=(
   "${REPO_ROOT}/segments/direnv.zsh"
   "${REPO_ROOT}/segments/lua.zsh"
   "${REPO_ROOT}/segments/zig.zsh"
+  "${REPO_ROOT}/segments/bun.zsh"
+  "${REPO_ROOT}/segments/deno.zsh"
 )
 
 typeset -i subshell_count=0

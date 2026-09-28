@@ -77,12 +77,13 @@ echo 'zline init' >> ~/.zshrc</div>
         <li><code style="color:var(--accent)">zline migrate &lt;p10k_file&gt;</code>: Automatically translate Powerlevel10k configurations to zline.</li>
         <li><code style="color:var(--accent)">zline compile</code> / <code style="color:var(--accent)">clean</code>: Manage compiled wordcode (.zwc).</li>
         <li><code style="color:var(--accent)">zline update</code>: Pull latest release and recompile bytecode.</li>
+        <li><code style="color:var(--accent)">zline notify [on|off|threshold|status]</code>: Configure desktop notifications on long-running commands (OSC 777 / OSC 9).</li>
         <li><code style="color:var(--accent)">zline version</code>: Print current version.</li>
       </ul>
     </div>
 
     <div class="feature-card">
-      <h2 style="margin-bottom: 0.75rem;">Built-in Segments (24 Segments)</h2>
+      <h2 style="margin-bottom: 0.75rem;">Built-in Segments (30 Segments)</h2>
       <ul style="margin-left: 1.5rem; color: var(--text-secondary); line-height: 1.8;">
         <li><strong>dir</strong>: Path shortening (<code style="color:var(--accent)">--shorten 1</code>), Git root anchor (<code style="color:var(--accent)">--anchor git</code>), path aliases (<code style="color:var(--accent)">--alias github.com=gith</code>), read-only lock indicator (<code style="color:var(--accent)">--readonly-icon</code>).</li>
         <li><strong>git</strong>: Instant branch read (< 0.1 ms) + async status badges (<code style="color:var(--accent)">--clean 2 --dirty 3 --ahead 12</code>), submodules (<code style="color:var(--accent)">--submodule</code>), stashes (<code style="color:var(--accent)">--stash</code>).</li>
@@ -112,6 +113,8 @@ echo 'zline init' >> ~/.zshrc</div>
         <li><strong>direnv</strong>: Active Direnv environment indicator from <code style="color:var(--text-primary)">$DIRENV_DIR</code>.</li>
         <li><strong>lua</strong>: Lua runtime version from <code style="color:var(--text-primary)">.lua-version</code> or <code style="color:var(--text-primary)">.tool-versions</code>.</li>
         <li><strong>zig</strong>: Zig toolchain version from <code style="color:var(--text-primary)">.zigversion</code> or <code style="color:var(--text-primary)">build.zig</code>.</li>
+        <li><strong>bun</strong>: Bun runtime version or indicator from <code style="color:var(--text-primary)">bun.lockb</code> or <code style="color:var(--text-primary)">.tool-versions</code>.</li>
+        <li><strong>deno</strong>: Deno runtime version or indicator from <code style="color:var(--text-primary)">deno.json</code> or <code style="color:var(--text-primary)">.tool-versions</code>.</li>
       </ul>
     </div>
   </main>
