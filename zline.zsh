@@ -7,6 +7,7 @@ typeset -ga zline_right=()
 source "${ZLINE_DIR}/lib/color.zsh"
 source "${ZLINE_DIR}/lib/hooks.zsh"
 source "${ZLINE_DIR}/lib/render.zsh"
+source "${ZLINE_DIR}/lib/worker.zsh"
 
 for _zline_seg in "${ZLINE_DIR}"/segments/*.zsh(N); do
   source "$_zline_seg"
@@ -46,6 +47,7 @@ zline() {
       setopt prompt_percent
       zline_compile
       _zline_hooks_install
+      _zline_worker_start
       zline_render
       ;;
     bench)
