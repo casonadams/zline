@@ -132,6 +132,10 @@
         <label><input type="checkbox" id="optHaskell"> Haskell (9.4)</label>
         <label><input type="checkbox" id="optScala"> Scala (3.3)</label>
         <label><input type="checkbox" id="optKotlin"> Kotlin (1.9)</label>
+        <label><input type="checkbox" id="optSwift"> Swift (5.10)</label>
+        <label><input type="checkbox" id="optDart"> Dart (3.3)</label>
+        <label><input type="checkbox" id="optJulia"> Julia (1.10)</label>
+        <label><input type="checkbox" id="optOcaml"> OCaml (5.1)</label>
         <label><input type="checkbox" id="optGcp"> GCP (my-project)</label>
         <label><input type="checkbox" id="optAzure"> Azure (Production)</label>
         <label><input type="checkbox" id="optViMode"> Vi-Mode (NOR)</label>
@@ -232,6 +236,10 @@
     const optHaskell = document.getElementById("optHaskell");
     const optScala = document.getElementById("optScala");
     const optKotlin = document.getElementById("optKotlin");
+    const optSwift = document.getElementById("optSwift");
+    const optDart = document.getElementById("optDart");
+    const optJulia = document.getElementById("optJulia");
+    const optOcaml = document.getElementById("optOcaml");
     const optGcp = document.getElementById("optGcp");
     const optAzure = document.getElementById("optAzure");
     const optViMode = document.getElementById("optViMode");
@@ -316,6 +324,18 @@
         if (optKotlin.checked) {
           rightHtml += `<span class="seg" style="background:#c084fc;color:#000">󱈙 1.9</span>`;
         }
+        if (optSwift.checked) {
+          rightHtml += `<span class="seg" style="background:#ef4444;color:#fff"> 5.10</span>`;
+        }
+        if (optDart.checked) {
+          rightHtml += `<span class="seg" style="background:#38bdf8;color:#000"> 3.3</span>`;
+        }
+        if (optJulia.checked) {
+          rightHtml += `<span class="seg" style="background:#c084fc;color:#fff"> 1.10</span>`;
+        }
+        if (optOcaml.checked) {
+          rightHtml += `<span class="seg" style="background:#eab308;color:#000"> 5.1</span>`;
+        }
         if (optGcp.checked) {
           rightHtml += `<span class="seg" style="background:#3b82f6;color:#fff">󱇶 my-project</span>`;
         }
@@ -392,6 +412,18 @@
         }
         if (optKotlin.checked) {
           rightHtml += `<span style="color:#d8b4fe">󱈙 1.9</span> `;
+        }
+        if (optSwift.checked) {
+          rightHtml += `<span style="color:#ef4444"> 5.10</span> `;
+        }
+        if (optDart.checked) {
+          rightHtml += `<span style="color:#38bdf8"> 3.3</span> `;
+        }
+        if (optJulia.checked) {
+          rightHtml += `<span style="color:#c084fc"> 1.10</span> `;
+        }
+        if (optOcaml.checked) {
+          rightHtml += `<span style="color:#eab308"> 5.1</span> `;
         }
         if (optGcp.checked) {
           rightHtml += `<span style="color:#38bdf8">󱇶 my-project</span> `;
@@ -478,6 +510,10 @@
       if (optHaskell.checked) rightSegs.push("haskell");
       if (optScala.checked) rightSegs.push("scala");
       if (optKotlin.checked) rightSegs.push("kotlin");
+      if (optSwift.checked) rightSegs.push("swift");
+      if (optDart.checked) rightSegs.push("dart");
+      if (optJulia.checked) rightSegs.push("julia");
+      if (optOcaml.checked) rightSegs.push("ocaml");
       if (optGcp.checked) rightSegs.push("gcp");
       if (optAzure.checked) rightSegs.push("azure");
       if (optViMode.checked) rightSegs.push("'vi_mode --hide-insert'");
@@ -509,7 +545,7 @@ zline init`;
       configCode.textContent = code;
     }
 
-    [presetSelect, frameSelect, connectSelect, optDir, optAnchor, dirShorten, optGit, gitState, optExec, optStatus, optVenv, optRust, optGo, optDocker, optK8s, optNix, optLua, optBun, optDeno, optElixir, optCrystal, optHaskell, optScala, optKotlin, optGcp, optAzure, optViMode, optOs, optContainer, optShlvl, optTime].forEach(el => {
+    [presetSelect, frameSelect, connectSelect, optDir, optAnchor, dirShorten, optGit, gitState, optExec, optStatus, optVenv, optRust, optGo, optDocker, optK8s, optNix, optLua, optBun, optDeno, optElixir, optCrystal, optHaskell, optScala, optKotlin, optSwift, optDart, optJulia, optOcaml, optGcp, optAzure, optViMode, optOs, optContainer, optShlvl, optTime].forEach(el => {
       el.addEventListener("change", updatePreview);
     });
 

@@ -389,7 +389,7 @@ bun --color 15
 | :--- | :--- | :--- |
 | `--color <col>` | `15` (white) | Foreground text / icon color. |
 | `--bg <col>` | `15` | Background block color in Powerline/Rainbow modes. |
-| `--icon <sym>` | `🥟 ` | Bun segment icon (`bun:` in ASCII mode). |
+| `--icon <sym>` | ` ` | Bun segment icon (`bun:` in ASCII mode). |
 
 ---
 
@@ -405,7 +405,7 @@ deno --color 10
 | :--- | :--- | :--- |
 | `--color <col>` | `10` (green) | Foreground text / icon color. |
 | `--bg <col>` | `10` | Background block color in Powerline/Rainbow modes. |
-| `--icon <sym>` | `🦕 ` | Deno segment icon (`deno:` in ASCII mode). |
+| `--icon <sym>` | ` ` | Deno segment icon (`deno:` in ASCII mode). |
 
 ---
 
@@ -591,6 +591,70 @@ kotlin --color 13
 
 ---
 
+## `swift` (Swift Runtime)
+
+Displays active Swift version from `.tool-versions`, `.swift-version`, or `Package.swift`.
+
+```zsh
+swift --color 9
+```
+
+| Flag | Default | Description |
+| :--- | :--- | :--- |
+| `--color <col>` | `9` (red) | Foreground text / icon color. |
+| `--bg <col>` | `9` | Background block color in Powerline/Rainbow modes. |
+| `--icon <sym>` | ` ` | Swift segment icon (`swift:` in ASCII mode). |
+
+---
+
+## `dart` (Dart / Flutter Runtime)
+
+Displays active Dart / Flutter version from `.tool-versions` or detects `pubspec.yaml`.
+
+```zsh
+dart --color 12
+```
+
+| Flag | Default | Description |
+| :--- | :--- | :--- |
+| `--color <col>` | `12` (cyan) | Foreground text / icon color. |
+| `--bg <col>` | `12` | Background block color in Powerline/Rainbow modes. |
+| `--icon <sym>` | ` ` | Dart segment icon (`dart:` in ASCII mode). |
+
+---
+
+## `julia` (Julia Runtime)
+
+Displays active Julia version from `.tool-versions` or detects `Project.toml`.
+
+```zsh
+julia --color 13
+```
+
+| Flag | Default | Description |
+| :--- | :--- | :--- |
+| `--color <col>` | `13` (magenta) | Foreground text / icon color. |
+| `--bg <col>` | `13` | Background block color in Powerline/Rainbow modes. |
+| `--icon <sym>` | ` ` | Julia segment icon (`jl:` in ASCII mode). |
+
+---
+
+## `ocaml` (OCaml Runtime)
+
+Displays active OCaml version from `.tool-versions` or detects `dune-project` / `*.opam`.
+
+```zsh
+ocaml --color 11
+```
+
+| Flag | Default | Description |
+| :--- | :--- | :--- |
+| `--color <col>` | `11` (yellow) | Foreground text / icon color. |
+| `--bg <col>` | `11` | Background block color in Powerline/Rainbow modes. |
+| `--icon <sym>` | ` ` | OCaml segment icon (`ml:` in ASCII mode). |
+
+---
+
 ## Universal `.tool-versions` Detection
 
-Language runtime segments (`node`, `rust`, `golang`, `ruby`, `php`, `java`, `dotnet`, `venv`, `lua`, `zig`, `bun`, `deno`, `elixir`, `crystal`, `haskell`, `scala`, `kotlin`) automatically resolve versions defined in `.tool-versions` (used by `asdf`, `mise`, and `rtx`) in pure Zsh without executing external subshells.
+Language runtime segments (`node`, `rust`, `golang`, `ruby`, `php`, `java`, `dotnet`, `venv`, `lua`, `zig`, `bun`, `deno`, `elixir`, `crystal`, `haskell`, `scala`, `kotlin`, `swift`, `dart`, `julia`, `ocaml`) automatically resolve versions defined in `.tool-versions` (used by `asdf`, `mise`, and `rtx`) in pure Zsh without executing external subshells.

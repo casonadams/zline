@@ -141,7 +141,7 @@ for seg in "${(k)_zline_registered_segments[@]}"; do
     print -P "  %F{9}Segment missing in man page:%f $seg"
   fi
 done
-assert_eq "$all_documented" "1" "All 41 registered segments documented in man/man1/zline.1"
+assert_eq "$all_documented" "1" "All 45 registered segments documented in man/man1/zline.1"
 
 cd "$REPO_ROOT"
 rm -rf "$test_dir"

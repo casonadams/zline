@@ -3,6 +3,7 @@ typeset -gA _ZLINE_P10K_SEG_MAP=(
   vcs git
   status status
   command_execution_time exec_time
+  context user_host
   prompt_char prompt_char
   virtualenv venv
   anaconda venv
@@ -38,12 +39,12 @@ _zline_migrate_extract_elements() {
     fi
 
     if (( in_block == 1 )); then
-      if [[ "$line" == *")"* ]]; then
-        line="${line%%\)*}"
+      local code="${line%%#*}"
+      if [[ "$code" == *")"* ]]; then
+        code="${code%%\)*}"
         in_block=0
       fi
-      for word in ${(z)line}; do
-        [[ "$word" == \#* ]] && break
+      for word in ${(z)code}; do
         word="${word//[\'\"]}"
         [[ -n "$word" ]] && items+=("$word")
       done

@@ -55,6 +55,10 @@ typeset -a hot_files=(
   "${REPO_ROOT}/segments/haskell.zsh"
   "${REPO_ROOT}/segments/scala.zsh"
   "${REPO_ROOT}/segments/kotlin.zsh"
+  "${REPO_ROOT}/segments/swift.zsh"
+  "${REPO_ROOT}/segments/dart.zsh"
+  "${REPO_ROOT}/segments/julia.zsh"
+  "${REPO_ROOT}/segments/ocaml.zsh"
 )
 
 typeset -i subshell_count=0

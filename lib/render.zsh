@@ -52,6 +52,10 @@ typeset -gA _zline_registered_segments=(
   haskell 1
   scala 1
   kotlin 1
+  swift 1
+  dart 1
+  julia 1
+  ocaml 1
   newline 1
 )
 
