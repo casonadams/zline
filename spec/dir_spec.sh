@@ -26,14 +26,18 @@ Describe 'zline directory segment'
   End
 
   Describe 'git repository anchor'
-    typeset anchor_test_repo="/tmp/zline_anchor_spec"
-    cleanup_anchor() { rm -rf "$anchor_test_repo"; }
-    After 'cleanup_anchor'
+    format_test_anchor() {
+      typeset test_repo="/tmp/zline_anchor_spec"
+      mkdir -p "${test_repo}/.git" "${test_repo}/sub1/sub2"
+      typeset -a test_aliases=()
+      _zline_dir_format_path "${test_repo}/sub1/sub2" 1 1 "git" test_aliases
+      typeset res="$REPLY"
+      rm -rf "$test_repo"
+      REPLY="$res"
+    }
 
     It 'anchors git repository root'
-      typeset -a test_aliases=()
-      mkdir -p "${anchor_test_repo}/.git" "${anchor_test_repo}/sub1/sub2"
-      When call _zline_dir_format_path "${anchor_test_repo}/sub1/sub2" 1 1 "git" test_aliases
+      When call format_test_anchor
       The variable REPLY should eq "/t/zline_anchor_spec/s/sub2"
     End
   End
