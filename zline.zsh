@@ -17,6 +17,7 @@ source "${ZLINE_DIR}/lib/instant.zsh"
 source "${ZLINE_DIR}/lib/doctor.zsh"
 source "${ZLINE_DIR}/lib/configure.zsh"
 source "${ZLINE_DIR}/lib/compile.zsh"
+source "${ZLINE_DIR}/lib/migrate.zsh"
 
 for _zline_seg in "${ZLINE_DIR}"/segments/*.zsh(N); do
   source "$_zline_seg"
@@ -129,6 +130,9 @@ zline() {
       ;;
     clean)
       zline_clean_compiled
+      ;;
+    migrate)
+      zline_migrate "$@"
       ;;
     *)
       print -u2 -r -- "zline: unknown command: $cmd"

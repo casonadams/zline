@@ -20,6 +20,13 @@ typeset -gA _zline_registered_segments=(
   k8s 1
   node 1
   time 1
+  jobs 1
+  aws 1
+  rust 1
+  golang 1
+  terraform 1
+  docker 1
+  package 1
   newline 1
 )
 
