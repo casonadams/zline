@@ -22,6 +22,28 @@ zline() {
   shift
 
   case "$cmd" in
+    preset)
+      local preset_name="$1"
+      shift
+      local theme_file="${ZLINE_DIR}/themes/${preset_name}.zsh"
+      if [[ -r "$theme_file" ]]; then
+        source "$theme_file"
+      else
+        print -u2 -r -- "zline: unknown preset: $preset_name"
+        return 1
+      fi
+      while (( $# > 0 )); do
+        case "$1" in
+          --transient) _zline_transient=1 ;;
+          --no-transient) _zline_transient=0 ;;
+          --no-osc) _zline_osc=0 ;;
+          --no-instant) _zline_instant_enabled=0 ;;
+          --ascii) _zline_mode="ascii" ;;
+          --nerdfont) _zline_mode="nerdfont" ;;
+        esac
+        shift
+      done
+      ;;
     style)
       local style_name="$1"
       shift
