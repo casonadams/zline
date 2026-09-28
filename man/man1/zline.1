@@ -223,14 +223,20 @@ Terminal hyperlinks for clickable file paths and Git repositories.
 \fBzline preset\fR \fIname\fR [\fIoptions...\fR]
 Loads a preset theme configuration.
 .TP
+\fBzline preset list\fR
+Lists all available presets and curated themes.
+.TP
+\fBzline preset show\fR \fIname\fR
+Displays configuration source of specified preset.
+.TP
 \fBzline style\fR \fIname\fR [\fIoptions...\fR]
-Configures visual styling (\fB--transient\fR, \fB--ascii\fR, \fB--no-osc\fR).
+Configures visual styling (\fB--transient\fR, \fB--transient-dir\fR, \fB--ascii\fR, \fB--no-osc\fR).
 .TP
 \fBzline init\fR
 Compiles segments and initializes hooks.
 .TP
-\fBzline bench\fR [\fIiterations\fR]
-Runs execution latency benchmark over \fIiterations\fR (default: 1000).
+\fBzline bench\fR [\fB--profile\fR] [\fIiterations\fR]
+Runs execution latency benchmark or segment micro-profiling over \fIiterations\fR (default: 1000).
 .TP
 \fBzline version\fR
 Prints active version.

@@ -78,9 +78,11 @@ zline init
 
 ---
 
-## Visual Presets
+## Visual Presets & Curated Themes
 
-`zline` comes with four built-in presets:
+`zline` includes built-in structural layout presets and curated color themes:
+
+### Layout Presets
 
 | Preset | Description | Command |
 | :--- | :--- | :--- |
@@ -88,6 +90,17 @@ zline init
 | **Lean** | Modern, flat, space-separated layout with crisp foreground colors | `zline preset lean` |
 | **Rainbow** | High-contrast vivid blocks for rapid visual parsing | `zline preset rainbow` |
 | **Pure** | Minimalist two-line prompt inspired by Sindre Sorhus's Pure prompt | `zline preset pure` |
+
+### Curated Color Themes
+
+| Theme | Description | Command |
+| :--- | :--- | :--- |
+| **Catppuccin** | Soothing pastel palette based on Mocha | `zline preset catppuccin` |
+| **Tokyo Night** | Dark, vibrant aesthetic inspired by Tokyo nightlife | `zline preset tokyonight` |
+| **Nord** | Arctic, north-bluish clean palette | `zline preset nord` |
+| **Gruvbox** | Warm retro groove color scheme | `zline preset gruvbox` |
+
+List all presets with `zline preset list` or inspect preset code with `zline preset show <name>`.
 
 ---
 

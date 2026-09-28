@@ -21,13 +21,16 @@ Describe 'zline directory segment'
 
   It 'substitutes directory aliases'
     typeset -a test_aliases=("--alias" "github.com=gith")
-    When call _zline_dir_format_path "/Users/cadams/src/github.com/casonadams/zline" 1 1 "none" test_aliases
+    When call _zline_dir_format_path "$HOME/src/github.com/casonadams/zline" 1 1 "none" test_aliases
     The variable REPLY should eq "~/s/gith/c/zline"
   End
 
   It 'anchors git repository root'
-    typeset -a test_aliases=("--alias" "github.com=gith")
-    When call _zline_dir_format_path "$PWD" 1 1 "git" test_aliases
-    The variable REPLY should eq "~/s/gith/c/zline"
+    typeset -a test_aliases=()
+    typeset anchor_test_repo="/tmp/zline_anchor_spec"
+    mkdir -p "${anchor_test_repo}/.git" "${anchor_test_repo}/sub1/sub2"
+    When call _zline_dir_format_path "${anchor_test_repo}/sub1/sub2" 1 1 "git" test_aliases
+    rm -rf "$anchor_test_repo"
+    The variable REPLY should eq "/t/zline_anchor_spec/s/sub2"
   End
 End

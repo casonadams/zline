@@ -76,6 +76,7 @@ You can customize prompt behavior using flags on `zline preset` or `zline style`
 | Flag | Description |
 | :--- | :--- |
 | `--transient` | Automatically collapses past prompts into a minimal `❯` symbol on Enter. |
+| `--transient-dir` | Retains directory in collapsed transient prompt instead of symbol-only. |
 | `--frame <none\|left\|full>` | Renders corner frame connectors (`╭─`, `╰─`). |
 | `--connect <char>` | Draws a connecting line (`·`, `─`) between left and right prompts on multiline layouts. |
 | `--connect-color <col>` | Color of the connecting line (default: `8` / grey). |
@@ -86,7 +87,27 @@ You can customize prompt behavior using flags on `zline preset` or `zline style`
 
 ---
 
-## 5. Execution Model
+## 5. CLI Commands Reference
+
+| Command | Description |
+| :--- | :--- |
+| `zline preset <name>` | Loads built-in layout or curated color theme (`powerline`, `lean`, `rainbow`, `pure`, `catppuccin`, `tokyonight`, `nord`, `gruvbox`). |
+| `zline preset list` | Displays all available presets and curated themes. |
+| `zline preset show <name>` | Dumps the full source definition of a preset. |
+| `zline style <name>` | Configures visual styling flags (`--transient`, `--ascii`, `--no-osc`, `--frame`, `--connect`). |
+| `zline init` | Compiles segment arguments and installs Zsh hooks. |
+| `zline bench [--profile] [N]` | Runs prompt latency benchmarks or per-segment micro-profiling over `N` iterations. |
+| `zline compare` | Executes comparative benchmark against subshell-based and standard prompt designs. |
+| `zline doctor` | Comprehensive health check (shell version, UTF-8 locale, cache directory, valid segments). |
+| `zline configure` | Interactive setup wizard for generating a custom configuration. |
+| `zline migrate <p10k_file>` | Automatically translates Powerlevel10k configurations into idiomatic `zline` syntax. |
+| `zline compile` / `clean` | Manages memory-mapped `.zwc` wordcode compilation. |
+| `zline update` | Pulls the latest release and recompiles bytecode. |
+| `zline version` | Prints active `zline` release version. |
+
+---
+
+## 6. Execution Model
 
 - **Compile Once**: When `zline init` runs, it tokenizes all arguments into internal arrays once during shell launch (< 0.2 ms).
 - **Zero-Cost Renders**: On every Enter keystroke, `zline` does **zero** flag parsing and **zero** subshell forks, directly invoking the pre-compiled segment handlers in microseconds.

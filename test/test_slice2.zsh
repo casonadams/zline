@@ -45,12 +45,15 @@ assert_eq "$REPLY" "/" "Root directory renders as /"
 
 # 2. Path formatting with aliases
 test_aliases=("--alias" "github.com=gith")
-_zline_dir_format_path "/Users/cadams/src/github.com/casonadams/zline" 1 1 "none" test_aliases
+_zline_dir_format_path "$HOME/src/github.com/casonadams/zline" 1 1 "none" test_aliases
 assert_eq "$REPLY" "~/s/gith/c/zline" "Alias replaces component and is preserved intact"
 
 # 3. Path formatting with Git anchor
-_zline_dir_format_path "${REPO_ROOT}" 1 1 "git" test_aliases
-assert_eq "$REPLY" "~/s/gith/c/zline" "Git anchor preserves repository directory name full"
+typeset anchor_test="/tmp/zline_anchor_test_slice2"
+mkdir -p "${anchor_test}/.git" "${anchor_test}/sub1/sub2"
+_zline_dir_format_path "${anchor_test}/sub1/sub2" 1 1 "git" test_aliases
+assert_eq "$REPLY" "/t/zline_anchor_test_slice2/s/sub2" "Git anchor preserves repository directory name full"
+rm -rf "$anchor_test"
 
 # 4. Custom formatter support
 my_custom_formatter() {
@@ -61,8 +64,11 @@ zline_segment_dir --format my_custom_formatter
 assert_eq "$_zline_ret_content" "CUSTOM:zline" "Custom formatter overrides path formatting via \$REPLY"
 
 # 5. Caching and chpwd invalidation
+typeset expected_content
+_zline_dir_format_path "$PWD" 1 1 "git" test_aliases
+expected_content="$REPLY"
 zline_segment_dir --shorten 1 --alias "github.com=gith" --anchor git
-assert_eq "$_zline_ret_content" "~/s/gith/c/zline" "Segment computes formatted path correctly"
+assert_eq "$_zline_ret_content" "$expected_content" "Segment computes formatted path correctly"
 assert_eq "$_zline_dir_cache_pwd" "$PWD" "Cache stores current working directory"
 
 # Simulate chpwd hook

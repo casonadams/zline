@@ -65,25 +65,49 @@ echo 'zline init' >> ~/.zshrc</div>
     <div class="feature-card" style="margin-bottom: 2rem;">
       <h2 style="margin-bottom: 0.75rem;">Command Line Interface</h2>
       <ul style="margin-left: 1.5rem; color: var(--text-secondary); line-height: 1.8;">
-        <li><code style="color:var(--accent)">zline preset &lt;name&gt;</code>: Load built-in preset (<code style="color:var(--text-primary)">powerline</code>, <code style="color:var(--text-primary)">lean</code>, <code style="color:var(--text-primary)">rainbow</code>, <code style="color:var(--text-primary)">pure</code>).</li>
-        <li><code style="color:var(--accent)">zline style &lt;name&gt;</code>: Set prompt styling flags (<code style="color:var(--text-primary)">--transient</code>, <code style="color:var(--text-primary)">--ascii</code>, <code style="color:var(--text-primary)">--no-osc</code>).</li>
+        <li><code style="color:var(--accent)">zline preset &lt;name&gt;</code>: Load built-in preset or curated theme (<code style="color:var(--text-primary)">powerline</code>, <code style="color:var(--text-primary)">lean</code>, <code style="color:var(--text-primary)">rainbow</code>, <code style="color:var(--text-primary)">pure</code>, <code style="color:var(--text-primary)">catppuccin</code>, <code style="color:var(--text-primary)">tokyonight</code>, <code style="color:var(--text-primary)">nord</code>, <code style="color:var(--text-primary)">gruvbox</code>).</li>
+        <li><code style="color:var(--accent)">zline preset list</code>: List all available layout presets and curated themes.</li>
+        <li><code style="color:var(--accent)">zline preset show &lt;name&gt;</code>: Inspect preset configuration source.</li>
+        <li><code style="color:var(--accent)">zline style &lt;name&gt;</code>: Set prompt styling flags (<code style="color:var(--text-primary)">--transient</code>, <code style="color:var(--text-primary)">--transient-dir</code>, <code style="color:var(--text-primary)">--ascii</code>, <code style="color:var(--text-primary)">--no-osc</code>, <code style="color:var(--text-primary)">--frame</code>, <code style="color:var(--text-primary)">--connect</code>).</li>
         <li><code style="color:var(--accent)">zline init</code>: Pre-compile segments and attach lifecycle hooks.</li>
-        <li><code style="color:var(--accent)">zline bench [iters]</code>: Run execution latency benchmark (< 1.5 ms assertion).</li>
+        <li><code style="color:var(--accent)">zline bench [--profile] [iters]</code>: Run execution latency benchmark (< 1.5 ms assertion) or per-segment micro-profiling.</li>
+        <li><code style="color:var(--accent)">zline compare</code>: Run comparative benchmarks against other prompt architectures.</li>
+        <li><code style="color:var(--accent)">zline doctor</code>: Comprehensive diagnostics for shell version, UTF-8 locale, cache directory, and segments.</li>
+        <li><code style="color:var(--accent)">zline configure</code>: Interactive configuration wizard.</li>
+        <li><code style="color:var(--accent)">zline migrate &lt;p10k_file&gt;</code>: Automatically translate Powerlevel10k configurations to zline.</li>
+        <li><code style="color:var(--accent)">zline compile</code> / <code style="color:var(--accent)">clean</code>: Manage compiled wordcode (.zwc).</li>
+        <li><code style="color:var(--accent)">zline update</code>: Pull latest release and recompile bytecode.</li>
         <li><code style="color:var(--accent)">zline version</code>: Print current version.</li>
       </ul>
     </div>
 
     <div class="feature-card">
-      <h2 style="margin-bottom: 0.75rem;">Built-in Segments</h2>
+      <h2 style="margin-bottom: 0.75rem;">Built-in Segments (24 Segments)</h2>
       <ul style="margin-left: 1.5rem; color: var(--text-secondary); line-height: 1.8;">
-        <li><strong>dir</strong>: Path shortening (<code style="color:var(--accent)">--shorten 1</code>), Git root anchor (<code style="color:var(--accent)">--anchor git</code>), path aliases (<code style="color:var(--accent)">--alias github.com=gith</code>).</li>
-        <li><strong>git</strong>: Instant branch read (< 0.1 ms) + async dirty counts (<code style="color:var(--accent)">--clean 2 --dirty 3</code>).</li>
-        <li><strong>status</strong>: Exit code failure badge (<code style="color:var(--accent)">--hide-zero</code>).</li>
-        <li><strong>exec_time</strong>: Duration thresholding (<code style="color:var(--accent)">--min 2</code>).</li>
+        <li><strong>dir</strong>: Path shortening (<code style="color:var(--accent)">--shorten 1</code>), Git root anchor (<code style="color:var(--accent)">--anchor git</code>), path aliases (<code style="color:var(--accent)">--alias github.com=gith</code>), read-only lock indicator (<code style="color:var(--accent)">--readonly-icon</code>).</li>
+        <li><strong>git</strong>: Instant branch read (< 0.1 ms) + async status badges (<code style="color:var(--accent)">--clean 2 --dirty 3 --ahead 12</code>), submodules (<code style="color:var(--accent)">--submodule</code>), stashes (<code style="color:var(--accent)">--stash</code>).</li>
+        <li><strong>status</strong>: Exit code failure badge (<code style="color:var(--accent)">--hide-zero</code>, <code style="color:var(--accent)">--color 9</code>).</li>
+        <li><strong>exec_time</strong>: Duration thresholding and precision (<code style="color:var(--accent)">--min 2 --precision 2</code>).</li>
         <li><strong>prompt_char</strong>: Dynamic symbol with error and Vi-mode tracking (<code style="color:var(--accent)">--symbol '❯'</code>).</li>
         <li><strong>venv</strong>: Virtualenv, Conda, and Poetry environment detection.</li>
         <li><strong>node</strong>: Node.js version detection from <code style="color:var(--text-primary)">.node-version</code> or <code style="color:var(--text-primary)">.nvmrc</code>.</li>
         <li><strong>k8s</strong>: Current Kubernetes context from <code style="color:var(--text-primary)">~/.kube/config</code>.</li>
+        <li><strong>time</strong>: Local time formatted with pure Zsh prompt escapes.</li>
+        <li><strong>jobs</strong>: Active background job count indicator.</li>
+        <li><strong>aws</strong>: AWS profile and active region detection.</li>
+        <li><strong>rust</strong>: Rust toolchain version from <code style="color:var(--text-primary)">rust-toolchain</code> or <code style="color:var(--text-primary)">rust-toolchain.toml</code>.</li>
+        <li><strong>golang</strong>: Go version from <code style="color:var(--text-primary)">go.mod</code>.</li>
+        <li><strong>terraform</strong>: Workspace from <code style="color:var(--text-primary)">$TF_WORKSPACE</code> or <code style="color:var(--text-primary)">.terraform/environment</code>.</li>
+        <li><strong>docker</strong>: Active context from <code style="color:var(--text-primary)">$DOCKER_CONTEXT</code> or <code style="color:var(--text-primary)">~/.docker/config.json</code>.</li>
+        <li><strong>package</strong>: Application version from <code style="color:var(--text-primary)">package.json</code> or <code style="color:var(--text-primary)">Cargo.toml</code>.</li>
+        <li><strong>user_host</strong>: User and hostname for SSH and root sessions.</li>
+        <li><strong>battery</strong>: Battery charge percentage and charging state.</li>
+        <li><strong>ruby</strong>: Ruby version from <code style="color:var(--text-primary)">.ruby-version</code>.</li>
+        <li><strong>php</strong>: PHP version from <code style="color:var(--text-primary)">.php-version</code>.</li>
+        <li><strong>java</strong>: Java version from <code style="color:var(--text-primary)">.java-version</code>.</li>
+        <li><strong>dotnet</strong>: .NET SDK version from <code style="color:var(--text-primary)">global.json</code>.</li>
+        <li><strong>load</strong>: System 1-minute load average with configurable warning thresholds (<code style="color:var(--accent)">--warn 4.0</code>).</li>
+        <li><strong>ram</strong>: Memory utilization percentage with warning alerts (<code style="color:var(--accent)">--warn 80</code>).</li>
       </ul>
     </div>
   </main>

@@ -22,6 +22,8 @@ dir --shorten 1 --alias github.com=gith --anchor git --color 4
 | `--bg <col>` | `4` | Background color (in powerline/rainbow modes). |
 | `--fg <col>` | `15` | Text color (in powerline/rainbow modes). |
 | `--icon <sym>` | ` ` | Custom icon override. |
+| `--readonly-icon <sym>` | ` ` | Custom icon displayed when the current directory is read-only. |
+| `--readonly-color <col>` | `9` (red) | Color applied when the current directory is read-only. |
 | `--format <fn>` | None | Custom Zsh formatter function setting `$REPLY`. |
 
 ---
@@ -39,12 +41,17 @@ git --clean 2 --dirty 3 --ahead 12
 | `--clean <col>` | `2` (green) | Color when working tree is clean. |
 | `--dirty <col>` | `3` (yellow) | Color when working tree has modified, staged, or untracked files. |
 | `--ahead <col>` | `12` (blue) | Color when branch is ahead of upstream. |
+| `--ahead-sym <sym>` | `⇡` | Custom symbol for ahead commit counts. |
+| `--behind-sym <sym>` | `⇣` | Custom symbol for behind commit counts. |
+| `--submodule` | Off | Badges Git submodules with a submodule indicator. |
+| `--stash` | Off | Displays stash entry count badge (`*N`). |
 | `--icon <sym>` | ` ` | Branch icon symbol. |
 
 ### Status Badges:
 - `+N`: `N` staged changes
 - `!N`: `N` unstaged modifications
 - `?N`: `N` untracked files
+- `*N`: `N` stashed states (when `--stash` enabled)
 - `⇡N`: Ahead of remote by `N` commits
 - `⇣N`: Behind remote by `N` commits
 - `xN`: `N` unmerged merge conflicts
@@ -79,6 +86,7 @@ exec_time --min 2 --color 11
 | Flag | Default | Description |
 | :--- | :--- | :--- |
 | `--min <N>` | `2` | Minimum duration in seconds before displaying execution time. |
+| `--precision <N>` | `1` | Decimal precision for execution duration (`1` or `2`). |
 | `--color <col>` | `11` (yellow) | Text/badge color. |
 
 ---
@@ -268,3 +276,37 @@ Displays .NET version from `global.json` or `*.csproj`.
 ```zsh
 dotnet --color 5
 ```
+
+---
+
+## `load` (System Load Average)
+
+Displays 1-minute system load average with configurable warning thresholds.
+
+```zsh
+load --warn 4.0 --warn-color 9 --color 8
+```
+
+| Flag | Default | Description |
+| :--- | :--- | :--- |
+| `--warn <val>` | `4.0` | Load threshold that triggers the warning color. |
+| `--warn-color <col>` | `9` (red) | Color applied when load exceeds threshold. |
+| `--color <col>` | `8` (grey) | Color applied during normal load. |
+| `--icon <sym>` | ` ` | Load segment icon. |
+
+---
+
+## `ram` (Memory Utilization)
+
+Displays system memory utilization percentage or capacity with warning alerts.
+
+```zsh
+ram --warn 80 --warn-color 9 --color 8
+```
+
+| Flag | Default | Description |
+| :--- | :--- | :--- |
+| `--warn <pct>` | `80` | Memory percentage threshold that triggers warning color. |
+| `--warn-color <col>` | `9` (red) | Color applied when memory utilization exceeds threshold. |
+| `--color <col>` | `8` (grey) | Color applied during normal memory utilization. |
+| `--icon <sym>` | `󰍛 ` | Memory segment icon. |
