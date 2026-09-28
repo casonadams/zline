@@ -16,8 +16,9 @@ dir --shorten 1 --alias github.com=gith --anchor git --color 4
 | :--- | :--- | :--- |
 | `--shorten <N>` | `0` | Shorten intermediate directory components to `N` characters (`1` $\rightarrow$ `~/s/g/c/zline`). |
 | `--keep-last <N>` | `1` | Number of trailing directory components to keep full. |
+| `--last <N>` | `0` | Truncates path to the last `N` components (`--last 2` $\rightarrow$ `.../foo/bar`). |
 | `--alias <k=v>` | None | Replaces path component matching `k` with `v` (can be repeated). |
-| `--anchor <git>` | `none` | Keeps Git repository root name full while shortening directories above it. |
+| `--anchor <git|project>` | `none` | Anchors at Git repository root or project root (`package.json`, `Cargo.toml`, etc.). |
 | `--color <col>` | `4` | Foreground color (in lean/pure modes). |
 | `--bg <col>` | `4` | Background color (in powerline/rainbow modes). |
 | `--fg <col>` | `15` | Text color (in powerline/rainbow modes). |
@@ -43,6 +44,11 @@ git --clean 2 --dirty 3 --ahead 12
 | `--ahead <col>` | `12` (blue) | Color when branch is ahead of upstream. |
 | `--ahead-sym <sym>` | `⇡` | Custom symbol for ahead commit counts. |
 | `--behind-sym <sym>` | `⇣` | Custom symbol for behind commit counts. |
+| `--staged-icon <sym>` | `+` | Custom symbol for staged changes counter. |
+| `--unstaged-icon <sym>` | `!` | Custom symbol for unstaged modifications counter. |
+| `--untracked-icon <sym>` | `?` | Custom symbol for untracked files counter. |
+| `--conflict-icon <sym>` | `x` | Custom symbol for unmerged conflicts counter. |
+| `--stash-icon <sym>` | `*` | Custom symbol for stashes counter. |
 | `--submodule` | Off | Badges Git submodules with a submodule indicator. |
 | `--stash` | Off | Displays stash entry count badge (`*N`). |
 | `--icon <sym>` | ` ` | Branch icon symbol. |
@@ -700,6 +706,40 @@ cmake --color 4
 | `--color <col>` | `4` (blue) | Foreground text / icon color. |
 | `--bg <col>` | `4` | Background block color in Powerline/Rainbow modes. |
 | `--icon <sym>` | ` ` | CMake segment icon (`cmake:` in ASCII mode). |
+
+---
+
+## `text` (Static & Dynamic Custom Text)
+
+Displays static strings, environment variables, or custom text badges.
+
+```zsh
+text "PROD" --color 9
+text "$AWS_VAULT" --icon "🔒 "
+```
+
+| Flag | Default | Description |
+| :--- | :--- | :--- |
+| `--content <str>` | `$1` | Raw text string or evaluated shell variable (e.g. `"$VAR"`). |
+| `--color <col>` | `7` | Text foreground color. |
+| `--bg <col>` | `0` | Background block color in Powerline/Rainbow modes. |
+| `--icon <sym>` | None | Optional leading icon. |
+
+---
+
+## Universal Segment Flags (`--prefix`, `--suffix`, `--format`)
+
+Every segment in `zline` universally supports wrapping and formatting flags:
+
+```zsh
+zline_left=( dir 'git --prefix "[" --suffix "]"' prompt_char )
+```
+
+| Flag | Description |
+| :--- | :--- |
+| `--prefix <str>` | Prepends arbitrary string before segment content. |
+| `--suffix <str>` | Appends arbitrary string after segment content. |
+| `--format <fn>` | Post-processes segment content with a custom Zsh function setting `$REPLY`. |
 
 ---
 

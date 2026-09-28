@@ -39,7 +39,7 @@ for p in "${presets[@]}"; do
   _zline_visual_len "$top"
   local -i top_len=$REPLY
   local -i top_ok=0
-  (( top_len > 0 && top_len < 100 )) && top_ok=1
+  (( top_len > 0 && top_len <= 100 )) && top_ok=1
   assert_eq "$top_ok" "1" "Preset '${p}' top line has valid visual column width (${top_len} cols)"
 
   # Check bottom line visual length

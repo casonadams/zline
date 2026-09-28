@@ -18,18 +18,61 @@ _zline_find_git_root() {
   return 1
 }
 
+_zline_find_project_root() {
+  emulate -L zsh
+  local cur="$1"
+  while [[ "$cur" != "/" && -n "$cur" ]]; do
+    if [[ -e "${cur}/.git" || -f "${cur}/package.json" || -f "${cur}/Cargo.toml" || \
+          -f "${cur}/go.mod" || -f "${cur}/pyproject.toml" || -f "${cur}/pom.xml" || \
+          -f "${cur}/build.gradle" || -f "${cur}/mix.exs" || -f "${cur}/CMakeLists.txt" ]]; then
+      REPLY="$cur"
+      return 0
+    fi
+    cur="${cur:h}"
+  done
+  REPLY=""
+  return 1
+}
+
 _zline_dir_format_path() {
   emulate -L zsh
   local raw="$1"
   local shorten="${2:-0}"
   local keep_last="${3:-1}"
   local anchor="$4"
-  local -a in_aliases=("${(@P)5}")
+  local -a in_aliases=()
+  local -i last_n=0
+  if [[ "$5" == <-> ]]; then
+    last_n="$5"
+    in_aliases=("${(@P)6}")
+  else
+    in_aliases=("${(@P)5}")
+    last_n="${6:-0}"
+  fi
 
   local p="${raw/#$HOME/~}"
   if [[ "$p" == "~" || "$p" == "/" || -z "$p" ]]; then
     REPLY="$p"
     return 0
+  fi
+
+  if (( last_n > 0 )); then
+    local -a raw_parts=("${(s:/:)p}")
+    local -a non_empty_parts=()
+    local pt
+    for pt in "${raw_parts[@]}"; do
+      [[ -n "$pt" ]] && non_empty_parts+=("$pt")
+    done
+    local -i n_parts=${#non_empty_parts}
+    if (( n_parts > last_n )); then
+      local -a tail_parts=("${non_empty_parts[@]: -${last_n}}")
+      if [[ "${non_empty_parts[1]}" == "~" ]]; then
+        REPLY="~/.../${(j:/:)tail_parts}"
+      else
+        REPLY=".../${(j:/:)tail_parts}"
+      fi
+      return 0
+    fi
   fi
 
   local -A alias_map=()
@@ -42,6 +85,11 @@ _zline_dir_format_path() {
   local git_rel=""
   if [[ "$anchor" == "git" ]]; then
     _zline_find_git_root "$raw" || true
+    if [[ -n "$REPLY" ]]; then
+      git_rel="${REPLY/#$HOME/~}"
+    fi
+  elif [[ "$anchor" == "project" ]]; then
+    _zline_find_project_root "$raw" || true
     if [[ -n "$REPLY" ]]; then
       git_rel="${REPLY/#$HOME/~}"
     fi
@@ -110,6 +158,7 @@ zline_segment_dir() {
     -color:=opts -fg:=opts -bg:=opts -icon:=opts \
     -readonly-icon:=opts -readonly-color:=opts \
     -shorten:=opts -keep-last:=opts -anchor:=opts \
+    -last:=opts -max-depth:=opts \
     -format:=opts -alias+:=alias_arr
 
   local opts_key="$*|${alias_arr[*]}"
@@ -122,11 +171,13 @@ zline_segment_dir() {
     _zline_dir_cache_opts="$opts_key"
     _zline_dir_cache_res="$_zline_ret_content"
   else
+    local ln="${opts[--last]:-${opts[--max-depth]:-0}}"
     _zline_dir_format_path "$PWD" \
       "${opts[--shorten]:-0}" \
       "${opts[--keep-last]:-1}" \
       "${opts[--anchor]:-none}" \
-      alias_arr
+      alias_arr \
+      "$ln"
 
     _zline_ret_content="$REPLY"
     _zline_dir_cache_pwd="$PWD"

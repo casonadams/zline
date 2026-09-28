@@ -59,6 +59,7 @@ typeset -gA _zline_registered_segments=(
   helm 1
   pulumi 1
   cmake 1
+  text 1
   newline 1
 )
 
@@ -81,6 +82,7 @@ _zline_read_tool_version() {
 typeset -g _zline_connect_char=""
 typeset -g _zline_connect_color="8"
 typeset -gi _zline_rprompt_line=1
+typeset -g _zline_frame_shape="rounded"
 
 _zline_visual_len() {
   local str="$1"
@@ -244,6 +246,12 @@ _zline_render_left() {
     if [[ "$_zline_mode" == "ascii" ]]; then
       frame_top="+- "
       frame_bot="+- "
+    elif [[ "$_zline_frame_shape" == "sharp" ]]; then
+      frame_top="%F{8}"$'\u250C\u2500'"%f "
+      frame_bot="%F{8}"$'\u2514\u2500'"%f "
+    elif [[ "$_zline_frame_shape" == "double" ]]; then
+      frame_top="%F{8}"$'\u2554\u2550'"%f "
+      frame_bot="%F{8}"$'\u255A\u2550'"%f "
     else
       frame_top="%F{8}"$'\u256D\u2500'"%f "
       frame_bot="%F{8}"$'\u2570\u2500'"%f "
@@ -275,12 +283,34 @@ _zline_render_left() {
     typeset -g _zline_ret_bg=""
     typeset -g _zline_ret_icon=""
 
+    local -a s_args=( ${(Q)${(z)raw_args}} )
+    local -A u_opts=()
+    () {
+      set -- "$@"
+      zparseopts -D -E -A u_opts -K -prefix:=u_opts -suffix:=u_opts -format:=u_opts 2>/dev/null
+      s_args=( "$@" )
+    } "${s_args[@]}"
+
     if (( $+functions[zline_segment_${name}] )); then
-      "zline_segment_${name}" ${(z)raw_args}
+      "zline_segment_${name}" "${s_args[@]}"
     fi
 
     if [[ -z "$_zline_ret_content" && -z "$_zline_ret_icon" ]]; then
       continue
+    fi
+
+    if [[ -n "$_zline_ret_content" ]]; then
+      if [[ -n "${u_opts[--prefix]}" ]]; then
+        _zline_ret_content="${u_opts[--prefix]}${_zline_ret_content}"
+      fi
+      if [[ -n "${u_opts[--suffix]}" ]]; then
+        _zline_ret_content="${_zline_ret_content}${u_opts[--suffix]}"
+      fi
+      local u_fmt="${u_opts[--format]}"
+      if [[ -n "$u_fmt" && $+functions[$u_fmt] -eq 1 ]]; then
+        "$u_fmt" "$_zline_ret_content"
+        _zline_ret_content="$REPLY"
+      fi
     fi
 
     if [[ "$_zline_style" == "powerline" || "$_zline_style" == "rainbow" ]]; then
@@ -358,12 +388,34 @@ _zline_render_right() {
     typeset -g _zline_ret_bg=""
     typeset -g _zline_ret_icon=""
 
+    local -a s_args=( ${(Q)${(z)raw_args}} )
+    local -A u_opts=()
+    () {
+      set -- "$@"
+      zparseopts -D -E -A u_opts -K -prefix:=u_opts -suffix:=u_opts -format:=u_opts 2>/dev/null
+      s_args=( "$@" )
+    } "${s_args[@]}"
+
     if (( $+functions[zline_segment_${name}] )); then
-      "zline_segment_${name}" ${(z)raw_args}
+      "zline_segment_${name}" "${s_args[@]}"
     fi
 
     if [[ -z "$_zline_ret_content" && -z "$_zline_ret_icon" ]]; then
       continue
+    fi
+
+    if [[ -n "$_zline_ret_content" ]]; then
+      if [[ -n "${u_opts[--prefix]}" ]]; then
+        _zline_ret_content="${u_opts[--prefix]}${_zline_ret_content}"
+      fi
+      if [[ -n "${u_opts[--suffix]}" ]]; then
+        _zline_ret_content="${_zline_ret_content}${u_opts[--suffix]}"
+      fi
+      local u_fmt="${u_opts[--format]}"
+      if [[ -n "$u_fmt" && $+functions[$u_fmt] -eq 1 ]]; then
+        "$u_fmt" "$_zline_ret_content"
+        _zline_ret_content="$REPLY"
+      fi
     fi
 
     if [[ "$_zline_style" == "powerline" || "$_zline_style" == "rainbow" ]]; then
@@ -404,6 +456,10 @@ zline_render() {
     if [[ "$_zline_frame" == "full" ]]; then
       if [[ "$_zline_mode" == "ascii" ]]; then
         frame_end=" -+"
+      elif [[ "$_zline_frame_shape" == "sharp" ]]; then
+        frame_end=" %F{8}"$'\u2500\u2510'"%f"
+      elif [[ "$_zline_frame_shape" == "double" ]]; then
+        frame_end=" %F{8}"$'\u2550\u2557'"%f"
       else
         frame_end=" %F{8}"$'\u2500\u256E'"%f"
       fi

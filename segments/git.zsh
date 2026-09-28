@@ -67,12 +67,16 @@ _zline_git_format_details() {
   local behind_sym="$2"
   local -i stash_cnt="${3:-0}"
   local stash_sym="$4"
+  local staged_icon="${5:-+}"
+  local unstaged_icon="${6:-!}"
+  local untracked_icon="${7:-?}"
+  local conflict_icon="${8:-x}"
 
   local -a items=()
-  (( _zline_git_cache_conflicts > 0 )) && items+=("x${_zline_git_cache_conflicts}")
-  (( _zline_git_cache_staged > 0 )) && items+=("+${_zline_git_cache_staged}")
-  (( _zline_git_cache_unstaged > 0 )) && items+=("!${_zline_git_cache_unstaged}")
-  (( _zline_git_cache_untracked > 0 )) && items+=("?${_zline_git_cache_untracked}")
+  (( _zline_git_cache_conflicts > 0 )) && items+=("${conflict_icon}${_zline_git_cache_conflicts}")
+  (( _zline_git_cache_staged > 0 )) && items+=("${staged_icon}${_zline_git_cache_staged}")
+  (( _zline_git_cache_unstaged > 0 )) && items+=("${unstaged_icon}${_zline_git_cache_unstaged}")
+  (( _zline_git_cache_untracked > 0 )) && items+=("${untracked_icon}${_zline_git_cache_untracked}")
 
   local a_sym="${ahead_sym}"
   local b_sym="${behind_sym}"
@@ -118,6 +122,8 @@ zline_segment_git() {
   zparseopts -E -D -A opts -K \
     -ignore-submodules=flags -submodule=flags \
     -clean:=opts -dirty:=opts -ahead:=opts -color:=opts \
+    -staged-icon:=opts -unstaged-icon:=opts -untracked-icon:=opts -conflict-icon:=opts \
+    -ahead-icon:=opts -behind-icon:=opts -stash-icon:=opts \
     -ahead-sym:=opts -behind-sym:=opts -stash-sym:=opts \
     -fg:=opts -bg:=opts -icon:=opts
 
@@ -148,7 +154,16 @@ zline_segment_git() {
   local -i stash_count=$REPLY
 
   if (( _zline_git_cache_valid == 1 || stash_count > 0 )); then
-    _zline_git_format_details "${opts[--ahead-sym]}" "${opts[--behind-sym]}" "$stash_count" "${opts[--stash-sym]}"
+    local staged_ic="${opts[--staged-icon]:-+}"
+    local unstaged_ic="${opts[--unstaged-icon]:-!}"
+    local untracked_ic="${opts[--untracked-icon]:-?}"
+    local conflict_ic="${opts[--conflict-icon]:-x}"
+    local ahead_ic="${opts[--ahead-icon]:-${opts[--ahead-sym]}}"
+    local behind_ic="${opts[--behind-icon]:-${opts[--behind-sym]}}"
+    local stash_ic="${opts[--stash-icon]:-${opts[--stash-sym]}}"
+
+    _zline_git_format_details "$ahead_ic" "$behind_ic" "$stash_count" "$stash_ic" \
+      "$staged_ic" "$unstaged_ic" "$untracked_ic" "$conflict_ic"
     details="$REPLY"
     if (( _zline_git_cache_staged > 0 || _zline_git_cache_unstaged > 0 || _zline_git_cache_untracked > 0 || _zline_git_cache_conflicts > 0 )); then
       is_dirty=1

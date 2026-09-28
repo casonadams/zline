@@ -78,7 +78,8 @@ You can customize prompt behavior using flags on `zline preset` or `zline style`
 | `--transient` | Automatically collapses past prompts into a minimal `❯` symbol on Enter. |
 | `--transient-dir` | Retains directory in collapsed transient prompt instead of symbol-only. |
 | `--frame <none\|left\|full>` | Renders corner frame connectors (`╭─`, `╰─`). |
-| `--connect <char>` | Draws a connecting line (`·`, `─`) between left and right prompts on multiline layouts. |
+| `--frame-shape <rounded\|sharp\|double>` | Selects frame corner glyph style (`╭─` / `┌─` / `╔═`). |
+| `--connect <solid\|dashed\|dotted\|char>` | Draws a connecting line (`─`, `┄`, `┈`) between left and right prompts on multiline layouts. |
 | `--connect-color <col>` | Color of the connecting line (default: `8` / grey). |
 | `--hyperlinks` | Formats directory paths and Git repositories as clickable OSC 8 hyperlinks. |
 | `--title` | Automatically updates terminal tab/window titles with current path and running commands. |

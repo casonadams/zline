@@ -86,8 +86,10 @@ Shortens intermediate directory components to \fIN\fR characters (e.g. \fB--shor
 Number of trailing directory components to keep full (default: 1).
 .IP "\fB--alias\fR \fIpattern=replacement\fR"
 Substitutes matching path components (e.g. \fB--alias github.com=gith\fR).
-.IP "\fB--anchor\fR \fIgit\fR"
-Anchors at Git repository root, shortening paths above the repository but keeping the repository name full.
+.IP "\fB--anchor\fR \fIgit\fR | \fIproject\fR"
+Anchors at Git repository root or project root, shortening paths above the repository but keeping the project name full.
+.IP "\fB--last\fR \fIN\fR"
+Truncates path to the last \fIN\fR directory components (e.g. \fB--last 2\fR produces \fB.../parent/current\fR).
 .IP "\fB--format\fR \fIfunc_name\fR"
 Delegates path formatting to a custom Zsh function setting \fB$REPLY\fR.
 .RE
@@ -101,6 +103,8 @@ Color used when working tree is clean (default: 2 / green).
 Color used when working tree has changes (default: 3 / yellow).
 .IP "\fB--ahead\fR \fIcolor\fR"
 Color used when branch is ahead of remote (default: 12 / bright-blue).
+.IP "\fB--staged-icon\fR \fIsym\fR, \fB--unstaged-icon\fR \fIsym\fR, \fB--untracked-icon\fR \fIsym\fR"
+Custom status glyphs for git state counters (default: \fB+\fR, \fB!\fR, \fB?\fR).
 .RE
 .TP
 .B status
@@ -258,6 +262,9 @@ Active Pulumi infrastructure stack and project name from \fIPulumi.yaml\fR.
 .TP
 .B cmake
 Active CMake C/C++ project name or indicator from \fICMakeLists.txt\fR.
+.TP
+.B text
+Custom static text badge or evaluated shell variable (e.g. \fBtext "PROD"\fR or \fBtext "$VAR"\fR).
 
 .SH COLOR PALETTE
 \fBzline\fR standardizes on Base16 / Term16 colors (0\(en15) to guarantee seamless harmony with any terminal color scheme:

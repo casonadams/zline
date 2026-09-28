@@ -69,6 +69,7 @@ zline() {
       fi
       local theme_file="${ZLINE_DIR}/themes/${preset_name}.zsh"
       if [[ -r "$theme_file" ]]; then
+        _zline_connect_char=""
         source "$theme_file"
       else
         print -u2 -r -- "zline: unknown preset: $preset_name"
@@ -84,6 +85,7 @@ zline() {
           --ascii) _zline_mode="ascii" ;;
           --nerdfont) _zline_mode="nerdfont" ;;
           --frame) shift; _zline_frame="$1" ;;
+          --frame-shape) shift; _zline_frame_shape="$1" ;;
           --title) _zline_title_enabled=1 ;;
           --no-title) _zline_title_enabled=0 ;;
           --notify)
@@ -170,9 +172,19 @@ zline() {
             shift
             _zline_frame="$1"
             ;;
+          --frame-shape)
+            shift
+            _zline_frame_shape="$1"
+            ;;
           --connect)
             shift
-            _zline_connect_char="$1"
+            case "$1" in
+              solid) _zline_connect_char="─" ;;
+              dashed) _zline_connect_char="┄" ;;
+              dotted) _zline_connect_char="┈" ;;
+              none) _zline_connect_char="" ;;
+              *) _zline_connect_char="$1" ;;
+            esac
             ;;
           --connect-color)
             shift
