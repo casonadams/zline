@@ -14,6 +14,8 @@ source "${ZLINE_DIR}/lib/worker.zsh"
 source "${ZLINE_DIR}/lib/osc.zsh"
 source "${ZLINE_DIR}/lib/transient.zsh"
 source "${ZLINE_DIR}/lib/instant.zsh"
+source "${ZLINE_DIR}/lib/doctor.zsh"
+source "${ZLINE_DIR}/lib/configure.zsh"
 
 for _zline_seg in "${ZLINE_DIR}"/segments/*.zsh(N); do
   source "$_zline_seg"
@@ -113,6 +115,12 @@ zline() {
       ;;
     version)
       print -r -- "zline v${ZLINE_VERSION}"
+      ;;
+    doctor)
+      zline_doctor "$@"
+      ;;
+    configure)
+      zline_configure "$@"
       ;;
     *)
       print -u2 -r -- "zline: unknown command: $cmd"
