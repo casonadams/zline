@@ -127,6 +127,10 @@
         <label><input type="checkbox" id="optLua"> Lua (5.4)</label>
         <label><input type="checkbox" id="optBun"> Bun (1.1)</label>
         <label><input type="checkbox" id="optDeno"> Deno (1.40)</label>
+        <label><input type="checkbox" id="optElixir"> Elixir (1.16)</label>
+        <label><input type="checkbox" id="optGcp"> GCP (my-project)</label>
+        <label><input type="checkbox" id="optAzure"> Azure (Production)</label>
+        <label><input type="checkbox" id="optViMode"> Vi-Mode (NOR)</label>
         <label><input type="checkbox" id="optTime"> Current Time (14:30)</label>
       </div>
     </div>
@@ -216,6 +220,10 @@
     const optLua = document.getElementById("optLua");
     const optBun = document.getElementById("optBun");
     const optDeno = document.getElementById("optDeno");
+    const optElixir = document.getElementById("optElixir");
+    const optGcp = document.getElementById("optGcp");
+    const optAzure = document.getElementById("optAzure");
+    const optViMode = document.getElementById("optViMode");
     const optTime = document.getElementById("optTime");
     const promptPreview = document.getElementById("promptPreview");
     const configCode = document.getElementById("configCode");
@@ -279,6 +287,18 @@
         if (optDeno.checked) {
           rightHtml += `<span class="seg" style="background:#10b981;color:#000">🦕 1.40</span>`;
         }
+        if (optElixir.checked) {
+          rightHtml += `<span class="seg" style="background:#a855f7;color:#fff"> 1.16</span>`;
+        }
+        if (optGcp.checked) {
+          rightHtml += `<span class="seg" style="background:#3b82f6;color:#fff">󱇶 my-project</span>`;
+        }
+        if (optAzure.checked) {
+          rightHtml += `<span class="seg" style="background:#06b6d4;color:#000">󰠅 Production</span>`;
+        }
+        if (optViMode.checked) {
+          rightHtml += `<span class="seg" style="background:#eab308;color:#000">NOR</span>`;
+        }
         if (optStatus.checked) {
           rightHtml += `<span class="seg seg-status">✘ 1</span>`;
         }
@@ -322,6 +342,18 @@
         }
         if (optDeno.checked) {
           rightHtml += `<span style="color:#10b981">🦕 1.40</span> `;
+        }
+        if (optElixir.checked) {
+          rightHtml += `<span style="color:#c084fc"> 1.16</span> `;
+        }
+        if (optGcp.checked) {
+          rightHtml += `<span style="color:#38bdf8">󱇶 my-project</span> `;
+        }
+        if (optAzure.checked) {
+          rightHtml += `<span style="color:#06b6d4">󰠅 Production</span> `;
+        }
+        if (optViMode.checked) {
+          rightHtml += `<span style="color:#eab308">NOR</span> `;
         }
         if (optStatus.checked) {
           rightHtml += `<span style="color:#ef4444">✘ 1</span> `;
@@ -385,6 +417,10 @@
       if (optLua.checked) rightSegs.push("lua");
       if (optBun.checked) rightSegs.push("bun");
       if (optDeno.checked) rightSegs.push("deno");
+      if (optElixir.checked) rightSegs.push("elixir");
+      if (optGcp.checked) rightSegs.push("gcp");
+      if (optAzure.checked) rightSegs.push("azure");
+      if (optViMode.checked) rightSegs.push("'vi_mode --hide-insert'");
       if (optStatus.checked) rightSegs.push("'status --hide-zero'");
       if (optExec.checked) rightSegs.push("'exec_time --min 2'");
       if (optTime.checked) rightSegs.push("time");
@@ -410,7 +446,7 @@ zline init`;
       configCode.textContent = code;
     }
 
-    [presetSelect, frameSelect, connectSelect, optDir, optAnchor, dirShorten, optGit, gitState, optExec, optStatus, optVenv, optRust, optGo, optDocker, optK8s, optNix, optLua, optBun, optDeno, optTime].forEach(el => {
+    [presetSelect, frameSelect, connectSelect, optDir, optAnchor, dirShorten, optGit, gitState, optExec, optStatus, optVenv, optRust, optGo, optDocker, optK8s, optNix, optLua, optBun, optDeno, optElixir, optGcp, optAzure, optViMode, optTime].forEach(el => {
       el.addEventListener("change", updatePreview);
     });
 

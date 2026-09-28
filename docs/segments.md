@@ -409,6 +409,74 @@ deno --color 10
 
 ---
 
+## `vi_mode` (Modal Editing Indicator)
+
+Displays current ZLE keymap state (`NORMAL`, `INSERT`, `VISUAL`).
+
+```zsh
+vi_mode --normal NOR --insert INS --hide-insert
+```
+
+| Flag | Default | Description |
+| :--- | :--- | :--- |
+| `--normal <str>` | `NOR` | Label displayed during Normal (`vicmd`) mode. |
+| `--insert <str>` | `INS` | Label displayed during Insert (`viins`/`main`) mode. |
+| `--visual <str>` | `VIS` | Label displayed during Visual mode. |
+| `--color-normal <col>` | `11` (yellow) | Color applied during Normal mode. |
+| `--color-insert <col>` | `10` (green) | Color applied during Insert mode. |
+| `--color-visual <col>` | `13` (magenta) | Color applied during Visual mode. |
+| `--hide-insert` | `false` | When set, hides the segment during Insert mode. |
+
+---
+
+## `gcp` (Google Cloud Platform)
+
+Displays active Google Cloud project from environment variables or active `gcloud` configuration.
+
+```zsh
+gcp --color 12
+```
+
+| Flag | Default | Description |
+| :--- | :--- | :--- |
+| `--color <col>` | `12` (bright-blue) | Foreground text / icon color. |
+| `--bg <col>` | `12` | Background block color in Powerline/Rainbow modes. |
+| `--icon <sym>` | `󱇶 ` | GCP segment icon (`gcp:` in ASCII mode). |
+
+---
+
+## `azure` (Microsoft Azure)
+
+Displays active Azure subscription from environment variables or `azureProfile.json`.
+
+```zsh
+azure --color 14
+```
+
+| Flag | Default | Description |
+| :--- | :--- | :--- |
+| `--color <col>` | `14` (cyan) | Foreground text / icon color. |
+| `--bg <col>` | `14` | Background block color in Powerline/Rainbow modes. |
+| `--icon <sym>` | `󰠅 ` | Azure segment icon (`az:` in ASCII mode). |
+
+---
+
+## `elixir` (Elixir Runtime)
+
+Displays active Elixir version from `.tool-versions` or detects `mix.exs`.
+
+```zsh
+elixir --color 5
+```
+
+| Flag | Default | Description |
+| :--- | :--- | :--- |
+| `--color <col>` | `5` (magenta) | Foreground text / icon color. |
+| `--bg <col>` | `5` | Background block color in Powerline/Rainbow modes. |
+| `--icon <sym>` | ` ` | Elixir segment icon (`ex:` in ASCII mode). |
+
+---
+
 ## Universal `.tool-versions` Detection
 
-Language runtime segments (`node`, `rust`, `golang`, `ruby`, `php`, `java`, `dotnet`, `venv`, `lua`, `zig`, `bun`, `deno`) automatically resolve versions defined in `.tool-versions` (used by `asdf`, `mise`, and `rtx`) in pure Zsh without executing external subshells.
+Language runtime segments (`node`, `rust`, `golang`, `ruby`, `php`, `java`, `dotnet`, `venv`, `lua`, `zig`, `bun`, `deno`, `elixir`) automatically resolve versions defined in `.tool-versions` (used by `asdf`, `mise`, and `rtx`) in pure Zsh without executing external subshells.

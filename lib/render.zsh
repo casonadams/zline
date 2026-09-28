@@ -41,6 +41,10 @@ typeset -gA _zline_registered_segments=(
   zig 1
   bun 1
   deno 1
+  vi_mode 1
+  gcp 1
+  azure 1
+  elixir 1
   newline 1
 )
 

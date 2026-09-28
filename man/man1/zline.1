@@ -204,6 +204,18 @@ Active Bun runtime indicator or version from \fIbun.lockb\fR, \fIbunfig.toml\fR,
 .TP
 .B deno
 Active Deno runtime indicator or version from \fIdeno.json\fR, \fIdeno.lock\fR, or \fI.tool-versions\fR.
+.TP
+.B vi_mode
+Modal editing indicator displaying current ZLE keymap state (NORMAL, INSERT, VISUAL).
+.TP
+.B gcp
+Active Google Cloud Platform project from \fI$CLOUDSDK_CORE_PROJECT\fR or \fIgcloud\fR config.
+.TP
+.B azure
+Active Microsoft Azure subscription from \fI$ARM_SUBSCRIPTION_NAME\fR or \fIazureProfile.json\fR.
+.TP
+.B elixir
+Active Elixir version from \fI.tool-versions\fR or project files (\fImix.exs\fR).
 
 .SH COLOR PALETTE
 \fBzline\fR standardizes on Base16 / Term16 colors (0\(en15) to guarantee seamless harmony with any terminal color scheme:
