@@ -33,6 +33,8 @@ typeset -gA _zline_registered_segments=(
   php 1
   java 1
   dotnet 1
+  load 1
+  ram 1
   newline 1
 )
 

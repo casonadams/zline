@@ -46,9 +46,24 @@ _zline_git_read_head() {
   return 0
 }
 
+_zline_git_read_stash() {
+  local dir="$1"
+  local stash_file="${dir}/.git/logs/refs/stash"
+  local -i count=0
+  if [[ -f "$stash_file" ]]; then
+    local line
+    while IFS= read -r line; do
+      (( count += 1 ))
+    done < "$stash_file" 2>/dev/null
+  fi
+  REPLY=$count
+}
+
 _zline_git_format_details() {
   local ahead_sym="$1"
   local behind_sym="$2"
+  local -i stash_cnt="${3:-0}"
+  local stash_sym="$4"
 
   local -a items=()
   (( _zline_git_cache_conflicts > 0 )) && items+=("x${_zline_git_cache_conflicts}")
@@ -78,6 +93,18 @@ _zline_git_format_details() {
   (( _zline_git_cache_ahead > 0 )) && items+=("${a_sym}${_zline_git_cache_ahead}")
   (( _zline_git_cache_behind > 0 )) && items+=("${b_sym}${_zline_git_cache_behind}")
 
+  if (( stash_cnt > 0 )); then
+    local s_sym="${stash_sym}"
+    if [[ -z "$s_sym" ]]; then
+      if [[ "$_zline_mode" == "ascii" ]]; then
+        s_sym="*"
+      else
+        s_sym=$'\u2691'
+      fi
+    fi
+    items+=("${s_sym}${stash_cnt}")
+  fi
+
   REPLY="${(j: :)items}"
 }
 
@@ -87,7 +114,7 @@ zline_segment_git() {
   zparseopts -E -D -A opts -K \
     -ignore-submodules=flags -submodule=flags \
     -clean:=opts -dirty:=opts -ahead:=opts -color:=opts \
-    -ahead-sym:=opts -behind-sym:=opts \
+    -ahead-sym:=opts -behind-sym:=opts -stash-sym:=opts \
     -fg:=opts -bg:=opts -icon:=opts
 
   _zline_find_git_root "$PWD" || true
@@ -113,8 +140,11 @@ zline_segment_git() {
 
   local details=""
   local -i is_dirty=0
-  if (( _zline_git_cache_valid == 1 )); then
-    _zline_git_format_details "${opts[--ahead-sym]}" "${opts[--behind-sym]}"
+  _zline_git_read_stash "$git_root"
+  local -i stash_count=$REPLY
+
+  if (( _zline_git_cache_valid == 1 || stash_count > 0 )); then
+    _zline_git_format_details "${opts[--ahead-sym]}" "${opts[--behind-sym]}" "$stash_count" "${opts[--stash-sym]}"
     details="$REPLY"
     if (( _zline_git_cache_staged > 0 || _zline_git_cache_unstaged > 0 || _zline_git_cache_untracked > 0 || _zline_git_cache_conflicts > 0 )); then
       is_dirty=1

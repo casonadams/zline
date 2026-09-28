@@ -21,6 +21,10 @@ _zline() {
     'lean:Modern, flat, space-separated layout'
     'rainbow:High-contrast vivid color blocks'
     'pure:Minimalist two-line prompt'
+    'catppuccin:Pastel Mocha palette with lavender accents'
+    'tokyonight:Tokyo Night Storm palette with cyan accents'
+    'nord:Arctic frost palette with polar night colors'
+    'gruvbox:Retro groove warm palette'
     'list:List all available presets with descriptions'
     'show:Display the configuration code of a preset'
   )
