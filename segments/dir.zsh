@@ -5,6 +5,7 @@ typeset -g _zline_dir_cache_opts=""
 typeset -g _zline_dir_cache_res=""
 
 _zline_find_git_root() {
+  emulate -L zsh
   local cur="$1"
   while [[ "$cur" != "/" && -n "$cur" ]]; do
     if [[ -e "${cur}/.git" ]]; then
@@ -18,6 +19,7 @@ _zline_find_git_root() {
 }
 
 _zline_dir_format_path() {
+  emulate -L zsh
   local raw="$1"
   local shorten="${2:-0}"
   local keep_last="${3:-1}"
@@ -101,6 +103,7 @@ _zline_dir_on_chpwd() {
 zline_hook add chpwd _zline_dir_on_chpwd
 
 zline_segment_dir() {
+  emulate -L zsh
   local -A opts=()
   local -a alias_arr=()
   zparseopts -E -D -A opts -K \

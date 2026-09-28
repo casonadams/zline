@@ -135,7 +135,7 @@ assert_eq "$REPLY" "x1 +2 !3 ?4 ^5 v1" "Badge formatting in ascii mode"
 _zline_mode="nerdfont"
 
 # 6. Asynchronous worker lifecycle and IPC
-_zline_worker_start
+_zline_worker_start --force
 assert_eq "$(( _zline_worker_pid > 0 ))" "1" "Worker process started"
 assert_eq "$(( _zline_worker_req_fd >= 0 ))" "1" "Worker request pipe open"
 assert_eq "$(( _zline_worker_res_fd >= 0 ))" "1" "Worker response pipe open"

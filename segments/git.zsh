@@ -8,6 +8,7 @@ typeset -gi _zline_git_cache_conflicts=0
 typeset -gi _zline_git_cache_valid=0
 
 _zline_git_read_head() {
+  emulate -L zsh
   local dir="$1"
   local git_path="${dir}/.git"
   if [[ -f "$git_path" ]]; then
@@ -47,6 +48,7 @@ _zline_git_read_head() {
 }
 
 _zline_git_read_stash() {
+  emulate -L zsh
   local dir="$1"
   local stash_file="${dir}/.git/logs/refs/stash"
   local -i count=0
@@ -60,6 +62,7 @@ _zline_git_read_stash() {
 }
 
 _zline_git_format_details() {
+  emulate -L zsh
   local ahead_sym="$1"
   local behind_sym="$2"
   local -i stash_cnt="${3:-0}"
@@ -109,6 +112,7 @@ _zline_git_format_details() {
 }
 
 zline_segment_git() {
+  emulate -L zsh
   local -A opts=()
   local -a flags=()
   zparseopts -E -D -A opts -K \

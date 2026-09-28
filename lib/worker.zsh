@@ -83,18 +83,22 @@ _zline_worker_loop() {
 }
 
 _zline_worker_start() {
+  emulate -L zsh
   (( _zline_worker_pid > 0 )) && return 0
+  if [[ ! -o interactive && "$1" != "--force" ]]; then
+    return 0
+  fi
 
-  _zline_worker_tmpdir=$(mktemp -d "${TMPDIR:-/tmp}/zline-worker.XXXXXX")
+  _zline_worker_tmpdir=$(mktemp -d "${TMPDIR:-/tmp}/zline-worker.XXXXXX" 2>/dev/null) || return 0
   local req_pipe="${_zline_worker_tmpdir}/req"
   local res_pipe="${_zline_worker_tmpdir}/res"
-  mkfifo "$req_pipe" "$res_pipe"
+  mkfifo "$req_pipe" "$res_pipe" 2>/dev/null || { rm -rf "$_zline_worker_tmpdir" 2>/dev/null; return 0; }
 
   ( _zline_worker_loop "$req_pipe" "$res_pipe" ) </dev/null >/dev/null 2>&1 &!
   _zline_worker_pid=$!
 
-  exec {_zline_worker_req_fd}>"$req_pipe"
-  exec {_zline_worker_res_fd}<"$res_pipe"
+  exec {_zline_worker_req_fd}>"$req_pipe" 2>/dev/null || { _zline_worker_stop; return 0; }
+  exec {_zline_worker_res_fd}<"$res_pipe" 2>/dev/null || { _zline_worker_stop; return 0; }
 
   if [[ -o interactive ]] && (( $+widgets[zle-line-init] || $+functions[zle] )); then
     zle -F "$_zline_worker_res_fd" _zline_worker_zle_handler 2>/dev/null

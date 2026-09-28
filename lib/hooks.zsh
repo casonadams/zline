@@ -10,9 +10,10 @@ typeset -ga _zline_hooks_keymap_select=()
 typeset -ga _zline_hooks_line_finish=()
 
 zline_hook() {
+  emulate -L zsh
   local action="$1"
   local event="$2"
-  local fn="$3"
+  local fn="${3:-}"
   local var="_zline_hooks_${event}"
 
   if (( ! ${(P)+var} )); then

@@ -31,6 +31,7 @@ done
 unset _zline_seg
 
 zline() {
+  emulate -L zsh
   local cmd="$1"
   shift
 

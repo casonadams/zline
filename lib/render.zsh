@@ -81,6 +81,7 @@ _zline_set_style_separators() {
 }
 
 _zline_compile_tokens() {
+  emulate -L zsh
   local side="$1"
   shift
   local -a items=("$@")
@@ -132,6 +133,7 @@ _zline_compile_tokens() {
 }
 
 zline_compile() {
+  emulate -L zsh
   _zline_set_style_separators
   _zline_compile_tokens "left" "${zline_left[@]}"
   _zline_compile_tokens "right" "${zline_right[@]}"
@@ -190,6 +192,7 @@ _zline_render_left_segment_powerline() {
 }
 
 _zline_render_left() {
+  emulate -L zsh
   local out=""
   local last_bg="none"
   local count=${#_zline_compiled_left_names}
@@ -300,6 +303,7 @@ _zline_render_right_segment_powerline() {
 }
 
 _zline_render_right() {
+  emulate -L zsh
   local out=""
   local last_bg="none"
   local count=${#_zline_compiled_right_names}
@@ -342,6 +346,7 @@ _zline_render_right() {
 }
 
 zline_render() {
+  emulate -L zsh
   zline_hook run pre_render
   _zline_render_left
   local left_body="$REPLY"
