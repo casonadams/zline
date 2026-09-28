@@ -48,6 +48,10 @@ typeset -gA _zline_registered_segments=(
   os 1
   container 1
   shlvl 1
+  crystal 1
+  haskell 1
+  scala 1
+  kotlin 1
   newline 1
 )
 

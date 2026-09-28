@@ -128,6 +128,10 @@
         <label><input type="checkbox" id="optBun"> Bun (1.1)</label>
         <label><input type="checkbox" id="optDeno"> Deno (1.40)</label>
         <label><input type="checkbox" id="optElixir"> Elixir (1.16)</label>
+        <label><input type="checkbox" id="optCrystal"> Crystal (1.11)</label>
+        <label><input type="checkbox" id="optHaskell"> Haskell (9.4)</label>
+        <label><input type="checkbox" id="optScala"> Scala (3.3)</label>
+        <label><input type="checkbox" id="optKotlin"> Kotlin (1.9)</label>
         <label><input type="checkbox" id="optGcp"> GCP (my-project)</label>
         <label><input type="checkbox" id="optAzure"> Azure (Production)</label>
         <label><input type="checkbox" id="optViMode"> Vi-Mode (NOR)</label>
@@ -224,6 +228,10 @@
     const optBun = document.getElementById("optBun");
     const optDeno = document.getElementById("optDeno");
     const optElixir = document.getElementById("optElixir");
+    const optCrystal = document.getElementById("optCrystal");
+    const optHaskell = document.getElementById("optHaskell");
+    const optScala = document.getElementById("optScala");
+    const optKotlin = document.getElementById("optKotlin");
     const optGcp = document.getElementById("optGcp");
     const optAzure = document.getElementById("optAzure");
     const optViMode = document.getElementById("optViMode");
@@ -296,6 +304,18 @@
         if (optElixir.checked) {
           rightHtml += `<span class="seg" style="background:#a855f7;color:#fff"> 1.16</span>`;
         }
+        if (optCrystal.checked) {
+          rightHtml += `<span class="seg" style="background:#f1f5f9;color:#000"> 1.11</span>`;
+        }
+        if (optHaskell.checked) {
+          rightHtml += `<span class="seg" style="background:#a855f7;color:#fff"> 9.4</span>`;
+        }
+        if (optScala.checked) {
+          rightHtml += `<span class="seg" style="background:#ef4444;color:#fff"> 3.3</span>`;
+        }
+        if (optKotlin.checked) {
+          rightHtml += `<span class="seg" style="background:#c084fc;color:#000">󱈙 1.9</span>`;
+        }
         if (optGcp.checked) {
           rightHtml += `<span class="seg" style="background:#3b82f6;color:#fff">󱇶 my-project</span>`;
         }
@@ -360,6 +380,18 @@
         }
         if (optElixir.checked) {
           rightHtml += `<span style="color:#c084fc"> 1.16</span> `;
+        }
+        if (optCrystal.checked) {
+          rightHtml += `<span style="color:#f8fafc"> 1.11</span> `;
+        }
+        if (optHaskell.checked) {
+          rightHtml += `<span style="color:#c084fc"> 9.4</span> `;
+        }
+        if (optScala.checked) {
+          rightHtml += `<span style="color:#ef4444"> 3.3</span> `;
+        }
+        if (optKotlin.checked) {
+          rightHtml += `<span style="color:#d8b4fe">󱈙 1.9</span> `;
         }
         if (optGcp.checked) {
           rightHtml += `<span style="color:#38bdf8">󱇶 my-project</span> `;
@@ -442,6 +474,10 @@
       if (optBun.checked) rightSegs.push("bun");
       if (optDeno.checked) rightSegs.push("deno");
       if (optElixir.checked) rightSegs.push("elixir");
+      if (optCrystal.checked) rightSegs.push("crystal");
+      if (optHaskell.checked) rightSegs.push("haskell");
+      if (optScala.checked) rightSegs.push("scala");
+      if (optKotlin.checked) rightSegs.push("kotlin");
       if (optGcp.checked) rightSegs.push("gcp");
       if (optAzure.checked) rightSegs.push("azure");
       if (optViMode.checked) rightSegs.push("'vi_mode --hide-insert'");
@@ -473,7 +509,7 @@ zline init`;
       configCode.textContent = code;
     }
 
-    [presetSelect, frameSelect, connectSelect, optDir, optAnchor, dirShorten, optGit, gitState, optExec, optStatus, optVenv, optRust, optGo, optDocker, optK8s, optNix, optLua, optBun, optDeno, optElixir, optGcp, optAzure, optViMode, optOs, optContainer, optShlvl, optTime].forEach(el => {
+    [presetSelect, frameSelect, connectSelect, optDir, optAnchor, dirShorten, optGit, gitState, optExec, optStatus, optVenv, optRust, optGo, optDocker, optK8s, optNix, optLua, optBun, optDeno, optElixir, optCrystal, optHaskell, optScala, optKotlin, optGcp, optAzure, optViMode, optOs, optContainer, optShlvl, optTime].forEach(el => {
       el.addEventListener("change", updatePreview);
     });
 

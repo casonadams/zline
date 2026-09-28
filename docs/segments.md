@@ -527,6 +527,70 @@ shlvl --threshold 2 --warn 9
 
 ---
 
+## `crystal` (Crystal Runtime)
+
+Displays active Crystal version from `.tool-versions` or detects `shard.yml`.
+
+```zsh
+crystal --color 15
+```
+
+| Flag | Default | Description |
+| :--- | :--- | :--- |
+| `--color <col>` | `15` (white) | Foreground text / icon color. |
+| `--bg <col>` | `15` | Background block color in Powerline/Rainbow modes. |
+| `--icon <sym>` | ` ` | Crystal segment icon (`cr:` in ASCII mode). |
+
+---
+
+## `haskell` (Haskell Runtime)
+
+Displays active Haskell / GHC version from `.tool-versions` or detects `stack.yaml` / `cabal.project`.
+
+```zsh
+haskell --color 5
+```
+
+| Flag | Default | Description |
+| :--- | :--- | :--- |
+| `--color <col>` | `5` (magenta) | Foreground text / icon color. |
+| `--bg <col>` | `5` | Background block color in Powerline/Rainbow modes. |
+| `--icon <sym>` | ` ` | Haskell segment icon (`hs:` in ASCII mode). |
+
+---
+
+## `scala` (Scala Runtime)
+
+Displays active Scala version from `.tool-versions` or detects `build.sbt`.
+
+```zsh
+scala --color 9
+```
+
+| Flag | Default | Description |
+| :--- | :--- | :--- |
+| `--color <col>` | `9` (red) | Foreground text / icon color. |
+| `--bg <col>` | `9` | Background block color in Powerline/Rainbow modes. |
+| `--icon <sym>` | ` ` | Scala segment icon (`scala:` in ASCII mode). |
+
+---
+
+## `kotlin` (Kotlin Runtime)
+
+Displays active Kotlin version from `.tool-versions` or detects `build.gradle.kts`.
+
+```zsh
+kotlin --color 13
+```
+
+| Flag | Default | Description |
+| :--- | :--- | :--- |
+| `--color <col>` | `13` (purple) | Foreground text / icon color. |
+| `--bg <col>` | `13` | Background block color in Powerline/Rainbow modes. |
+| `--icon <sym>` | `󱈙 ` | Kotlin segment icon (`kt:` in ASCII mode). |
+
+---
+
 ## Universal `.tool-versions` Detection
 
-Language runtime segments (`node`, `rust`, `golang`, `ruby`, `php`, `java`, `dotnet`, `venv`, `lua`, `zig`, `bun`, `deno`, `elixir`) automatically resolve versions defined in `.tool-versions` (used by `asdf`, `mise`, and `rtx`) in pure Zsh without executing external subshells.
+Language runtime segments (`node`, `rust`, `golang`, `ruby`, `php`, `java`, `dotnet`, `venv`, `lua`, `zig`, `bun`, `deno`, `elixir`, `crystal`, `haskell`, `scala`, `kotlin`) automatically resolve versions defined in `.tool-versions` (used by `asdf`, `mise`, and `rtx`) in pure Zsh without executing external subshells.
