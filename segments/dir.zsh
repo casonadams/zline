@@ -130,6 +130,11 @@ zline_segment_dir() {
     _zline_dir_cache_res="$_zline_ret_content"
   fi
 
+  if (( _zline_osc_hyperlinks == 1 )); then
+    _zline_osc_hyperlink "file://${HOST:-localhost}${PWD}" "$_zline_ret_content"
+    _zline_ret_content="$REPLY"
+  fi
+
   _zline_ret_fg="${opts[--color]:-${opts[--fg]:-4}}"
   _zline_ret_bg="${opts[--bg]:-4}"
   if [[ "$_zline_style" == "powerline" || "$_zline_style" == "rainbow" ]]; then

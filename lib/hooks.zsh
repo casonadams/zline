@@ -67,6 +67,13 @@ _zline_on_zshexit() {
   zline_hook run zshexit "$@"
 }
 
+TRAPWINCH() {
+  if [[ -o interactive ]] && (( $+functions[zle] )); then
+    zline_render
+    zle reset-prompt 2>/dev/null
+  fi
+}
+
 _zline_hooks_install() {
   add-zsh-hook chpwd _zline_on_chpwd
   add-zsh-hook precmd _zline_on_precmd

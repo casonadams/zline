@@ -27,6 +27,8 @@ typeset -gA _zline_registered_segments=(
   terraform 1
   docker 1
   package 1
+  user_host 1
+  battery 1
   newline 1
 )
 

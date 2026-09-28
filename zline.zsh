@@ -55,6 +55,8 @@ zline() {
           --frame) shift; _zline_frame="$1" ;;
           --title) _zline_title_enabled=1 ;;
           --no-title) _zline_title_enabled=0 ;;
+          --hyperlinks) _zline_osc_hyperlinks=1 ;;
+          --no-hyperlinks) _zline_osc_hyperlinks=0 ;;
         esac
         shift
       done
@@ -100,6 +102,12 @@ zline() {
           --title-format)
             shift
             _zline_title_format="$1"
+            ;;
+          --hyperlinks)
+            _zline_osc_hyperlinks=1
+            ;;
+          --no-hyperlinks)
+            _zline_osc_hyperlinks=0
             ;;
           --frame)
             shift
