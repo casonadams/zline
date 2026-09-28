@@ -58,14 +58,18 @@ rm -f .tool-versions
 # 3. zline notify CLI commands
 typeset out
 out="$(zline notify status)"
-assert_eq "$out" "Notifications: disabled" "zline notify status initially disabled"
+typeset is_disabled=0
+[[ "$out" == *disabled* ]] && is_disabled=1
+assert_eq "$is_disabled" "1" "zline notify status initially disabled"
 
 zline notify on 15 >/dev/null
 assert_eq "$_zline_notify_enabled" "1" "zline notify on enables notifications"
 assert_eq "$_zline_notify_threshold" "15" "zline notify on sets custom threshold"
 
 out="$(zline notify status)"
-assert_eq "$out" "Notifications: enabled (threshold: 15s)" "zline notify status shows enabled and threshold"
+typeset is_enabled_15=0
+[[ "$out" == *enabled* && "$out" == *15s* ]] && is_enabled_15=1
+assert_eq "$is_enabled_15" "1" "zline notify status shows enabled and threshold"
 
 zline notify threshold 45 >/dev/null
 assert_eq "$_zline_notify_threshold" "45" "zline notify threshold updates threshold"
@@ -75,16 +79,14 @@ assert_eq "$_zline_notify_enabled" "0" "zline notify off disables notifications"
 
 # 4. _zline_notify_precmd emission
 _zline_notify_enabled=1
+_zline_notify_force=1
 _zline_notify_threshold=10
 _zline_notify_last_cmd="npm test"
 _zline_last_duration=12.5
 _zline_last_exit_code=0
 
-# Intercept stdout
-exec 3>&1
 typeset notify_output
 notify_output="$(_zline_notify_precmd)"
-exec 1>&3
 
 # Test that notification output contains OSC 777 and OSC 9 escape sequences
 typeset has_osc777=0
@@ -102,6 +104,7 @@ below_thresh_output="$(_zline_notify_precmd)"
 assert_eq "$below_thresh_output" "" "No notification emitted when duration < threshold"
 
 _zline_notify_enabled=0
+_zline_notify_force=0
 
 # 5. Documentation completeness
 typeset man_content

@@ -23,8 +23,8 @@ _zline_notify_precmd() {
     dur_str="$REPLY"
     local status_str="exit ${_zline_last_exit_code:-0}"
 
-    print -n -u1 $'\e]777;notify;Command Finished ('${dur_str}$') ;'${cmd}' ('${status_str}')$'\a'
-    print -n -u1 $'\e]9;'${cmd}': finished in '${dur_str}' ('${status_str}')$'\a'
+    print -n -u1 -- $'\e]777;notify;Command Finished ('"${dur_str}"$') ;'"${cmd}"' ('"${status_str}"')'$'\a'
+    print -n -u1 -- $'\e]9;'"${cmd}"': finished in '"${dur_str}"' ('"${status_str}"')'$'\a'
   fi
   _zline_notify_last_cmd=""
 }
