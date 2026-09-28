@@ -85,7 +85,7 @@ zline_segment_git() {
   local -A opts=()
   local -a flags=()
   zparseopts -E -D -A opts -K \
-    -ignore-submodules=flags \
+    -ignore-submodules=flags -submodule=flags \
     -clean:=opts -dirty:=opts -ahead:=opts -color:=opts \
     -ahead-sym:=opts -behind-sym:=opts \
     -fg:=opts -bg:=opts -icon:=opts
@@ -101,7 +101,15 @@ zline_segment_git() {
   local branch="$REPLY"
   [[ -z "$branch" ]] && { _zline_ret_content=""; return 0; }
 
-  _zline_worker_send "git" "$git_root" 2>/dev/null
+  if (( ${flags[(Ie)--submodule]} > 0 )) && [[ -f "${git_root}/.git" ]]; then
+    if [[ "$_zline_mode" == "ascii" ]]; then
+      branch="${branch} [sub]"
+    else
+      branch="${branch} "$'\uF04F9'
+    fi
+  fi
+
+  _zline_worker_send "git" "$git_root" 2>/dev/null || true
 
   local details=""
   local -i is_dirty=0

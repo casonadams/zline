@@ -21,12 +21,20 @@ zline_hook add precmd _zline_exec_time_precmd
 
 _zline_format_duration() {
   typeset -F dur="$1"
+  local -i prec="${2:-1}"
   typeset -i total_sec=dur
-  typeset -i ms=$(( (dur - total_sec) * 10 ))
 
   if (( total_sec < 60 )); then
-    if (( total_sec < 10 )); then
-      REPLY="${total_sec}.${ms}s"
+    if (( total_sec < 10 || prec >= 2 )); then
+      if (( prec >= 2 )); then
+        local -i ms=$(( (dur - total_sec) * 100 ))
+        local ms_str="$ms"
+        (( ms < 10 )) && ms_str="0${ms}"
+        REPLY="${total_sec}.${ms_str}s"
+      else
+        local -i ms=$(( (dur - total_sec) * 10 ))
+        REPLY="${total_sec}.${ms}s"
+      fi
     else
       REPLY="${total_sec}s"
     fi
@@ -44,6 +52,7 @@ _zline_format_duration() {
 zline_segment_exec_time() {
   local -A opts=()
   zparseopts -E -D -A opts -K \
+    -precision:=opts \
     -min:=opts -color:=opts -icon:=opts -bg:=opts -fg:=opts
 
   local min_val="${opts[--min]:-2}"
@@ -55,7 +64,7 @@ zline_segment_exec_time() {
     return 0
   fi
 
-  _zline_format_duration "$_zline_last_duration"
+  _zline_format_duration "$_zline_last_duration" "${opts[--precision]:-1}"
   _zline_ret_content="$REPLY"
   _zline_ret_fg="${opts[--color]:-11}"
   _zline_ret_bg="${opts[--bg]:-3}"

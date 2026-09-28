@@ -105,6 +105,7 @@ zline_segment_dir() {
   local -a alias_arr=()
   zparseopts -E -D -A opts -K \
     -color:=opts -fg:=opts -bg:=opts -icon:=opts \
+    -readonly-icon:=opts -readonly-color:=opts \
     -shorten:=opts -keep-last:=opts -anchor:=opts \
     -format:=opts -alias+:=alias_arr
 
@@ -135,14 +136,35 @@ zline_segment_dir() {
     _zline_ret_content="$REPLY"
   fi
 
+  local -i is_readonly=0
+  if [[ ! -w "$PWD" ]]; then
+    is_readonly=1
+  fi
+
   _zline_ret_fg="${opts[--color]:-${opts[--fg]:-4}}"
   _zline_ret_bg="${opts[--bg]:-4}"
-  if [[ "$_zline_style" == "powerline" || "$_zline_style" == "rainbow" ]]; then
+
+  if (( is_readonly == 1 )); then
+    if [[ "$_zline_style" == "powerline" || "$_zline_style" == "rainbow" ]]; then
+      _zline_ret_bg="${opts[--readonly-color]:-1}"
+      _zline_ret_fg="15"
+    else
+      _zline_ret_fg="${opts[--readonly-color]:-9}"
+    fi
+  elif [[ "$_zline_style" == "powerline" || "$_zline_style" == "rainbow" ]]; then
     _zline_ret_fg="${opts[--fg]:-15}"
   fi
 
   if [[ -n "${opts[(i)--icon]}" ]]; then
     _zline_ret_icon="${opts[--icon]}"
+  elif (( is_readonly == 1 )); then
+    if [[ -n "${opts[--readonly-icon]}" ]]; then
+      _zline_ret_icon="${opts[--readonly-icon]}"
+    elif [[ "$_zline_mode" == "ascii" ]]; then
+      _zline_ret_icon="[ro] "
+    else
+      _zline_ret_icon=$'\uF023 '
+    fi
   elif [[ "$_zline_mode" == "ascii" ]]; then
     _zline_ret_icon=""
   else
