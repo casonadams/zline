@@ -88,6 +88,7 @@ zline() {
           --no-hyperlinks) _zline_osc_hyperlinks=0 ;;
           --connect) shift; _zline_connect_char="$1" ;;
           --connect-color) shift; _zline_connect_color="$1" ;;
+          --rprompt-line) shift; _zline_rprompt_line="$1" ;;
         esac
         shift
       done
@@ -156,6 +157,10 @@ zline() {
           --connect-color)
             shift
             _zline_connect_color="$1"
+            ;;
+          --rprompt-line)
+            shift
+            _zline_rprompt_line="$1"
             ;;
         esac
         shift

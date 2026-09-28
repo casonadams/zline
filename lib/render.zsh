@@ -40,6 +40,7 @@ typeset -gA _zline_registered_segments=(
 
 typeset -g _zline_connect_char=""
 typeset -g _zline_connect_color="8"
+typeset -gi _zline_rprompt_line=1
 
 _zline_visual_len() {
   local str="$1"
@@ -354,13 +355,26 @@ zline_render() {
     _zline_visual_len "$right_body"
     local -i right_len=$REPLY
 
-    if [[ -n "$_zline_connect_char" && "$left_body" == *$'\n'* ]]; then
+    local frame_end=""
+    if [[ "$_zline_frame" == "full" ]]; then
+      if [[ "$_zline_mode" == "ascii" ]]; then
+        frame_end=" -+"
+      else
+        frame_end=" %F{8}"$'\u2500\u256E'"%f"
+      fi
+      right_body="${right_body}${frame_end}"
+      _zline_visual_len "$right_body"
+      right_len=$REPLY
+    fi
+
+    if (( _zline_rprompt_line == 1 )) && [[ "$left_body" == *$'\n'* ]]; then
       local -i rem=$(( COLUMNS - left_len - right_len - 2 ))
       if (( rem > 2 )); then
+        local fill_char="${_zline_connect_char:- }"
         local -a fill_chars=()
         local -i fi
         for (( fi = 1; fi <= rem; fi++ )); do
-          fill_chars+="$_zline_connect_char"
+          fill_chars+="$fill_char"
         done
         local filler="${(j::)fill_chars}"
         local left_bot="${left_body#*$'\n'}"

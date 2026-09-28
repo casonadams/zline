@@ -55,6 +55,7 @@ _zline_frame="none"
 # 5. Responsive truncation
 zline preset powerline --no-osc
 zline_right=(time)
+_zline_rprompt_line=2
 zline init
 
 # When COLUMNS is large, RPROMPT is rendered
@@ -66,6 +67,7 @@ assert_eq "$has_rprompt" "1" "RPROMPT rendered when COLUMNS width is ample"
 # When COLUMNS is small, RPROMPT is dropped to prevent line wrap
 COLUMNS=15 zline_render
 assert_eq "$RPROMPT" "" "RPROMPT dropped when terminal COLUMNS too narrow"
+_zline_rprompt_line=1
 
 # 6. Wordcode compilation (.zwc)
 typeset test_file="${REPO_ROOT}/zline.zsh"
