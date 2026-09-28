@@ -77,7 +77,7 @@ for seg in "${(k)_zline_registered_segments[@]}"; do
     print -P "  %F{9}Segment missing in man page:%f $seg"
   fi
 done
-assert_eq "$all_documented" "1" "All 22 registered segments documented in man/man1/zline.1"
+assert_eq "$all_documented" "1" "All registered segments documented in man/man1/zline.1"
 
 print -P "\n%F{14}Slice 16 Summary: %F{10}${passed} passed%f, %F{9}${failed} failed%f"
 

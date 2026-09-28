@@ -310,3 +310,73 @@ ram --warn 80 --warn-color 9 --color 8
 | `--warn-color <col>` | `9` (red) | Color applied when memory utilization exceeds threshold. |
 | `--color <col>` | `8` (grey) | Color applied during normal memory utilization. |
 | `--icon <sym>` | `󰍛 ` | Memory segment icon. |
+
+---
+
+## `nix_shell` (Nix Environment)
+
+Displays active Nix development shell status (`$IN_NIX_SHELL` or `$name`).
+
+```zsh
+nix_shell --color 14
+```
+
+| Flag | Default | Description |
+| :--- | :--- | :--- |
+| `--color <col>` | `14` (cyan) | Foreground text / icon color. |
+| `--bg <col>` | `14` | Background block color in Powerline/Rainbow modes. |
+| `--icon <sym>` | ` ` | Nix segment icon (`nix:` in ASCII mode). |
+
+---
+
+## `direnv` (Direnv Environment)
+
+Displays active Direnv environment indicator from `$DIRENV_DIR`.
+
+```zsh
+direnv --color 11
+```
+
+| Flag | Default | Description |
+| :--- | :--- | :--- |
+| `--color <col>` | `11` (yellow) | Foreground text / icon color. |
+| `--bg <col>` | `11` | Background block color in Powerline/Rainbow modes. |
+| `--icon <sym>` | `▼ ` | Direnv segment icon (`direnv:` in ASCII mode). |
+
+---
+
+## `lua` (Lua Runtime)
+
+Displays active Lua version from `.lua-version`, `.tool-versions`, or project files.
+
+```zsh
+lua --color 4
+```
+
+| Flag | Default | Description |
+| :--- | :--- | :--- |
+| `--color <col>` | `4` (blue) | Foreground text / icon color. |
+| `--bg <col>` | `4` | Background block color in Powerline/Rainbow modes. |
+| `--icon <sym>` | ` ` | Lua segment icon (`lua:` in ASCII mode). |
+
+---
+
+## `zig` (Zig Toolchain)
+
+Displays active Zig version from `.zigversion`, `.tool-versions`, or `build.zig`.
+
+```zsh
+zig --color 3
+```
+
+| Flag | Default | Description |
+| :--- | :--- | :--- |
+| `--color <col>` | `3` (yellow) | Foreground text / icon color. |
+| `--bg <col>` | `3` | Background block color in Powerline/Rainbow modes. |
+| `--icon <sym>` | `↯ ` | Zig segment icon (`zig:` in ASCII mode). |
+
+---
+
+## Universal `.tool-versions` Detection
+
+Language runtime segments (`node`, `rust`, `golang`, `ruby`, `php`, `java`, `dotnet`, `venv`, `lua`, `zig`) automatically resolve versions defined in `.tool-versions` (used by `asdf`, `mise`, and `rtx`) in pure Zsh without executing external subshells.

@@ -1,4 +1,5 @@
 zline_segment_venv() {
+  emulate -L zsh
   local -A opts=()
   zparseopts -E -D -A opts -K \
     -color:=opts -icon:=opts -bg:=opts -fg:=opts
@@ -10,6 +11,10 @@ zline_segment_venv() {
     name="$CONDA_DEFAULT_ENV"
   elif [[ -n "$POETRY_ACTIVE" ]]; then
     name="poetry"
+  elif [[ -f ".python-version" ]]; then
+    read -r name < ".python-version" 2>/dev/null
+  elif _zline_read_tool_version "python"; then
+    name="$REPLY"
   fi
 
   if [[ -z "$name" ]]; then

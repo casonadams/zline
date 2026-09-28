@@ -1,4 +1,5 @@
 zline_segment_rust() {
+  emulate -L zsh
   local -A opts=()
   zparseopts -E -D -A opts -K \
     -color:=opts -icon:=opts -bg:=opts -fg:=opts
@@ -15,6 +16,8 @@ zline_segment_rust() {
         break
       fi
     done < "rust-toolchain.toml" 2>/dev/null
+  elif _zline_read_tool_version "rust"; then
+    ver="$REPLY"
   elif [[ -f "Cargo.toml" ]]; then
     ver="rust"
   fi

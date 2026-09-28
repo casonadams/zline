@@ -1,4 +1,5 @@
 zline_segment_dotnet() {
+  emulate -L zsh
   local -A opts=()
   zparseopts -E -D -A opts -K \
     -color:=opts -icon:=opts -bg:=opts -fg:=opts
@@ -14,8 +15,13 @@ zline_segment_dotnet() {
         break
       fi
     done < "global.json" 2>/dev/null
-  elif [[ -n "$(print -l *.(csproj|fsproj|sln)(N) 2>/dev/null)" ]]; then
-    ver=".net"
+  elif _zline_read_tool_version "dotnet"; then
+    ver="$REPLY"
+  else
+    local -a dotnet_files=( *.(csproj|fsproj|sln)(N) )
+    if (( ${#dotnet_files} > 0 )); then
+      ver=".net"
+    fi
   fi
 
   if [[ -z "$ver" ]]; then

@@ -1,4 +1,5 @@
 zline_segment_node() {
+  emulate -L zsh
   local -A opts=()
   zparseopts -E -D -A opts -K \
     -color:=opts -icon:=opts -bg:=opts -fg:=opts
@@ -10,6 +11,8 @@ zline_segment_node() {
     read -r ver < ".nvmrc" 2>/dev/null
   elif [[ -n "$NODE_VERSION" ]]; then
     ver="$NODE_VERSION"
+  elif _zline_read_tool_version "nodejs" || _zline_read_tool_version "node"; then
+    ver="$REPLY"
   elif [[ -f "package.json" ]]; then
     ver="node"
   fi

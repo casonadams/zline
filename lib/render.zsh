@@ -35,8 +35,28 @@ typeset -gA _zline_registered_segments=(
   dotnet 1
   load 1
   ram 1
+  nix_shell 1
+  direnv 1
+  lua 1
+  zig 1
   newline 1
 )
+
+_zline_read_tool_version() {
+  emulate -L zsh
+  local tool="$1"
+  [[ -f ".tool-versions" ]] || { REPLY=""; return 1; }
+  local line
+  while IFS= read -r line; do
+    if [[ "$line" == "${tool} "* ]]; then
+      local ver="${line#${tool} }"
+      REPLY="${ver%% *}"
+      return 0
+    fi
+  done < ".tool-versions" 2>/dev/null
+  REPLY=""
+  return 1
+}
 
 typeset -g _zline_connect_char=""
 typeset -g _zline_connect_color="8"

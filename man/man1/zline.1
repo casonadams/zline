@@ -186,6 +186,18 @@ System 1-minute load average with threshold alerts.
 .TP
 .B ram
 System memory utilization percentage or capacity.
+.TP
+.B nix_shell
+Nix development shell indicator from \fI$IN_NIX_SHELL\fR or \fI$name\fR.
+.TP
+.B direnv
+Active direnv environment status from \fI$DIRENV_DIR\fR.
+.TP
+.B lua
+Active Lua runtime version from \fI.lua-version\fR, \fI.tool-versions\fR, or project files.
+.TP
+.B zig
+Active Zig version from \fI.zigversion\fR, \fI.tool-versions\fR, or \fIbuild.zig\fR.
 
 .SH COLOR PALETTE
 \fBzline\fR standardizes on Base16 / Term16 colors (0\(en15) to guarantee seamless harmony with any terminal color scheme:

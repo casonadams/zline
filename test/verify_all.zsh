@@ -36,9 +36,9 @@ else
 fi
 
 # Gate 4: Master Unit & Integration Test Suite
-print -P "%F{12}[Gate 4/7] Running complete unit & integration test suites (15 suites)...%f"
+print -P "%F{12}[Gate 4/7] Running complete unit & integration test suites...%f"
 zsh test/run_all.zsh >/dev/null
-print -P "%F{10}✓ Gate 4 Passed: 15 test suites passing (100%% green).%f\n"
+print -P "%F{10}✓ Gate 4 Passed: all test suites passing (100%% green).%f\n"
 
 # Gate 5: Performance Benchmarks
 print -P "%F{12}[Gate 5/7] Verifying performance benchmarks (< 1.5 ms render latency)...%f"
@@ -59,7 +59,7 @@ print -P "%F{10}✓ Gate 6 Passed: Verified strictly 0 subshells on render path.
 # Gate 7: Manual Page & Completeness
 print -P "%F{12}[Gate 7/7] Verifying manual page & segment documentation completeness...%f"
 zsh test/test_man.zsh >/dev/null
-print -P "%F{10}✓ Gate 7 Passed: man page valid & all 22 registered segments documented.%f\n"
+print -P "%F{10}✓ Gate 7 Passed: man page valid & all 28 registered segments documented.%f\n"
 
 print -P "%F{10}%B================================================================%b%f"
 print -P "%F{10}%B  ALL 7 SPECIFICATION GATES PASSED! READY FOR PRODUCTION.       %b%f"

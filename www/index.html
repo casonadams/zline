@@ -123,6 +123,8 @@
         <label><input type="checkbox" id="optGo"> Go Version (1.22)</label>
         <label><input type="checkbox" id="optDocker"> Docker (desktop-linux)</label>
         <label><input type="checkbox" id="optK8s"> Kubernetes (prod-k8s)</label>
+        <label><input type="checkbox" id="optNix"> Nix Shell (impure)</label>
+        <label><input type="checkbox" id="optLua"> Lua (5.4)</label>
         <label><input type="checkbox" id="optTime"> Current Time (14:30)</label>
       </div>
     </div>
@@ -208,6 +210,8 @@
     const optGo = document.getElementById("optGo");
     const optDocker = document.getElementById("optDocker");
     const optK8s = document.getElementById("optK8s");
+    const optNix = document.getElementById("optNix");
+    const optLua = document.getElementById("optLua");
     const optTime = document.getElementById("optTime");
     const promptPreview = document.getElementById("promptPreview");
     const configCode = document.getElementById("configCode");
@@ -259,6 +263,12 @@
         if (optK8s.checked) {
           rightHtml += `<span class="seg" style="background:#06b6d4;color:#000">⎈ prod-k8s</span>`;
         }
+        if (optNix.checked) {
+          rightHtml += `<span class="seg" style="background:#06b6d4;color:#000"> impure</span>`;
+        }
+        if (optLua.checked) {
+          rightHtml += `<span class="seg" style="background:#3b82f6;color:#fff"> 5.4</span>`;
+        }
         if (optStatus.checked) {
           rightHtml += `<span class="seg seg-status">✘ 1</span>`;
         }
@@ -290,6 +300,12 @@
         }
         if (optK8s.checked) {
           rightHtml += `<span style="color:#06b6d4">⎈ prod-k8s</span> `;
+        }
+        if (optNix.checked) {
+          rightHtml += `<span style="color:#06b6d4"> impure</span> `;
+        }
+        if (optLua.checked) {
+          rightHtml += `<span style="color:#38bdf8"> 5.4</span> `;
         }
         if (optStatus.checked) {
           rightHtml += `<span style="color:#ef4444">✘ 1</span> `;
@@ -349,6 +365,8 @@
       if (optVenv.checked) rightSegs.push("venv");
       if (optDocker.checked) rightSegs.push("docker");
       if (optK8s.checked) rightSegs.push("k8s");
+      if (optNix.checked) rightSegs.push("nix_shell");
+      if (optLua.checked) rightSegs.push("lua");
       if (optStatus.checked) rightSegs.push("'status --hide-zero'");
       if (optExec.checked) rightSegs.push("'exec_time --min 2'");
       if (optTime.checked) rightSegs.push("time");
@@ -374,7 +392,7 @@ zline init`;
       configCode.textContent = code;
     }
 
-    [presetSelect, frameSelect, connectSelect, optDir, optAnchor, dirShorten, optGit, gitState, optExec, optStatus, optVenv, optRust, optGo, optDocker, optK8s, optTime].forEach(el => {
+    [presetSelect, frameSelect, connectSelect, optDir, optAnchor, dirShorten, optGit, gitState, optExec, optStatus, optVenv, optRust, optGo, optDocker, optK8s, optNix, optLua, optTime].forEach(el => {
       el.addEventListener("change", updatePreview);
     });
 

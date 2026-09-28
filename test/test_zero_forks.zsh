@@ -37,6 +37,10 @@ typeset -a hot_files=(
   "${REPO_ROOT}/segments/exec_time.zsh"
   "${REPO_ROOT}/segments/prompt_char.zsh"
   "${REPO_ROOT}/segments/venv.zsh"
+  "${REPO_ROOT}/segments/nix_shell.zsh"
+  "${REPO_ROOT}/segments/direnv.zsh"
+  "${REPO_ROOT}/segments/lua.zsh"
+  "${REPO_ROOT}/segments/zig.zsh"
 )
 
 typeset -i subshell_count=0

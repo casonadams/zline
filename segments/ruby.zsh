@@ -1,4 +1,5 @@
 zline_segment_ruby() {
+  emulate -L zsh
   local -A opts=()
   zparseopts -E -D -A opts -K \
     -color:=opts -icon:=opts -bg:=opts -fg:=opts
@@ -8,6 +9,8 @@ zline_segment_ruby() {
     read -r ver < ".ruby-version" 2>/dev/null
   elif [[ -n "$RUBY_VERSION" ]]; then
     ver="$RUBY_VERSION"
+  elif _zline_read_tool_version "ruby"; then
+    ver="$REPLY"
   elif [[ -f "Gemfile" ]]; then
     ver="ruby"
   fi
