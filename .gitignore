@@ -1,0 +1,6 @@
+*.zwc
+*.zwc.old
+.DS_Store
+*.tmp
+*.log
+.specs/

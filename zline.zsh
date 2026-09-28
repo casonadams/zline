@@ -1,0 +1,67 @@
+typeset -g ZLINE_VERSION="0.1.0"
+typeset -g ZLINE_DIR="${${(%):-%x}:A:h}"
+
+typeset -ga zline_left=()
+typeset -ga zline_right=()
+
+source "${ZLINE_DIR}/lib/color.zsh"
+source "${ZLINE_DIR}/lib/hooks.zsh"
+source "${ZLINE_DIR}/lib/render.zsh"
+
+zline() {
+  local cmd="$1"
+  shift
+
+  case "$cmd" in
+    style)
+      local style_name="$1"
+      shift
+      _zline_style="$style_name"
+      while (( $# > 0 )); do
+        case "$1" in
+          --transient)
+            _zline_transient=1
+            ;;
+          --ascii)
+            _zline_mode="ascii"
+            ;;
+          --nerdfont)
+            _zline_mode="nerdfont"
+            ;;
+          --frame)
+            shift
+            _zline_frame="$1"
+            ;;
+        esac
+        shift
+      done
+      ;;
+    init)
+      setopt prompt_subst
+      setopt prompt_percent
+      zline_compile
+      _zline_hooks_install
+      zline_render
+      ;;
+    bench)
+      local -i iters="${1:-1000}"
+      zmodload zsh/datetime
+      local t0=$EPOCHREALTIME
+      local -i i
+      for (( i = 1; i <= iters; i++ )); do
+        zline_render
+      done
+      local t1=$EPOCHREALTIME
+      local total_ms=$(( (t1 - t0) * 1000.0 ))
+      local per_ms=$(( total_ms / iters ))
+      printf "zline bench: %d iterations in %.2f ms (%.4f ms/render)\n" "$iters" "$total_ms" "$per_ms"
+      ;;
+    version)
+      print -r -- "zline v${ZLINE_VERSION}"
+      ;;
+    *)
+      print -u2 -r -- "zline: unknown command: $cmd"
+      return 1
+      ;;
+  esac
+}
