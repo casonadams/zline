@@ -11,6 +11,7 @@ _zline() {
     'compile:Pre-compile scripts to Zsh wordcode (.zwc)'
     'clean:Remove compiled .zwc wordcode files'
     'migrate:Translate Powerlevel10k configuration to zline'
+    'compare:Run prompt architecture comparison benchmark'
     'update:Update zline to the latest version'
     'version:Display zline version'
   )
@@ -36,6 +37,7 @@ _zline() {
           _arguments \
             '1:preset:->preset_name' \
             '--transient[Enable transient prompt]' \
+            '--transient-dir[Enable transient prompt retaining directory]' \
             '--no-transient[Disable transient prompt]' \
             '--frame[Select frame connector style]:frame:(none left full)' \
             '--ascii[Enable pure ASCII mode]' \

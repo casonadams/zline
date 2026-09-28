@@ -47,27 +47,47 @@ _zline_git_read_head() {
 }
 
 _zline_git_format_details() {
+  local ahead_sym="$1"
+  local behind_sym="$2"
+
   local -a items=()
   (( _zline_git_cache_conflicts > 0 )) && items+=("x${_zline_git_cache_conflicts}")
   (( _zline_git_cache_staged > 0 )) && items+=("+${_zline_git_cache_staged}")
   (( _zline_git_cache_unstaged > 0 )) && items+=("!${_zline_git_cache_unstaged}")
   (( _zline_git_cache_untracked > 0 )) && items+=("?${_zline_git_cache_untracked}")
 
-  if [[ "$_zline_mode" == "ascii" ]]; then
-    (( _zline_git_cache_ahead > 0 )) && items+=("^${_zline_git_cache_ahead}")
-    (( _zline_git_cache_behind > 0 )) && items+=("v${_zline_git_cache_behind}")
-  else
-    (( _zline_git_cache_ahead > 0 )) && items+=($'\u21E1'"${_zline_git_cache_ahead}")
-    (( _zline_git_cache_behind > 0 )) && items+=($'\u21E3'"${_zline_git_cache_behind}")
+  local a_sym="${ahead_sym}"
+  local b_sym="${behind_sym}"
+
+  if [[ -z "$a_sym" ]]; then
+    if [[ "$_zline_mode" == "ascii" ]]; then
+      a_sym="^"
+    else
+      a_sym=$'\u21E1'
+    fi
   fi
+
+  if [[ -z "$b_sym" ]]; then
+    if [[ "$_zline_mode" == "ascii" ]]; then
+      b_sym="v"
+    else
+      b_sym=$'\u21E3'
+    fi
+  fi
+
+  (( _zline_git_cache_ahead > 0 )) && items+=("${a_sym}${_zline_git_cache_ahead}")
+  (( _zline_git_cache_behind > 0 )) && items+=("${b_sym}${_zline_git_cache_behind}")
 
   REPLY="${(j: :)items}"
 }
 
 zline_segment_git() {
   local -A opts=()
+  local -a flags=()
   zparseopts -E -D -A opts -K \
+    -ignore-submodules=flags \
     -clean:=opts -dirty:=opts -ahead:=opts -color:=opts \
+    -ahead-sym:=opts -behind-sym:=opts \
     -fg:=opts -bg:=opts -icon:=opts
 
   _zline_find_git_root "$PWD" || true
@@ -86,7 +106,7 @@ zline_segment_git() {
   local details=""
   local -i is_dirty=0
   if (( _zline_git_cache_valid == 1 )); then
-    _zline_git_format_details
+    _zline_git_format_details "${opts[--ahead-sym]}" "${opts[--behind-sym]}"
     details="$REPLY"
     if (( _zline_git_cache_staged > 0 || _zline_git_cache_unstaged > 0 || _zline_git_cache_untracked > 0 || _zline_git_cache_conflicts > 0 )); then
       is_dirty=1

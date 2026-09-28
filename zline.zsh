@@ -23,6 +23,7 @@ source "${ZLINE_DIR}/lib/compile.zsh"
 source "${ZLINE_DIR}/lib/migrate.zsh"
 source "${ZLINE_DIR}/lib/title.zsh"
 source "${ZLINE_DIR}/lib/update.zsh"
+source "${ZLINE_DIR}/lib/compare.zsh"
 
 for _zline_seg in "${ZLINE_DIR}"/segments/*.zsh(N); do
   source "$_zline_seg"
@@ -47,7 +48,8 @@ zline() {
       while (( $# > 0 )); do
         case "$1" in
           --transient) _zline_transient=1 ;;
-          --no-transient) _zline_transient=0 ;;
+          --transient-dir) _zline_transient=1; _zline_transient_show_dir=1 ;;
+          --no-transient) _zline_transient=0; _zline_transient_show_dir=0 ;;
           --no-osc) _zline_osc=0 ;;
           --no-instant) _zline_instant_enabled=0 ;;
           --ascii) _zline_mode="ascii" ;;
@@ -72,8 +74,13 @@ zline() {
           --transient)
             _zline_transient=1
             ;;
+          --transient-dir)
+            _zline_transient=1
+            _zline_transient_show_dir=1
+            ;;
           --no-transient)
             _zline_transient=0
+            _zline_transient_show_dir=0
             ;;
           --no-osc)
             _zline_osc=0
@@ -168,6 +175,9 @@ zline() {
       ;;
     migrate)
       zline_migrate "$@"
+      ;;
+    compare)
+      zline_compare "$@"
       ;;
     update)
       zline_update "$@"
