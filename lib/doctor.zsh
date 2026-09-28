@@ -42,6 +42,19 @@ _zline_doctor_check_locale() {
   fi
 }
 
+_zline_doctor_check_terminal() {
+  local term_info="${TERM:-unknown}"
+  local col_info="Standard 16 colors"
+
+  if [[ "$COLORTERM" == *(truecolor|24bit)* ]]; then
+    col_info="24-bit TrueColor supported"
+  elif [[ "$TERM" == *256color* ]]; then
+    col_info="256-color palette supported"
+  fi
+
+  _zline_doctor_print_status "ok" "Terminal Capabilities" "${term_info} (${col_info})"
+}
+
 _zline_doctor_check_cache() {
   local cdir="${_zline_instant_cache_dir:-${XDG_CACHE_HOME:-$HOME/.cache}/zline}"
   if [[ -d "$cdir" && -w "$cdir" ]]; then
@@ -105,6 +118,7 @@ zline_doctor() {
 
   _zline_doctor_check_zsh
   _zline_doctor_check_locale
+  _zline_doctor_check_terminal
   _zline_doctor_check_cache
   _zline_doctor_check_worker
   _zline_doctor_check_segments

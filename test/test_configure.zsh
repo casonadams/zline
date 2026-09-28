@@ -52,6 +52,11 @@ content=$(< "$cfg_tmp")
 zsh -c "source '${REPO_ROOT}/zline.zsh'; source '${cfg_tmp}'; [[ -n \"\$PROMPT\" ]]"
 assert_eq "0" "0" "Generated configuration sources and initializes cleanly"
 
+# 5. ASCII mode configuration
+zline configure --style pure --ascii --out "$cfg_tmp"
+content=$(< "$cfg_tmp")
+[[ "$content" == *"zline preset pure"* && "$content" == *"--ascii"* ]] && assert_eq "has_ascii" "has_ascii" "Config contains --ascii flag when specified"
+
 rm -f "$cfg_tmp"
 
 print -P "\n%F{14}Configure Summary: %F{10}${passed} passed%f, %F{9}${failed} failed%f"
