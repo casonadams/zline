@@ -21,6 +21,8 @@ _zline() {
     'lean:Modern, flat, space-separated layout'
     'rainbow:High-contrast vivid color blocks'
     'pure:Minimalist two-line prompt'
+    'list:List all available presets with descriptions'
+    'show:Display the configuration code of a preset'
   )
 
   _arguments -C \

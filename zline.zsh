@@ -38,6 +38,33 @@ zline() {
     preset)
       local preset_name="$1"
       shift
+      if [[ "$preset_name" == "list" ]]; then
+        print -P "%F{14}%BAvailable zline Presets:%b%f\n"
+        local f
+        for f in "${ZLINE_DIR}"/themes/*.zsh(N); do
+          local name="${f:t:r}"
+          local desc="Custom preset"
+          case "$name" in
+            powerline) desc="Classic background blocks joined by Powerline arrows" ;;
+            lean) desc="Modern, flat, space-separated layout" ;;
+            rainbow) desc="Vivid high-contrast colored blocks" ;;
+            pure) desc="Minimalist two-line layout" ;;
+          esac
+          local name_pad="${(r:12:)name}"
+          print -P "  %F{10}%B${name_pad}%b%f : ${desc}"
+        done
+        return 0
+      elif [[ "$preset_name" == "show" ]]; then
+        local target="${1:-powerline}"
+        local tf="${ZLINE_DIR}/themes/${target}.zsh"
+        if [[ -r "$tf" ]]; then
+          cat "$tf"
+        else
+          print -u2 -r -- "zline: preset not found: $target"
+          return 1
+        fi
+        return 0
+      fi
       local theme_file="${ZLINE_DIR}/themes/${preset_name}.zsh"
       if [[ -r "$theme_file" ]]; then
         source "$theme_file"
@@ -146,6 +173,35 @@ zline() {
       _zline_instant_save
       ;;
     bench)
+      if [[ "$1" == "--profile" ]]; then
+        shift
+        local -i iters="${1:-500}"
+        zmodload -F zsh/datetime p:EPOCHREALTIME 2>/dev/null
+        print -P "%F{14}%B============================================================%b%f"
+        print -P "%F{15}%B              zline Per-Segment Micro-Profile               %b%f"
+        print -P "%F{14}%B============================================================%b%f\n"
+        printf "%-20s %10s %12s %12s\n" "Segment" "Runs" "Total Time" "Per Op"
+        printf "%-20s %10s %12s %12s\n" "--------------------" "----------" "------------" "------------"
+        local -a segs=("${_zline_compiled_left_names[@]}" "${_zline_compiled_right_names[@]}")
+        local s
+        for s in "${(u)segs[@]}"; do
+          [[ "$s" == "newline" ]] && continue
+          local fn="zline_segment_${s}"
+          if (( $+functions[$fn] )); then
+            local -F t0=$EPOCHREALTIME
+            local -i i
+            for (( i = 1; i <= iters; i++ )); do
+              "$fn"
+            done
+            local -F t1=$EPOCHREALTIME
+            local -F total_ms=$(( (t1 - t0) * 1000.0 ))
+            local -F per_us=$(( total_ms * 1000.0 / iters ))
+            printf "%-20s %10d %10.2f ms %10.1f µs\n" "$s" "$iters" "$total_ms" "$per_us"
+          fi
+        done
+        print -P "\n%F{14}%B============================================================%b%f"
+        return 0
+      fi
       local -i iters="${1:-1000}"
       zmodload zsh/datetime
       local t0=$EPOCHREALTIME
