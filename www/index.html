@@ -138,6 +138,8 @@
         <label><input type="checkbox" id="optOcaml"> OCaml (5.1)</label>
         <label><input type="checkbox" id="optGcp"> GCP (my-project)</label>
         <label><input type="checkbox" id="optAzure"> Azure (Production)</label>
+        <label><input type="checkbox" id="optHelm"> Helm (web:1.2.0)</label>
+        <label><input type="checkbox" id="optPulumi"> Pulumi (infra:prod)</label>
         <label><input type="checkbox" id="optViMode"> Vi-Mode (NOR)</label>
         <label><input type="checkbox" id="optOs"> OS (macOS)</label>
         <label><input type="checkbox" id="optContainer"> Container (docker)</label>
@@ -242,6 +244,8 @@
     const optOcaml = document.getElementById("optOcaml");
     const optGcp = document.getElementById("optGcp");
     const optAzure = document.getElementById("optAzure");
+    const optHelm = document.getElementById("optHelm");
+    const optPulumi = document.getElementById("optPulumi");
     const optViMode = document.getElementById("optViMode");
     const optOs = document.getElementById("optOs");
     const optContainer = document.getElementById("optContainer");
@@ -342,6 +346,12 @@
         if (optAzure.checked) {
           rightHtml += `<span class="seg" style="background:#06b6d4;color:#000">󰠅 Production</span>`;
         }
+        if (optHelm.checked) {
+          rightHtml += `<span class="seg" style="background:#06b6d4;color:#000">⎈ web:1.2.0</span>`;
+        }
+        if (optPulumi.checked) {
+          rightHtml += `<span class="seg" style="background:#a855f7;color:#fff"> infra:prod</span>`;
+        }
         if (optViMode.checked) {
           rightHtml += `<span class="seg" style="background:#eab308;color:#000">NOR</span>`;
         }
@@ -431,6 +441,12 @@
         if (optAzure.checked) {
           rightHtml += `<span style="color:#06b6d4">󰠅 Production</span> `;
         }
+        if (optHelm.checked) {
+          rightHtml += `<span style="color:#38bdf8">⎈ web:1.2.0</span> `;
+        }
+        if (optPulumi.checked) {
+          rightHtml += `<span style="color:#c084fc"> infra:prod</span> `;
+        }
         if (optViMode.checked) {
           rightHtml += `<span style="color:#eab308">NOR</span> `;
         }
@@ -516,6 +532,8 @@
       if (optOcaml.checked) rightSegs.push("ocaml");
       if (optGcp.checked) rightSegs.push("gcp");
       if (optAzure.checked) rightSegs.push("azure");
+      if (optHelm.checked) rightSegs.push("helm");
+      if (optPulumi.checked) rightSegs.push("pulumi");
       if (optViMode.checked) rightSegs.push("'vi_mode --hide-insert'");
       if (optOs.checked) rightSegs.push("os");
       if (optContainer.checked) rightSegs.push("container");
@@ -545,7 +563,7 @@ zline init`;
       configCode.textContent = code;
     }
 
-    [presetSelect, frameSelect, connectSelect, optDir, optAnchor, dirShorten, optGit, gitState, optExec, optStatus, optVenv, optRust, optGo, optDocker, optK8s, optNix, optLua, optBun, optDeno, optElixir, optCrystal, optHaskell, optScala, optKotlin, optSwift, optDart, optJulia, optOcaml, optGcp, optAzure, optViMode, optOs, optContainer, optShlvl, optTime].forEach(el => {
+    [presetSelect, frameSelect, connectSelect, optDir, optAnchor, dirShorten, optGit, gitState, optExec, optStatus, optVenv, optRust, optGo, optDocker, optK8s, optNix, optLua, optBun, optDeno, optElixir, optCrystal, optHaskell, optScala, optKotlin, optSwift, optDart, optJulia, optOcaml, optGcp, optAzure, optHelm, optPulumi, optViMode, optOs, optContainer, optShlvl, optTime].forEach(el => {
       el.addEventListener("change", updatePreview);
     });
 

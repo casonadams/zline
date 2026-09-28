@@ -59,7 +59,7 @@ print -P "%F{10}✓ Gate 6 Passed: Verified strictly 0 subshells on render path.
 # Gate 7: Manual Page & Completeness
 print -P "%F{12}[Gate 7/7] Verifying manual page & segment documentation completeness...%f"
 zsh test/test_man.zsh >/dev/null
-print -P "%F{10}✓ Gate 7 Passed: man page valid & all 45 registered segments documented.%f\n"
+print -P "%F{10}✓ Gate 7 Passed: man page valid & all 47 registered segments documented.%f\n"
 
 print -P "%F{10}%B================================================================%b%f"
 print -P "%F{10}%B  ALL 7 SPECIFICATION GATES PASSED! READY FOR PRODUCTION.       %b%f"

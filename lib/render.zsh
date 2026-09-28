@@ -56,6 +56,8 @@ typeset -gA _zline_registered_segments=(
   dart 1
   julia 1
   ocaml 1
+  helm 1
+  pulumi 1
   newline 1
 )
 

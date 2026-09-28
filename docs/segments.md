@@ -655,6 +655,38 @@ ocaml --color 11
 
 ---
 
+## `helm` (Kubernetes Helm Charts)
+
+Displays active Helm chart name and version from `Chart.yaml` or `helmfile.yaml`.
+
+```zsh
+helm --color 14
+```
+
+| Flag | Default | Description |
+| :--- | :--- | :--- |
+| `--color <col>` | `14` (cyan) | Foreground text / icon color. |
+| `--bg <col>` | `14` | Background block color in Powerline/Rainbow modes. |
+| `--icon <sym>` | `⎈ ` | Helm segment icon (`helm:` in ASCII mode). |
+
+---
+
+## `pulumi` (Pulumi Infrastructure as Code)
+
+Displays active Pulumi project and stack from `Pulumi.yaml` and `$PULUMI_STACK`.
+
+```zsh
+pulumi --color 13
+```
+
+| Flag | Default | Description |
+| :--- | :--- | :--- |
+| `--color <col>` | `13` (magenta) | Foreground text / icon color. |
+| `--bg <col>` | `13` | Background block color in Powerline/Rainbow modes. |
+| `--icon <sym>` | ` ` | Pulumi segment icon (`pulumi:` in ASCII mode). |
+
+---
+
 ## Universal `.tool-versions` Detection
 
 Language runtime segments (`node`, `rust`, `golang`, `ruby`, `php`, `java`, `dotnet`, `venv`, `lua`, `zig`, `bun`, `deno`, `elixir`, `crystal`, `haskell`, `scala`, `kotlin`, `swift`, `dart`, `julia`, `ocaml`) automatically resolve versions defined in `.tool-versions` (used by `asdf`, `mise`, and `rtx`) in pure Zsh without executing external subshells.
