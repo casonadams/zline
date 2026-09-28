@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies (Ubuntu)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y zsh git
+
+      - name: Install dependencies (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          brew install zsh git || true
+
+      - name: Install ShellSpec
+        run: |
+          curl -fsSL https://git.io/shellspec | sh -s -- --yes
+          echo "$HOME/.local/lib/shellspec" >> $GITHUB_PATH
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+
+      - name: Syntax check (zsh -n)
+        run: zsh -n zline.zsh zline.plugin.zsh lib/*.zsh segments/*.zsh themes/*.zsh test/*.zsh spec/*.sh benchmark/*.zsh
+
+      - name: Run ShellSpec BDD suite
+        run: $HOME/.local/bin/shellspec
+
+      - name: Run unit test suites
+        run: zsh test/run_all.zsh
+
+      - name: Run performance benchmarks
+        run: zsh benchmark/bench.zsh
