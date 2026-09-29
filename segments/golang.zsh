@@ -5,14 +5,14 @@ zline_segment_golang() {
     -color:=opts -icon:=opts -bg:=opts -fg:=opts
 
   local ver=""
-  if [[ -f "go.mod" ]]; then
+  if _zline_find_up "go.mod"; then
     local line
     while IFS= read -r line; do
       if [[ "$line" == "go "* ]]; then
         ver="${line#go }"
         break
       fi
-    done < "go.mod" 2>/dev/null
+    done < "$REPLY" 2>/dev/null
   elif _zline_read_tool_version "golang" || _zline_read_tool_version "go"; then
     ver="$REPLY"
   fi

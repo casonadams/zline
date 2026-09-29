@@ -64,10 +64,29 @@ typeset -gA _zline_registered_segments=(
   newline 1
 )
 
+_zline_find_up() {
+  emulate -L zsh
+  local cur="$PWD"
+  local target
+  while [[ "$cur" != "/" && -n "$cur" ]]; do
+    for target in "$@"; do
+      if [[ -f "${cur}/${target}" ]]; then
+        REPLY="${cur}/${target}"
+        return 0
+      fi
+    done
+    [[ -e "${cur}/.git" ]] && break
+    cur="${cur:h}"
+  done
+  REPLY=""
+  return 1
+}
+
 _zline_read_tool_version() {
   emulate -L zsh
   local tool="$1"
-  [[ -f ".tool-versions" ]] || { REPLY=""; return 1; }
+  _zline_find_up ".tool-versions" || { REPLY=""; return 1; }
+  local tv_file="$REPLY"
   local line
   while IFS= read -r line; do
     if [[ "$line" == "${tool} "* ]]; then
@@ -75,7 +94,7 @@ _zline_read_tool_version() {
       REPLY="${ver%% *}"
       return 0
     fi
-  done < ".tool-versions" 2>/dev/null
+  done < "$tv_file" 2>/dev/null
   REPLY=""
   return 1
 }

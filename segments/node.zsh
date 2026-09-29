@@ -5,15 +5,15 @@ zline_segment_node() {
     -color:=opts -icon:=opts -bg:=opts -fg:=opts
 
   local ver=""
-  if [[ -f ".node-version" ]]; then
-    read -r ver < ".node-version" 2>/dev/null
-  elif [[ -f ".nvmrc" ]]; then
-    read -r ver < ".nvmrc" 2>/dev/null
+  if _zline_find_up ".node-version"; then
+    read -r ver < "$REPLY" 2>/dev/null
+  elif _zline_find_up ".nvmrc"; then
+    read -r ver < "$REPLY" 2>/dev/null
   elif [[ -n "$NODE_VERSION" ]]; then
     ver="$NODE_VERSION"
   elif _zline_read_tool_version "nodejs" || _zline_read_tool_version "node"; then
     ver="$REPLY"
-  elif [[ -f "package.json" ]]; then
+  elif _zline_find_up "package.json"; then
     ver="node"
   fi
 

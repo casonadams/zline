@@ -5,31 +5,22 @@ zline_segment_rust() {
     -color:=opts -icon:=opts -bg:=opts -fg:=opts
 
   local ver=""
-  local cur="$PWD"
-  while [[ "$cur" != "/" && -n "$cur" ]]; do
-    if [[ -f "${cur}/rust-toolchain" ]]; then
-      read -r ver < "${cur}/rust-toolchain" 2>/dev/null
-      break
-    elif [[ -f "${cur}/rust-toolchain.toml" ]]; then
-      local line
-      while IFS= read -r line; do
-        if [[ "$line" == *"channel ="* ]]; then
-          ver="${line#*channel = }"
-          ver="${ver//[\"\']}"
-          break
-        fi
-      done < "${cur}/rust-toolchain.toml" 2>/dev/null
-      break
-    elif _zline_read_tool_version "rust"; then
-      ver="$REPLY"
-      break
-    elif [[ -f "${cur}/Cargo.toml" ]]; then
-      ver="rust"
-      break
-    fi
-    [[ -e "${cur}/.git" ]] && break
-    cur="${cur:h}"
-  done
+  if _zline_find_up "rust-toolchain"; then
+    read -r ver < "$REPLY" 2>/dev/null
+  elif _zline_find_up "rust-toolchain.toml"; then
+    local line
+    while IFS= read -r line; do
+      if [[ "$line" == *"channel ="* ]]; then
+        ver="${line#*channel = }"
+        ver="${ver//[\"\']}"
+        break
+      fi
+    done < "$REPLY" 2>/dev/null
+  elif _zline_read_tool_version "rust"; then
+    ver="$REPLY"
+  elif _zline_find_up "Cargo.toml"; then
+    ver="rust"
+  fi
 
   if [[ -z "$ver" ]]; then
     _zline_ret_content=""
