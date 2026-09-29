@@ -871,20 +871,28 @@ bazel --color 10
 | `--icon <sym>` | ` ` | Bazel icon (`bzl:` in ASCII mode). |
 ---
 
-## Universal Segment Flags (`--prefix`, `--suffix`, `--format`)
+## Universal Segment Flags (`--icon`, `--color`, `--prefix`, `--suffix`, `--format`)
 
-Every segment in `zline` universally supports wrapping and formatting flags:
+Every segment in `zline` universally supports icon overrides, color customization, wrapping, and formatting flags:
 
 ```zsh
-zline_left=( dir 'git --prefix "[" --suffix "]"' prompt_char )
+zline_left=(
+  dir --color 4
+  git --clean 2 --dirty 3 --icon " "
+  rust --icon ""
+  prompt_char
+)
 ```
 
 | Flag | Description |
 | :--- | :--- |
-| `--prefix <str>` | Prepends arbitrary string before segment content. |
-| `--suffix <str>` | Appends arbitrary string after segment content. |
+| `--icon <sym>` | Overrides the segment icon with a custom symbol (e.g. `--icon " "` or `--icon " "`). |
+| `--icon ""` | Suppresses the icon for this specific segment, rendering only the text/content without an icon or extra space. |
+| `--color <col>` / `--fg <col>` | Foreground color (Base16 index `0`–`15`, color name e.g. `cyan`, 256-color index, or hex `#RRGGBB`). |
+| `--bg <col>` | Background block color in Powerline/Rainbow modes. |
+| `--prefix <str>` | Prepends arbitrary string before segment content (e.g. `--prefix "["`). |
+| `--suffix <str>` | Appends arbitrary string after segment content (e.g. `--suffix "]"`). |
 | `--format <fn>` | Post-processes segment content with a custom Zsh function setting `$REPLY`. |
-
 ---
 
 ## Universal `.tool-versions` Detection

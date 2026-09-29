@@ -23,24 +23,26 @@ never stutters or drops user keystrokes.
 
 .SH CONFIGURATION
 Configuration in \fBzline\fR is declarative and concise, avoiding the need for hundreds of global environment variables.
-Prompts are defined using standard Zsh arrays:
+Prompts are defined using standard Zsh arrays. Array elements do not require quotes unless an argument contains whitespace or an explicit empty string:
 .RS
 .nf
-# Set visual preset
-zline preset powerline --transient
+# Set visual preset and global flags
+zline preset pure --transient --no-icons
 
-# Define left prompt segments
+# Define left prompt segments (unquoted)
 zline_left=(
-  'dir --shorten 1 --alias github.com=gith --anchor git'
-  'git --clean 2 --dirty 3'
+  dir --shorten 1 --anchor git
+  git --clean 2 --dirty 3
+  rust
+  package
   newline
   prompt_char
 )
 
-# Define right prompt segments
+# Define right prompt segments (unquoted)
 zline_right=(
-  'status --hide-zero'
-  'exec_time --min 2'
+  exec_time --min 2
+  time --color cyan
 )
 
 # Initialize prompt engine
@@ -323,6 +325,89 @@ Current working directory reporting for automatic directory inheritance across t
 .TP
 .B OSC 8
 Terminal hyperlinks for clickable file paths and Git repositories.
+.SH UNIVERSAL SEGMENT FLAGS
+Every segment in \fBzline\fR universally supports the following command-line flags:
+.TP
+.B \-\-icon \fIsymbol\fR
+Overrides the segment default icon with a custom glyph (e.g. \fB\-\-icon " "\fR).
+.TP
+.B \-\-icon ""
+Suppresses the icon for this specific segment, rendering only the text/content without an icon or leading spacer.
+.TP
+.B \-\-color \fIcode\fR | \-\-fg \fIcode\fR
+Sets the foreground text and icon color (Base16 index 0\(en15, semantic color name e.g. \fBcyan\fR, 256-color index, or hex \fB#RRGGBB\fR).
+.TP
+.B \-\-bg \fIcode\fR
+Sets the background block color in Powerline and Rainbow visual styles.
+.TP
+.B \-\-prefix \fIstring\fR
+Prepends an arbitrary string before segment content.
+.TP
+.B \-\-suffix \fIstring\fR
+Appends an arbitrary string after segment content.
+.TP
+.B \-\-format \fIfunction\fR
+Post-processes segment content with a custom Zsh function setting \fB$REPLY\fR.
+
+.SH GLOBAL STYLE FLAGS
+Global prompt behavior is configured via flags on \fBzline preset\fR or \fBzline style\fR:
+.TP
+.B \-\-transient
+Automatically collapses multi-line prompts down to a minimal \fB❯\fR symbol on Enter.
+.TP
+.B \-\-transient\-dir
+Retains directory path in collapsed transient prompt instead of symbol-only.
+.TP
+.B \-\-no\-transient
+Disables transient prompt collapse.
+.TP
+.B \-\-no\-icons
+Suppresses default segment icons globally across all segments (pure text mode).
+.TP
+.B \-\-icons
+Enables default segment icons (default).
+.TP
+.B \-\-no\-osc
+Disables OSC 133 (semantic shell integration) and OSC 7 (working directory) escape codes.
+.TP
+.B \-\-ascii
+Replaces all Nerd Font symbols and Powerline glyphs with pure ASCII text fallbacks.
+.TP
+.B \-\-nerdfont
+Enables Nerd Font v3 and Powerline symbols (default).
+.TP
+.B \-\-frame \fIstyle\fR
+Selects corner frame connector layout: \fBnone\fR, \fBleft\fR, or \fBfull\fR.
+.TP
+.B \-\-frame\-shape \fIshape\fR
+Selects frame corner glyph style: \fBrounded\fR (╭─), \fBsharp\fR (┌─), or \fBdouble\fR (╔═).
+.TP
+.B \-\-connect \fIstyle\fR
+Draws connecting line between left and right prompts on multiline layouts: \fBsolid\fR (─), \fBdashed\fR (┄), \fBdotted\fR (┈), or custom character.
+.TP
+.B \-\-connect\-color \fIcode\fR
+Sets connecting line color (default: 8 / grey).
+.TP
+.B \-\-rprompt\-line \fI1|2\fR
+Embeds right prompt into line 1 via connecting line or keeps native right prompt on the command input line.
+.TP
+.B \-\-title
+Automatically updates terminal window and tab titles with current directory and running commands.
+.TP
+.B \-\-no\-title
+Disables terminal window and tab title updates.
+.TP
+.B \-\-notify [\fIseconds\fR]
+Enables desktop notifications via OSC 777 / OSC 9 when commands exceed duration threshold (default: 30s).
+.TP
+.B \-\-no\-notify
+Disables desktop notifications.
+.TP
+.B \-\-hyperlinks
+Formats directory paths and Git repositories as clickable OSC 8 terminal hyperlinks.
+.TP
+.B \-\-no\-hyperlinks
+Disables clickable OSC 8 hyperlinks.
 
 .SH CLI COMMANDS
 .TP

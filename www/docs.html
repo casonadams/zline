@@ -61,6 +61,35 @@ echo 'zline preset powerline --transient' >> ~/.zshrc
 echo 'zline init' >> ~/.zshrc</div>
       </div>
     </div>
+    <div class="feature-card" style="margin-bottom: 2rem;">
+      <h2 style="margin-bottom: 0.75rem;">Configuration & Universal Flags</h2>
+      <p style="margin-bottom: 1rem; color: var(--text-secondary); line-height: 1.6;">
+        Prompts are defined using clean, native Zsh token arrays. You do <strong>not</strong> need quotes around lines unless an argument contains spaces:
+      </p>
+      <div class="code-box" style="margin-bottom: 1rem;">
+        <div class="code-content">zline_left=(
+  dir --shorten 1 --anchor git
+  git --clean 2 --dirty 3 --icon " "
+  rust --icon ""
+  package
+  newline
+  prompt_char
+)
+zline_right=(
+  exec_time --min 2
+  time --color cyan
+)</div>
+      </div>
+      <ul style="margin-left: 1.5rem; color: var(--text-secondary); line-height: 1.8;">
+        <li><code style="color:var(--accent)">--icon &lt;glyph&gt;</code>: Universal icon override on any segment (e.g. <code style="color:var(--text-primary)">--icon " "</code>).</li>
+        <li><code style="color:var(--accent)">--icon ""</code>: Suppresses the icon for a specific segment, rendering only the text/content without an icon.</li>
+        <li><code style="color:var(--accent)">--no-icons</code> / <code style="color:var(--accent)">--icons</code>: Global flag on <code style="color:var(--text-primary)">zline preset</code> or <code style="color:var(--text-primary)">zline style</code> to toggle pure-text mode across all segments.</li>
+        <li><code style="color:var(--accent)">--color &lt;col&gt;</code> / <code style="color:var(--accent)">--fg &lt;col&gt;</code>: Sets foreground color (Base16 0–15, color name e.g. <code style="color:var(--text-primary)">cyan</code>, 256-index, or hex <code style="color:var(--text-primary)">#RRGGBB</code>).</li>
+        <li><code style="color:var(--accent)">--bg &lt;col&gt;</code>: Sets background block color in Powerline and Rainbow visual styles.</li>
+        <li><code style="color:var(--accent)">--prefix &lt;str&gt;</code> / <code style="color:var(--accent)">--suffix &lt;str&gt;</code>: Universal surrounds prepended or appended to any segment.</li>
+        <li><code style="color:var(--accent)">--format &lt;fn&gt;</code>: Post-processes segment content with a custom Zsh function setting <code style="color:var(--text-primary)">$REPLY</code>.</li>
+      </ul>
+    </div>
 
     <div class="feature-card" style="margin-bottom: 2rem;">
       <h2 style="margin-bottom: 0.75rem;">Command Line Interface</h2>
@@ -83,7 +112,7 @@ echo 'zline init' >> ~/.zshrc</div>
     </div>
 
     <div class="feature-card">
-      <h2 style="margin-bottom: 0.75rem;">Built-in Segments (49 Segments)</h2>
+      <h2 style="margin-bottom: 0.75rem;">Built-in Segments (58 Segments)</h2>
       <ul style="margin-left: 1.5rem; color: var(--text-secondary); line-height: 1.8;">
         <li><strong>dir</strong>: Path shortening (<code style="color:var(--accent)">--shorten 1</code>), Git root anchor (<code style="color:var(--accent)">--anchor git</code>), path aliases (<code style="color:var(--accent)">--alias github.com=gith</code>), read-only lock indicator (<code style="color:var(--accent)">--readonly-icon</code>).</li>
         <li><strong>git</strong>: Instant branch read (< 0.1 ms) + async status badges (<code style="color:var(--accent)">--clean 2 --dirty 3 --ahead 12</code>), submodules (<code style="color:var(--accent)">--submodule</code>), stashes (<code style="color:var(--accent)">--stash</code>).</li>

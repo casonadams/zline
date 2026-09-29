@@ -4,48 +4,51 @@
 
 ---
 
-## 1. Native Zsh Array (Recommended)
+## 1. Native Zsh Array Syntax (No Quotes Required)
 
-Prompts are declared using `zline_left` and `zline_right` arrays:
+Prompts are declared using `zline_left` and `zline_right` arrays. You do **not** need to wrap each segment and its flags in quotes—native unquoted tokens are parsed directly:
 
 ```zsh
-# 1. Select visual preset
-zline preset powerline --transient
+# 1. Select visual preset and global flags
+zline preset pure --transient --no-icons
 
-# 2. Configure left prompt segments
+# 2. Configure left prompt segments (unquoted)
 zline_left=(
-  'dir --shorten 1 --alias github.com=gith --anchor git'
-  'git --clean 2 --dirty 3'
+  dir --shorten 1 --anchor git
+  git --clean 2 --dirty 3
+  rust
+  package
   newline
   prompt_char
 )
 
-# 3. Configure right prompt segments
+# 3. Configure right prompt segments (unquoted)
 zline_right=(
-  'status --hide-zero'
-  'exec_time --min 2'
+  exec_time --min 2
+  time --color cyan
 )
 
 # 4. Initialize prompt
 zline init
 ```
 
-Each element in the array represents a segment name followed by its flags.
+You only need quotes if an argument value contains spaces (e.g. `--alias "github.com=gith"` or `--icon " "`) or when explicitly passing an empty string (e.g. `--icon ""`).
 
 ---
 
-## 2. Unquoted Array Syntax
+## 2. Universal Segment Flags
 
-If you prefer unquoted lines in your `.zshrc`, `zline` natively parses unquoted token streams:
+Every segment in `zline` universally supports icon, color, surround, and format overrides:
 
-```zsh
-zline_left=(
-  dir --shorten 1 --color 4
-  git --clean 2 --dirty 3
-  newline
-  prompt_char
-)
-```
+| Flag | Example | Description |
+| :--- | :--- | :--- |
+| `--icon <sym>` | `git --icon " "` | Overrides the segment's default icon with a custom glyph. |
+| `--icon ""` | `git --icon ""` | Suppresses the icon for this specific segment (renders only text/content). |
+| `--color <col>` / `--fg <col>` | `time --color cyan` | Sets text/foreground color (Base16 `0`–`15`, color name, 256-index, or hex `#RRGGBB`). |
+| `--bg <col>` | `dir --bg 4` | Sets background block color (in Powerline and Rainbow modes). |
+| `--prefix <str>` | `git --prefix "["` | Prepends arbitrary string before segment content. |
+| `--suffix <str>` | `git --suffix "]"` | Appends arbitrary string after segment content. |
+| `--format <fn>` | `dir --format my_fmt` | Post-processes segment content with a custom Zsh function setting `$REPLY`. |
 
 ---
 
@@ -73,22 +76,28 @@ zline init
 
 You can customize prompt behavior using flags on `zline preset` or `zline style`:
 
-| Flag | Description |
-| :--- | :--- |
-| `--transient` | Automatically collapses past prompts into a minimal `❯` symbol on Enter. |
-| `--transient-dir` | Retains directory in collapsed transient prompt instead of symbol-only. |
-| `--frame <none\|left\|full>` | Renders corner frame connectors (`╭─`, `╰─`). |
-| `--frame-shape <rounded\|sharp\|double>` | Selects frame corner glyph style (`╭─` / `┌─` / `╔═`). |
-| `--connect <solid\|dashed\|dotted\|char>` | Draws a connecting line (`─`, `┄`, `┈`) between left and right prompts on multiline layouts. |
-| `--connect-color <col>` | Color of the connecting line (default: `8` / grey). |
-| `--hyperlinks` | Formats directory paths and Git repositories as clickable OSC 8 hyperlinks. |
-| `--title` | Automatically updates terminal tab/window titles with current path and running commands. |
-| `--notify [secs]` | Enables desktop notifications via OSC 777 / OSC 9 when commands exceed duration threshold. |
-| `--ascii` | Replaces all Nerd Font symbols and Powerline glyphs with pure ASCII fallbacks. |
-| `--no-osc` | Disables OSC 133 and OSC 7 terminal escape codes. |
-| `--no-icons` | Suppresses default segment icons globally across all segments (pure text mode). |
-| `--icons` | Enables default segment icons (default). |
-
+| Flag | Default | Description |
+| :--- | :--- | :--- |
+| `--transient` | Off | Automatically collapses past multi-line prompts into a minimal `❯` symbol on Enter. |
+| `--transient-dir` | Off | Retains directory in collapsed transient prompt instead of symbol-only (`~/src/zline ❯`). |
+| `--no-transient` | On | Disables transient prompt (retains full prompts in terminal scrollback). |
+| `--no-icons` | Off | Suppresses default segment icons globally across all segments (pure text mode). |
+| `--icons` | On | Enables default segment icons. |
+| `--no-osc` | Off | Disables OSC 133 (semantic shell integration) and OSC 7 (working directory) escape codes. |
+| `--ascii` | Off | Replaces all Nerd Font symbols and Powerline glyphs with pure ASCII fallbacks (`>`, `<`, `+`, `|`). |
+| `--nerdfont` | On | Enables Nerd Font v3 glyphs and Powerline separators. |
+| `--frame <none\|left\|full>` | `none` | Renders corner frame connectors (`╭─`, `╰─`). |
+| `--frame-shape <rounded\|sharp\|double>` | `rounded` | Selects frame corner glyph style (`╭─` / `┌─` / `╔═`). |
+| `--connect <solid\|dashed\|dotted\|char>` | None | Draws a connecting line (`─`, `┄`, `┈`) between left and right prompts on multiline layouts. |
+| `--connect-color <col>` | `8` | Color of the connecting line (default: `8` / grey). |
+| `--rprompt-line <1\|2>` | `1` | Embeds right prompt into line 1 via connecting line or keeps native RPROMPT on the input line. |
+| `--title` | On | Automatically updates terminal window/tab title with current path and running commands. |
+| `--no-title` | Off | Disables terminal window/tab title updates. |
+| `--title-format <fmt>` | `%~` | Custom prompt format string for idle window titles. |
+| `--notify [secs]` | Off | Enables desktop notifications via OSC 777 / OSC 9 when commands exceed duration threshold. |
+| `--no-notify` | On | Disables desktop notifications. |
+| `--hyperlinks` | Off | Formats directory paths and Git repositories as clickable OSC 8 hyperlinks. |
+| `--no-hyperlinks` | On | Disables clickable OSC 8 hyperlinks. |
 ---
 
 ## 5. CLI Commands Reference
