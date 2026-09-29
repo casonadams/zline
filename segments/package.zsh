@@ -4,26 +4,33 @@ zline_segment_package() {
     -color:=opts -icon:=opts -bg:=opts -fg:=opts
 
   local ver=""
-  if [[ -f "package.json" ]]; then
-    local line
-    while IFS= read -r line; do
-      if [[ "$line" == *'"version":'* ]]; then
-        local vpart="${line#*\"version\":}"
-        vpart="${vpart#*\"}"
-        ver="${vpart%%\"*}"
-        break
-      fi
-    done < "package.json" 2>/dev/null
-  elif [[ -f "Cargo.toml" ]]; then
-    local line
-    while IFS= read -r line; do
-      if [[ "$line" == "version = "* ]]; then
-        ver="${line#version = }"
-        ver="${ver//[\"\']}"
-        break
-      fi
-    done < "Cargo.toml" 2>/dev/null
-  fi
+  local cur="$PWD"
+  while [[ "$cur" != "/" && -n "$cur" ]]; do
+    if [[ -f "${cur}/package.json" ]]; then
+      local line
+      while IFS= read -r line; do
+        if [[ "$line" == *'"version":'* ]]; then
+          local vpart="${line#*\"version\":}"
+          vpart="${vpart#*\"}"
+          ver="${vpart%%\"*}"
+          break
+        fi
+      done < "${cur}/package.json" 2>/dev/null
+      [[ -n "$ver" ]] && break
+    elif [[ -f "${cur}/Cargo.toml" ]]; then
+      local line
+      while IFS= read -r line; do
+        if [[ "$line" == "version = "* ]]; then
+          ver="${line#version = }"
+          ver="${ver//[\"\']}"
+          break
+        fi
+      done < "${cur}/Cargo.toml" 2>/dev/null
+      [[ -n "$ver" ]] && break
+    fi
+    [[ -e "${cur}/.git" ]] && break
+    cur="${cur:h}"
+  done
 
   if [[ -z "$ver" ]]; then
     _zline_ret_content=""

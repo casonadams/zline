@@ -193,6 +193,7 @@ _zline_worker_zle_handler() {
   if read -u "$fd" -r reply; then
     _zline_worker_apply_reply "$reply"
     zline_hook run async_reply "git"
+    zline_render
     zle reset-prompt 2>/dev/null
   fi
 }
