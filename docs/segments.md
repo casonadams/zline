@@ -725,6 +725,150 @@ text "$AWS_VAULT" --icon "🔒 "
 | `--bg <col>` | `0` | Background block color in Powerline/Rainbow modes. |
 | `--icon <sym>` | None | Optional leading icon. |
 
+
+---
+
+## `clojure` (Clojure Runtime)
+
+Detects Clojure projects via `deps.edn`, `project.clj`, `shadow-cljs.edn`, or `.tool-versions`.
+
+```zsh
+clojure --color 10
+```
+
+| Flag | Default | Description |
+| :--- | :--- | :--- |
+| `--color <col>` | `10` (green) | Foreground text / icon color. |
+| `--bg <col>` | `10` | Background block color in Powerline/Rainbow modes. |
+| `--icon <sym>` | ` ` | Clojure icon (`clj:` in ASCII mode). |
+
+---
+
+## `erlang` (Erlang Runtime)
+
+Detects Erlang projects via `.erlang-version`, `.tool-versions`, `rebar.config`, or `erlang.mk`.
+
+```zsh
+erlang --color 9
+```
+
+| Flag | Default | Description |
+| :--- | :--- | :--- |
+| `--color <col>` | `9` (red) | Foreground text / icon color. |
+| `--bg <col>` | `9` | Background block color in Powerline/Rainbow modes. |
+| `--icon <sym>` | ` ` | Erlang icon (`erl:` in ASCII mode). |
+
+---
+
+## `perl` (Perl Runtime)
+
+Detects Perl projects via `.perl-version`, `.tool-versions`, `cpanfile`, `Makefile.PL`, or `Build.PL`.
+
+```zsh
+perl --color 12
+```
+
+| Flag | Default | Description |
+| :--- | :--- | :--- |
+| `--color <col>` | `12` (blue) | Foreground text / icon color. |
+| `--bg <col>` | `12` | Background block color in Powerline/Rainbow modes. |
+| `--icon <sym>` | ` ` | Perl icon (`pl:` in ASCII mode). |
+
+---
+
+## `r` (R Environment)
+
+Detects R projects via `DESCRIPTION`, `.Rprofile`, `renv.lock`, `*.R`, or `.tool-versions`.
+
+```zsh
+r --color 12
+```
+
+| Flag | Default | Description |
+| :--- | :--- | :--- |
+| `--color <col>` | `12` (blue) | Foreground text / icon color. |
+| `--bg <col>` | `12` | Background block color in Powerline/Rainbow modes. |
+| `--icon <sym>` | ` ` | R icon (`r:` in ASCII mode). |
+
+---
+
+## `solidity` (Solidity Smart Contracts)
+
+Detects Solidity projects via `foundry.toml`, `hardhat.config.*`, or `truffle-config.*`.
+
+```zsh
+solidity --color 8
+```
+
+| Flag | Default | Description |
+| :--- | :--- | :--- |
+| `--color <col>` | `8` (grey) | Foreground text / icon color. |
+| `--bg <col>` | `8` | Background block color in Powerline/Rainbow modes. |
+| `--icon <sym>` | ` ` | Solidity icon (`sol:` in ASCII mode). |
+
+---
+
+## `mise` (mise-en-place Tool Manager)
+
+Detects active `mise` environments via `$MISE_ENV` or `mise.toml`.
+
+```zsh
+mise --color 11
+```
+
+| Flag | Default | Description |
+| :--- | :--- | :--- |
+| `--color <col>` | `11` (yellow) | Foreground text / icon color. |
+| `--bg <col>` | `11` | Background block color in Powerline/Rainbow modes. |
+| `--icon <sym>` | ` ` | Mise icon (`mise:` in ASCII mode). |
+
+---
+
+## `jj` (Jujutsu VCS)
+
+Detects Jujutsu repositories via `.jj/` directory.
+
+```zsh
+jj --color 13
+```
+
+| Flag | Default | Description |
+| :--- | :--- | :--- |
+| `--color <col>` | `13` (magenta) | Foreground text / icon color. |
+| `--bg <col>` | `13` | Background block color in Powerline/Rainbow modes. |
+| `--icon <sym>` | ` ` | Jujutsu icon (`jj:` in ASCII mode). |
+
+---
+
+## `meson` (Meson C/C++ Build Tool)
+
+Detects Meson projects via `meson.build` or `meson_options.txt` and extracts project name.
+
+```zsh
+meson --color 14
+```
+
+| Flag | Default | Description |
+| :--- | :--- | :--- |
+| `--color <col>` | `14` (cyan) | Foreground text / icon color. |
+| `--bg <col>` | `14` | Background block color in Powerline/Rainbow modes. |
+| `--icon <sym>` | ` ` | Meson icon (`meson:` in ASCII mode). |
+
+---
+
+## `bazel` (Bazel Build Workspace)
+
+Detects Bazel workspaces via `MODULE.bazel`, `WORKSPACE`, `BUILD.bazel`, or `.bazelrc`.
+
+```zsh
+bazel --color 10
+```
+
+| Flag | Default | Description |
+| :--- | :--- | :--- |
+| `--color <col>` | `10` (green) | Foreground text / icon color. |
+| `--bg <col>` | `10` | Background block color in Powerline/Rainbow modes. |
+| `--icon <sym>` | ` ` | Bazel icon (`bzl:` in ASCII mode). |
 ---
 
 ## Universal Segment Flags (`--prefix`, `--suffix`, `--format`)
@@ -745,4 +889,4 @@ zline_left=( dir 'git --prefix "[" --suffix "]"' prompt_char )
 
 ## Universal `.tool-versions` Detection
 
-Language runtime segments (`node`, `rust`, `golang`, `ruby`, `php`, `java`, `dotnet`, `venv`, `lua`, `zig`, `bun`, `deno`, `elixir`, `crystal`, `haskell`, `scala`, `kotlin`, `swift`, `dart`, `julia`, `ocaml`) automatically resolve versions defined in `.tool-versions` (used by `asdf`, `mise`, and `rtx`) in pure Zsh without executing external subshells.
+Language runtime segments (`node`, `rust`, `golang`, `ruby`, `php`, `java`, `dotnet`, `venv`, `lua`, `zig`, `bun`, `deno`, `elixir`, `crystal`, `haskell`, `scala`, `kotlin`, `swift`, `dart`, `julia`, `ocaml`, `clojure`, `erlang`, `perl`, `r`, `solidity`) automatically resolve versions defined in `.tool-versions` (used by `asdf`, `mise`, and `rtx`) in pure Zsh without executing external subshells.

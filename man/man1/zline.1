@@ -265,6 +265,33 @@ Active CMake C/C++ project name or indicator from \fICMakeLists.txt\fR.
 .TP
 .B text
 Custom static text badge or evaluated shell variable (e.g. \fBtext "PROD"\fR or \fBtext "$VAR"\fR).
+.TP
+.B clojure
+Active Clojure version from \fI.tool-versions\fR or project files (\fIdeps.edn\fR, \fIproject.clj\fR).
+.TP
+.B erlang
+Active Erlang version from \fI.tool-versions\fR, \fI.erlang-version\fR, or \fIrebar.config\fR.
+.TP
+.B perl
+Active Perl version from \fI.tool-versions\fR, \fI.perl-version\fR, or \fIcpanfile\fR.
+.TP
+.B r
+Active R environment indicator or version from \fIDESCRIPTION\fR, \fI.Rprofile\fR, or \fIrenv.lock\fR.
+.TP
+.B solidity
+Active Solidity smart contract project indicator from \fIfoundry.toml\fR or \fIhardhat.config.js\fR.
+.TP
+.B mise
+Active mise-en-place polyglot tool environment from \fB$MISE_ENV\fR or \fImise.toml\fR.
+.TP
+.B jj
+Active Jujutsu version control repository indicator from \fI.jj\fR.
+.TP
+.B meson
+Active Meson C/C++ project name or indicator from \fImeson.build\fR.
+.TP
+.B bazel
+Active Bazel build workspace indicator from \fIMODULE.bazel\fR, \fIWORKSPACE\fR, or \fIBUILD\fR.
 
 .SH COLOR PALETTE
 \fBzline\fR standardizes on Base16 / Term16 colors (0\(en15) to guarantee seamless harmony with any terminal color scheme:

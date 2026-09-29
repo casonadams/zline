@@ -141,6 +141,9 @@
         <label><input type="checkbox" id="optHelm"> Helm (web:1.2.0)</label>
         <label><input type="checkbox" id="optPulumi"> Pulumi (infra:prod)</label>
         <label><input type="checkbox" id="optCmake"> CMake (my_app)</label>
+        <label><input type="checkbox" id="optMise"> Mise (dev)</label>
+        <label><input type="checkbox" id="optJj"> Jujutsu (jj)</label>
+        <label><input type="checkbox" id="optClojure"> Clojure (1.11)</label>
         <label><input type="checkbox" id="optText"> Custom Text (PROD)</label>
         <label><input type="checkbox" id="optViMode"> Vi-Mode (NOR)</label>
         <label><input type="checkbox" id="optOs"> OS (macOS)</label>
@@ -249,6 +252,9 @@
     const optHelm = document.getElementById("optHelm");
     const optPulumi = document.getElementById("optPulumi");
     const optCmake = document.getElementById("optCmake");
+    const optMise = document.getElementById("optMise");
+    const optJj = document.getElementById("optJj");
+    const optClojure = document.getElementById("optClojure");
     const optText = document.getElementById("optText");
     const optViMode = document.getElementById("optViMode");
     const optOs = document.getElementById("optOs");
@@ -359,6 +365,15 @@
         if (optCmake.checked) {
           rightHtml += `<span class="seg" style="background:#3b82f6;color:#fff"> my_app</span>`;
         }
+        if (optMise.checked) {
+          rightHtml += `<span class="seg" style="background:#eab308;color:#000"> mise</span>`;
+        }
+        if (optJj.checked) {
+          rightHtml += `<span class="seg" style="background:#d946ef;color:#fff"> jj</span>`;
+        }
+        if (optClojure.checked) {
+          rightHtml += `<span class="seg" style="background:#22c55e;color:#000"> clj</span>`;
+        }
         if (optText.checked) {
           rightHtml += `<span class="seg" style="background:#ef4444;color:#fff">PROD</span>`;
         }
@@ -460,6 +475,15 @@
         if (optCmake.checked) {
           rightHtml += `<span style="color:#38bdf8"> my_app</span> `;
         }
+        if (optMise.checked) {
+          rightHtml += `<span style="color:#facc15"> mise</span> `;
+        }
+        if (optJj.checked) {
+          rightHtml += `<span style="color:#e879f9"> jj</span> `;
+        }
+        if (optClojure.checked) {
+          rightHtml += `<span style="color:#4ade80"> clj</span> `;
+        }
         if (optText.checked) {
           rightHtml += `<span style="color:#ef4444">PROD</span> `;
         }
@@ -551,6 +575,9 @@
       if (optHelm.checked) rightSegs.push("helm");
       if (optPulumi.checked) rightSegs.push("pulumi");
       if (optCmake.checked) rightSegs.push("cmake");
+      if (optMise.checked) rightSegs.push("mise");
+      if (optJj.checked) rightSegs.push("jj");
+      if (optClojure.checked) rightSegs.push("clojure");
       if (optText.checked) rightSegs.push("'text \"PROD\" --color 9'");
       if (optViMode.checked) rightSegs.push("'vi_mode --hide-insert'");
       if (optOs.checked) rightSegs.push("os");
@@ -581,7 +608,7 @@ zline init`;
       configCode.textContent = code;
     }
 
-    [presetSelect, frameSelect, connectSelect, optDir, optAnchor, dirShorten, optGit, gitState, optExec, optStatus, optVenv, optRust, optGo, optDocker, optK8s, optNix, optLua, optBun, optDeno, optElixir, optCrystal, optHaskell, optScala, optKotlin, optSwift, optDart, optJulia, optOcaml, optGcp, optAzure, optHelm, optPulumi, optCmake, optText, optViMode, optOs, optContainer, optShlvl, optTime].forEach(el => {
+    [presetSelect, frameSelect, connectSelect, optDir, optAnchor, dirShorten, optGit, gitState, optExec, optStatus, optVenv, optRust, optGo, optDocker, optK8s, optNix, optLua, optBun, optDeno, optElixir, optCrystal, optHaskell, optScala, optKotlin, optSwift, optDart, optJulia, optOcaml, optGcp, optAzure, optHelm, optPulumi, optCmake, optMise, optJj, optClojure, optText, optViMode, optOs, optContainer, optShlvl, optTime].forEach(el => {
       el.addEventListener("change", updatePreview);
     });
 

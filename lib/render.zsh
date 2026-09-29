@@ -60,6 +60,15 @@ typeset -gA _zline_registered_segments=(
   helm 1
   pulumi 1
   cmake 1
+  clojure 1
+  erlang 1
+  perl 1
+  r 1
+  solidity 1
+  mise 1
+  jj 1
+  meson 1
+  bazel 1
   text 1
   newline 1
 )
