@@ -86,6 +86,8 @@ You can customize prompt behavior using flags on `zline preset` or `zline style`
 | `--notify [secs]` | Enables desktop notifications via OSC 777 / OSC 9 when commands exceed duration threshold. |
 | `--ascii` | Replaces all Nerd Font symbols and Powerline glyphs with pure ASCII fallbacks. |
 | `--no-osc` | Disables OSC 133 and OSC 7 terminal escape codes. |
+| `--no-icons` | Suppresses default segment icons globally across all segments (pure text mode). |
+| `--icons` | Enables default segment icons (default). |
 
 ---
 

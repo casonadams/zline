@@ -122,6 +122,23 @@ zline_right=(mock_git)
 zline init
 assert_eq "$RPROMPT" "%k%F{2}${r_sep}%f%K{2}%F{0}   main %f%k" "Right prompt in powerline renders reverse separator"
 
+# Test unquoted array tokens with flags and arguments
+zline style lean
+zline_left=(mock_dir newline mock_git)
+zline_right=()
+zline init
+assert_eq "$PROMPT" "%F{15} %f %F{15}~/test/dir%f"$'\n'"%F{0} %f %F{0}main%f " "Unquoted array tokens compile and render cleanly"
+
+# Test global --no-icons flag
+zline style lean --no-icons
+zline_left=(mock_dir mock_git)
+zline_right=()
+zline init
+assert_eq "$PROMPT" "%F{15}~/test/dir%f %F{0}main%f " "Global --no-icons suppresses segment icons"
+
+# Reset icons
+zline style lean --icons
+
 print -P "\n%F{14}Slice 1 Summary: %F{10}${passed} passed%f, %F{9}${failed} failed%f"
 
 if (( failed > 0 )); then

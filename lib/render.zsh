@@ -4,6 +4,7 @@ typeset -g _zline_sep_left=""
 typeset -g _zline_sep_right=""
 typeset -g _zline_sep_left_soft=""
 typeset -g _zline_sep_right_soft=""
+typeset -gi _zline_icons=1
 
 typeset -ga _zline_compiled_left_names=()
 typeset -ga _zline_compiled_left_args=()
@@ -130,32 +131,38 @@ _zline_compile_tokens() {
   local -a args=()
   local cur_name=""
   local cur_args=""
+  local -i expect_val=0
   local item
 
   for item in "${items[@]}"; do
-    if [[ "$item" == *" "* ]]; then
+    local first_word="${item%% *}"
+    if (( expect_val == 0 )) && [[ -n "${_zline_registered_segments[$first_word]}" || $+functions[zline_segment_${first_word}] == 1 ]]; then
       if [[ -n "$cur_name" ]]; then
         names+=("$cur_name")
         args+=("${cur_args# }")
         cur_name=""
         cur_args=""
       fi
-      local s_name="${item%% *}"
-      local s_arg="${item#* }"
-      names+=("$s_name")
-      args+=("$s_arg")
-      continue
-    fi
-
-    if [[ -n "${_zline_registered_segments[$item]}" || $+functions[zline_segment_${item}] == 1 ]]; then
-      if [[ -n "$cur_name" ]]; then
-        names+=("$cur_name")
-        args+=("${cur_args# }")
-        cur_args=""
+      if [[ "$item" == *" "* ]]; then
+        names+=("$first_word")
+        args+=("${item#* }")
+      else
+        cur_name="$item"
       fi
-      cur_name="$item"
     else
-      cur_args+=" $item"
+      cur_args+=" ${(q)item}"
+      if (( expect_val == 1 )); then
+        expect_val=0
+      elif [[ "$item" == --* && "$item" != *=* ]]; then
+        case "$item" in
+          --submodule|--ignore-submodules|--text|--hide-zero|--show-zero|--signal|--always|--hide-insert)
+            expect_val=0
+            ;;
+          *)
+            expect_val=1
+            ;;
+        esac
+      fi
     fi
   done
 
@@ -295,6 +302,11 @@ _zline_render_left() {
       "zline_segment_${name}" "${s_args[@]}"
     fi
 
+    if (( _zline_icons == 0 )); then
+      if (( ${s_args[(Ie)--icon]} == 0 )); then
+        _zline_ret_icon=""
+      fi
+    fi
     if [[ -z "$_zline_ret_content" && -z "$_zline_ret_icon" ]]; then
       continue
     fi
@@ -399,6 +411,11 @@ _zline_render_right() {
 
     if (( $+functions[zline_segment_${name}] )); then
       "zline_segment_${name}" "${s_args[@]}"
+    fi
+    if (( _zline_icons == 0 )); then
+      if (( ${s_args[(Ie)--icon]} == 0 )); then
+        _zline_ret_icon=""
+      fi
     fi
 
     if [[ -z "$_zline_ret_content" && -z "$_zline_ret_icon" ]]; then

@@ -84,6 +84,8 @@ zline() {
           --no-instant) _zline_instant_enabled=0 ;;
           --ascii) _zline_mode="ascii" ;;
           --nerdfont) _zline_mode="nerdfont" ;;
+          --no-icons) _zline_icons=0 ;;
+          --icons) _zline_icons=1 ;;
           --frame) shift; _zline_frame="$1" ;;
           --frame-shape) shift; _zline_frame_shape="$1" ;;
           --title) _zline_title_enabled=1 ;;
@@ -141,6 +143,12 @@ zline() {
             ;;
           --nerdfont)
             _zline_mode="nerdfont"
+            ;;
+          --no-icons)
+            _zline_icons=0
+            ;;
+          --icons)
+            _zline_icons=1
             ;;
           --title)
             _zline_title_enabled=1
