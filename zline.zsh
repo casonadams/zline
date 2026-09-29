@@ -29,10 +29,11 @@ source "${ZLINE_DIR}/lib/compare.zsh"
 source "${ZLINE_DIR}/segments/dir.zsh"
 source "${ZLINE_DIR}/segments/git.zsh"
 source "${ZLINE_DIR}/segments/exec_time.zsh"
+source "${ZLINE_DIR}/segments/status.zsh"
 
 for _zline_seg in "${ZLINE_DIR}"/segments/*.zsh(N); do
   local _zline_seg_name="${_zline_seg:t:r}"
-  [[ "$_zline_seg_name" == "dir" || "$_zline_seg_name" == "git" || "$_zline_seg_name" == "exec_time" ]] && continue
+  [[ "$_zline_seg_name" == "dir" || "$_zline_seg_name" == "git" || "$_zline_seg_name" == "exec_time" || "$_zline_seg_name" == "status" ]] && continue
   eval "zline_segment_${_zline_seg_name}() { unfunction zline_segment_${_zline_seg_name}; source '${_zline_seg:A}'; zline_segment_${_zline_seg_name} \"\$@\"; }"
 done
 unset _zline_seg _zline_seg_name

@@ -1,4 +1,4 @@
-typeset -gi _zline_last_exit_code=0
+(( $+_zline_last_exit_code )) || typeset -gi _zline_last_exit_code=0
 
 zline_segment_status() {
   local -A opts=()
