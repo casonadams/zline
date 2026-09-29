@@ -282,7 +282,8 @@ _zline_render_left() {
     typeset -g _zline_ret_bg=""
     typeset -g _zline_ret_icon=""
 
-    local -a s_args=( ${(Q)${(z)raw_args}} )
+    local -a s_args=()
+    [[ -n "$raw_args" ]] && s_args=( "${(@Q)${(@z)raw_args}}" )
     local -A u_opts=()
     () {
       set -- "$@"
@@ -387,7 +388,8 @@ _zline_render_right() {
     typeset -g _zline_ret_bg=""
     typeset -g _zline_ret_icon=""
 
-    local -a s_args=( ${(Q)${(z)raw_args}} )
+    local -a s_args=()
+    [[ -n "$raw_args" ]] && s_args=( "${(@Q)${(@z)raw_args}}" )
     local -A u_opts=()
     () {
       set -- "$@"

@@ -56,6 +56,11 @@ assert_eq "$REPLY" "✖1 ●3 ✚2 …1 ▲4 ★2" "custom stash icon"
 unset _zline_git_cache_valid _zline_git_cache_staged _zline_git_cache_unstaged \
   _zline_git_cache_untracked _zline_git_cache_conflicts _zline_git_cache_ahead _zline_git_cache_behind
 
+# Test empty icon override (--icon "")
+zline_left=('git --clean 2 --dirty 3 --icon ""')
+zline_right=()
+zline init
+assert_eq "$PROMPT" "%F{2}main%f " "empty icon override (--icon \"\") renders branch without icon"
 print -P "\n%F{14}Slice 32 Summary: %F{10}${passed} passed%f, %F{9}${failed} failed%f"
 
 if (( failed > 0 )); then
