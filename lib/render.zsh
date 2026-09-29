@@ -204,6 +204,14 @@ zline_compile() {
   _zline_set_style_separators
   _zline_compile_tokens "left" "${zline_left[@]}"
   _zline_compile_tokens "right" "${zline_right[@]}"
+
+  local seg
+  for seg in "${_zline_compiled_left_names[@]}" "${_zline_compiled_right_names[@]}"; do
+    [[ "$seg" == "newline" ]] && continue
+    if (( $+functions[_zline_load_segment] )); then
+      _zline_load_segment "$seg"
+    fi
+  done
 }
 
 _zline_render_left_segment_lean() {
@@ -311,12 +319,15 @@ _zline_render_left() {
     local -a s_args=()
     [[ -n "$raw_args" ]] && s_args=( "${(@Q)${(@z)raw_args}}" )
     local -A u_opts=()
-    () {
-      set -- "$@"
-      zparseopts -D -E -A u_opts -K -prefix:=u_opts -suffix:=u_opts -format:=u_opts 2>/dev/null
-      s_args=( "$@" )
-    } "${s_args[@]}"
+    if [[ "$raw_args" == *--(prefix|suffix|format)* ]]; then
+      () {
+        set -- "$@"
+        zparseopts -D -E -A u_opts -K -prefix:=u_opts -suffix:=u_opts -format:=u_opts 2>/dev/null
+        s_args=( "$@" )
+      } "${s_args[@]}"
+    fi
 
+    (( ! $+functions[zline_segment_${name}] && $+functions[_zline_load_segment] )) && _zline_load_segment "$name"
     if (( $+functions[zline_segment_${name}] )); then
       "zline_segment_${name}" "${s_args[@]}"
     fi
@@ -405,49 +416,48 @@ _zline_render_right_segment_powerline() {
 
 _zline_render_right() {
   emulate -L zsh
-  local out=""
-  local last_bg="none"
+  local -i max_w="${1:-0}"
   local count=${#_zline_compiled_right_names}
   local -i i
+
+  local -a r_icons=()
+  local -a r_contents=()
+  local -a r_fgs=()
+  local -a r_bgs=()
+  local out=""
+  local last_bg="none"
 
   for (( i = 1; i <= count; i++ )); do
     local name="${_zline_compiled_right_names[i]}"
     local raw_args="${_zline_compiled_right_args[i]}"
 
-    typeset -g _zline_ret_content=""
-    typeset -g _zline_ret_fg=""
-    typeset -g _zline_ret_bg=""
-    typeset -g _zline_ret_icon=""
-
+    typeset -g _zline_ret_content="" _zline_ret_fg="" _zline_ret_bg="" _zline_ret_icon=""
     local -a s_args=()
     [[ -n "$raw_args" ]] && s_args=( "${(@Q)${(@z)raw_args}}" )
     local -A u_opts=()
-    () {
-      set -- "$@"
-      zparseopts -D -E -A u_opts -K -prefix:=u_opts -suffix:=u_opts -format:=u_opts 2>/dev/null
-      s_args=( "$@" )
-    } "${s_args[@]}"
+    if [[ "$raw_args" == *--(prefix|suffix|format)* ]]; then
+      () {
+        set -- "$@"
+        zparseopts -D -E -A u_opts -K -prefix:=u_opts -suffix:=u_opts -format:=u_opts 2>/dev/null
+        s_args=( "$@" )
+      } "${s_args[@]}"
+    fi
 
+    (( ! $+functions[zline_segment_${name}] && $+functions[_zline_load_segment] )) && _zline_load_segment "$name"
     if (( $+functions[zline_segment_${name}] )); then
       "zline_segment_${name}" "${s_args[@]}"
     fi
-    if (( _zline_icons == 0 )); then
-      if (( ${s_args[(Ie)--icon]} == 0 )); then
-        _zline_ret_icon=""
-      fi
+    if (( _zline_icons == 0 )) && (( ${s_args[(Ie)--icon]} == 0 )); then
+      _zline_ret_icon=""
     fi
 
     if [[ -z "$_zline_ret_content" && -z "$_zline_ret_icon" ]]; then
       continue
     fi
 
-    if [[ -n "$_zline_ret_content" ]]; then
-      if [[ -n "${u_opts[--prefix]}" ]]; then
-        _zline_ret_content="${u_opts[--prefix]}${_zline_ret_content}"
-      fi
-      if [[ -n "${u_opts[--suffix]}" ]]; then
-        _zline_ret_content="${_zline_ret_content}${u_opts[--suffix]}"
-      fi
+    if [[ -n "$_zline_ret_content" && -n "${u_opts[--prefix]}${u_opts[--suffix]}${u_opts[--format]}" ]]; then
+      [[ -n "${u_opts[--prefix]}" ]] && _zline_ret_content="${u_opts[--prefix]}${_zline_ret_content}"
+      [[ -n "${u_opts[--suffix]}" ]] && _zline_ret_content="${_zline_ret_content}${u_opts[--suffix]}"
       local u_fmt="${u_opts[--format]}"
       if [[ -n "$u_fmt" && $+functions[$u_fmt] -eq 1 ]]; then
         "$u_fmt" "$_zline_ret_content"
@@ -455,11 +465,15 @@ _zline_render_right() {
       fi
     fi
 
+    r_icons+=("$_zline_ret_icon")
+    r_contents+=("$_zline_ret_content")
+    r_fgs+=("$_zline_ret_fg")
+    r_bgs+=("${_zline_ret_bg:-0}")
+
     if [[ "$_zline_style" == "powerline" || "$_zline_style" == "rainbow" ]]; then
-      local seg_bg="${_zline_ret_bg:-0}"
-      _zline_render_right_segment_powerline "$_zline_ret_icon" "$_zline_ret_content" "$_zline_ret_fg" "$seg_bg" "$last_bg"
+      _zline_render_right_segment_powerline "$_zline_ret_icon" "$_zline_ret_content" "$_zline_ret_fg" "${_zline_ret_bg:-0}" "$last_bg"
       out+="$REPLY"
-      last_bg="$seg_bg"
+      last_bg="${_zline_ret_bg:-0}"
     else
       _zline_render_left_segment_lean "$_zline_ret_icon" "$_zline_ret_content" "$_zline_ret_fg"
       [[ -n "$out" ]] && out+=" "
@@ -467,11 +481,65 @@ _zline_render_right() {
     fi
   done
 
+  local -i active_cnt=${#r_contents}
+  if (( active_cnt == 0 )); then
+    _zline_right_len=0
+    REPLY=""
+    return 0
+  fi
+
   if [[ "$_zline_style" == "powerline" || "$_zline_style" == "rainbow" ]]; then
     [[ -n "$out" ]] && out+="%k"
   fi
 
-  REPLY="$out"
+  if (( max_w <= 0 )); then
+    _zline_right_len=0
+    REPLY="$out"
+    return 0
+  fi
+
+  _zline_visual_len "$out"
+  _zline_right_len=$REPLY
+  if (( _zline_right_len <= max_w )); then
+    REPLY="$out"
+    return 0
+  fi
+
+  # Overflow: progressively drop from the left
+  local -i start=2
+  local right_str=""
+  while (( start <= active_cnt )); do
+    out=""
+    last_bg="none"
+    local -i k
+    for (( k = start; k <= active_cnt; k++ )); do
+      if [[ "$_zline_style" == "powerline" || "$_zline_style" == "rainbow" ]]; then
+        _zline_render_right_segment_powerline "${r_icons[k]}" "${r_contents[k]}" "${r_fgs[k]}" "${r_bgs[k]}" "$last_bg"
+        out+="$REPLY"
+        last_bg="${r_bgs[k]}"
+      else
+        _zline_render_left_segment_lean "${r_icons[k]}" "${r_contents[k]}" "${r_fgs[k]}"
+        [[ -n "$out" ]] && out+=" "
+        out+="$REPLY"
+      fi
+    done
+    if [[ "$_zline_style" == "powerline" || "$_zline_style" == "rainbow" ]]; then
+      [[ -n "$out" ]] && out+="%k"
+    fi
+    right_str="$out"
+    _zline_visual_len "$right_str"
+    _zline_right_len=$REPLY
+    if (( _zline_right_len <= max_w )); then
+      break
+    fi
+    (( start += 1 ))
+  done
+
+  if (( start > active_cnt )); then
+    right_str=""
+    _zline_right_len=0
+  fi
+  REPLY="$right_str"
 }
 
 zline_render() {
@@ -479,15 +547,22 @@ zline_render() {
   zline_hook run pre_render
   _zline_render_left
   local left_body="$REPLY"
-  _zline_render_right
+
+  local -i max_right=0
+  local -i left_len=0
+  local left_top="${left_body%%$'\n'*}"
+  if [[ -n "$COLUMNS" && $COLUMNS -gt 0 ]]; then
+    _zline_visual_len "$left_top"
+    left_len=$REPLY
+    max_right=$(( COLUMNS - left_len - 2 ))
+    (( max_right < 0 )) && max_right=0
+  fi
+
+  _zline_render_right "$max_right"
   local right_body="$REPLY"
+  local -i right_len=$_zline_right_len
 
   if [[ -n "$right_body" && -n "$COLUMNS" && $COLUMNS -gt 0 ]]; then
-    local left_top="${left_body%%$'\n'*}"
-    _zline_visual_len "$left_top"
-    local -i left_len=$REPLY
-    _zline_visual_len "$right_body"
-    local -i right_len=$REPLY
 
     local frame_end=""
     if [[ "$_zline_frame" == "full" ]]; then

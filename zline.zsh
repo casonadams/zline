@@ -26,10 +26,16 @@ source "${ZLINE_DIR}/lib/notify.zsh"
 source "${ZLINE_DIR}/lib/update.zsh"
 source "${ZLINE_DIR}/lib/compare.zsh"
 
+source "${ZLINE_DIR}/segments/dir.zsh"
+source "${ZLINE_DIR}/segments/git.zsh"
+source "${ZLINE_DIR}/segments/exec_time.zsh"
+
 for _zline_seg in "${ZLINE_DIR}"/segments/*.zsh(N); do
-  source "$_zline_seg"
+  local _zline_seg_name="${_zline_seg:t:r}"
+  [[ "$_zline_seg_name" == "dir" || "$_zline_seg_name" == "git" || "$_zline_seg_name" == "exec_time" ]] && continue
+  eval "zline_segment_${_zline_seg_name}() { unfunction zline_segment_${_zline_seg_name}; source '${_zline_seg:A}'; zline_segment_${_zline_seg_name} \"\$@\"; }"
 done
-unset _zline_seg
+unset _zline_seg _zline_seg_name
 
 zline() {
   emulate -L zsh

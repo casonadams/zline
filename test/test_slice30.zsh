@@ -44,6 +44,14 @@ COLUMNS=30
 zline_render
 assert_eq "$RPROMPT" "" "right prompt dropped on narrow terminal (COLUMNS=30)"
 
+
+# Progressive drop test: multiple right segments drop from left to right
+zline_left=( 'text "LEFT"' )
+zline_right=( 'text "FIRST"' 'text "SECOND"' )
+zline_compile
+COLUMNS=16
+zline_render
+assert_eq "$RPROMPT" "%F{7}SECOND%f" "medium terminal drops leftmost right segment and retains rightmost segment"
 unset COLUMNS
 
 print -P "\n%F{14}Slice 34 Summary: %F{10}${passed} passed%f, %F{9}${failed} failed%f"
