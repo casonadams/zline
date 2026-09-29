@@ -24,7 +24,7 @@ _zline_worker_git_task() {
 
   local raw
   raw=$(git -C "$dir" status --porcelain=v2 --branch 2>/dev/null) || {
-    print -r -- "${seq}:git:none:0:0:0:0:0:0"
+    print -r -- "${seq}:git:none:0:0:0:0:0:0:${dir}"
     return 0
   }
 
@@ -55,7 +55,7 @@ _zline_worker_git_task() {
     esac
   done <<< "$raw"
 
-  print -r -- "${seq}:git:${branch}:${staged}:${unstaged}:${untracked}:${ahead}:${behind}:${conflicts}"
+  print -r -- "${seq}:git:${branch}:${staged}:${unstaged}:${untracked}:${ahead}:${behind}:${conflicts}:${dir}"
 }
 
 _zline_worker_loop() {
@@ -159,6 +159,7 @@ _zline_worker_apply_reply() {
   local -i seq="${parts[1]}"
   local type="${parts[2]}"
 
+  local pending_dir="$_zline_worker_pending_dir"
   _zline_worker_pending=0
   _zline_worker_pending_dir=""
 
@@ -167,16 +168,40 @@ _zline_worker_apply_reply() {
   fi
   _zline_worker_last_acked=$seq
 
+  local -i has_changed=0
   if [[ "$type" == "git" ]]; then
-    _zline_git_cache_branch="${parts[3]}"
-    _zline_git_cache_staged="${parts[4]:-0}"
-    _zline_git_cache_unstaged="${parts[5]:-0}"
-    _zline_git_cache_untracked="${parts[6]:-0}"
-    _zline_git_cache_ahead="${parts[7]:-0}"
-    _zline_git_cache_behind="${parts[8]:-0}"
-    _zline_git_cache_conflicts="${parts[9]:-0}"
+    local n_dir="${parts[10]:-$pending_dir}"
+    local n_branch="${parts[3]}"
+    local n_staged="${parts[4]:-0}"
+    local n_unstaged="${parts[5]:-0}"
+    local n_untracked="${parts[6]:-0}"
+    local n_ahead="${parts[7]:-0}"
+    local n_behind="${parts[8]:-0}"
+    local n_conflicts="${parts[9]:-0}"
+
+    if [[ "$_zline_git_cache_valid" != "1" || \
+          "$_zline_git_cache_dir" != "$n_dir" || \
+          "$_zline_git_cache_branch" != "$n_branch" || \
+          "$_zline_git_cache_staged" != "$n_staged" || \
+          "$_zline_git_cache_unstaged" != "$n_unstaged" || \
+          "$_zline_git_cache_untracked" != "$n_untracked" || \
+          "$_zline_git_cache_ahead" != "$n_ahead" || \
+          "$_zline_git_cache_behind" != "$n_behind" || \
+          "$_zline_git_cache_conflicts" != "$n_conflicts" ]]; then
+      has_changed=1
+    fi
+
+    _zline_git_cache_dir="$n_dir"
+    _zline_git_cache_branch="$n_branch"
+    _zline_git_cache_staged="$n_staged"
+    _zline_git_cache_unstaged="$n_unstaged"
+    _zline_git_cache_untracked="$n_untracked"
+    _zline_git_cache_ahead="$n_ahead"
+    _zline_git_cache_behind="$n_behind"
+    _zline_git_cache_conflicts="$n_conflicts"
     _zline_git_cache_valid=1
   fi
+  REPLY=$has_changed
 }
 
 _zline_worker_poll() {
@@ -192,8 +217,13 @@ _zline_worker_zle_handler() {
   local reply=""
   if read -u "$fd" -r reply; then
     _zline_worker_apply_reply "$reply"
+    local -i has_changed=$REPLY
     zline_hook run async_reply "git"
-    zline_render
-    zle reset-prompt 2>/dev/null
+    if (( has_changed == 1 )); then
+      if [[ "$KEYMAP" == "main" || "$KEYMAP" == "viins" || "$KEYMAP" == "vicmd" || -z "$KEYMAP" ]]; then
+        zline_render
+        zle reset-prompt 2>/dev/null
+      fi
+    fi
   fi
 }

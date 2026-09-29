@@ -6,6 +6,13 @@ typeset -gi _zline_git_cache_ahead=0
 typeset -gi _zline_git_cache_behind=0
 typeset -gi _zline_git_cache_conflicts=0
 typeset -gi _zline_git_cache_valid=0
+typeset -g _zline_git_cache_dir=""
+
+_zline_git_on_change() {
+  _zline_git_cache_valid=0
+}
+zline_hook add preexec _zline_git_on_change
+zline_hook add chpwd _zline_git_on_change
 
 _zline_git_read_head() {
   emulate -L zsh
@@ -146,7 +153,9 @@ zline_segment_git() {
     fi
   fi
 
-  _zline_worker_send "git" "$git_root" 2>/dev/null || true
+  if (( _zline_git_cache_valid == 0 )) || [[ "$git_root" != "$_zline_git_cache_dir" ]]; then
+    _zline_worker_send "git" "$git_root" 2>/dev/null || true
+  fi
 
   local details=""
   local -i is_dirty=0
