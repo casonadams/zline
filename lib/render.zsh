@@ -85,17 +85,16 @@ typeset -gi _zline_rprompt_line=1
 typeset -g _zline_frame_shape="rounded"
 
 _zline_visual_len() {
-  local str="$1"
-  local -i low=0 high=256 mid
-  while (( low < high )); do
-    (( mid = (low + high + 1) / 2 ))
-    if [[ "${(%):-${str}%${mid}(l.1.0)}" == *1 ]]; then
-      low=$mid
-    else
-      high=$(( mid - 1 ))
-    fi
-  done
-  REPLY=$low
+  local s="$1"
+  setopt localoptions extended_glob
+  s="${s//\%\{[^\%]#%\}/}"
+  s="${s//\%[FK]\{[^\}]#\}/}"
+  s="${s//\%[fkbuUsS]/}"
+  s="${(%)s}"
+  local esc=$'\e'
+  s="${s//${esc}\[[0-9;]#([a-zA-Z]|~)/}"
+  s="${s//${esc}\]*($'\a'|${esc}\\\\)/}"
+  REPLY=${#${(m)s}}
 }
 
 _zline_set_style_separators() {

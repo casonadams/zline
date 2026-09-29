@@ -33,6 +33,11 @@ assert_eq "$_zline_title_enabled" "1" "Title manager enabled by default"
 _zline_title_enabled=0
 assert_eq "$_zline_title_enabled" "0" "Title manager can be disabled"
 _zline_title_enabled=1
+typeset title_capture=""
+typeset title_test_out=$(mktemp "${TMPDIR:-/tmp}/zline-test-title.XXXXXX")
+_zline_title_preexec 'printf "%s %h"' >"$title_test_out"
+assert_eq "$(<"$title_test_out")" "" "Title preexec does not leak output to stdout when stdout is redirected"
+rm -f "$title_test_out"
 
 # 2. Installer script verification
 typeset -i install_sh_ok=0

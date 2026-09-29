@@ -3,16 +3,17 @@ typeset -g _zline_title_format="%~"
 
 _zline_title_set() {
   (( _zline_title_enabled == 0 )) && return 0
-  [[ -o interactive ]] || return 0
-  [[ -t 1 ]] || return 0
+  [[ -o interactive && -t 1 ]] || return 0
+  [[ "$TERM" == "dumb" || -z "$TERM" ]] && return 0
 
   local title="$1"
-  print -n -P $'\e]2;'${title}$'\a'
+  print -n -r -- $'\e]2;'${title}$'\a'
 }
 
 _zline_title_precmd() {
   (( _zline_title_enabled == 0 )) && return 0
-  _zline_title_set "${_zline_title_format} — zsh"
+  local fmt="${(%):-${_zline_title_format}}"
+  _zline_title_set "${fmt} — zsh"
 }
 
 _zline_title_preexec() {

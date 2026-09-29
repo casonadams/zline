@@ -139,6 +139,10 @@ _zline_worker_start --force
 assert_eq "$(( _zline_worker_pid > 0 ))" "1" "Worker process started"
 assert_eq "$(( _zline_worker_req_fd >= 0 ))" "1" "Worker request pipe open"
 assert_eq "$(( _zline_worker_res_fd >= 0 ))" "1" "Worker response pipe open"
+typeset test_err_tmp=$(mktemp "${TMPDIR:-/tmp}/zline-test-err.XXXXXX")
+print -u2 "STDERR_INTACT" 2>"$test_err_tmp"
+assert_eq "$(<"$test_err_tmp")" "STDERR_INTACT" "Worker start preserves standard error descriptor (FD 2)"
+rm -f "$test_err_tmp"
 
 _zline_worker_send "git" "$REPO_ROOT"
 _zline_worker_poll

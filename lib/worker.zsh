@@ -97,8 +97,13 @@ _zline_worker_start() {
   ( _zline_worker_loop "$req_pipe" "$res_pipe" ) </dev/null >/dev/null 2>&1 &!
   _zline_worker_pid=$!
 
-  exec {_zline_worker_req_fd}>"$req_pipe" 2>/dev/null || { _zline_worker_stop; return 0; }
-  exec {_zline_worker_res_fd}<"$res_pipe" 2>/dev/null || { _zline_worker_stop; return 0; }
+  if (( $+builtins[sysopen] )); then
+    sysopen -w -o cloexec -u _zline_worker_req_fd "$req_pipe" 2>/dev/null || { _zline_worker_stop; return 0; }
+    sysopen -r -o cloexec -u _zline_worker_res_fd "$res_pipe" 2>/dev/null || { _zline_worker_stop; return 0; }
+  else
+    { exec {_zline_worker_req_fd}>"$req_pipe" } 2>/dev/null || { _zline_worker_stop; return 0; }
+    { exec {_zline_worker_res_fd}<"$res_pipe" } 2>/dev/null || { _zline_worker_stop; return 0; }
+  fi
 
   if [[ -o interactive ]] && (( $+widgets[zle-line-init] || $+functions[zle] )); then
     zle -F "$_zline_worker_res_fd" _zline_worker_zle_handler 2>/dev/null
