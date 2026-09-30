@@ -104,6 +104,17 @@ PROMPT="ORIGINAL_PROMPT"
 _zline_transient_line_finish
 assert_eq "$PROMPT" "ORIGINAL_PROMPT" "Disabled transient prompt leaves PROMPT untouched"
 
+# Line finish hook dispatching
+typeset -g _received_line_finish=0
+_test_line_finish_hook() {
+  _received_line_finish=1
+}
+zline_hook add line_finish _test_line_finish_hook
+_zline_transient=1
+_zline_transient_line_finish
+assert_eq "$_received_line_finish" "1" "line_finish hook dispatched on transient line finish"
+_zline_transient=0
+
 # 4. Vi-mode keymap select hook
 typeset -g _received_keymap=""
 _test_vi_hook() {
