@@ -61,7 +61,7 @@ my_custom_formatter() {
 }
 
 zline_segment_dir --format my_custom_formatter
-assert_eq "$_zline_ret_content" "CUSTOM:zline" "Custom formatter overrides path formatting via \$REPLY"
+assert_eq "$_zline_ret_content" "CUSTOM:${PWD:t}" "Custom formatter overrides path formatting via \$REPLY"
 
 # 5. Caching and chpwd invalidation
 typeset expected_content

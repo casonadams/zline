@@ -37,7 +37,7 @@ fi
 
 # Gate 4: Master Unit & Integration Test Suite
 print -P "%F{12}[Gate 4/8] Running complete unit & integration test suites...%f"
-zsh test/run_all.zsh >/dev/null
+zsh test/run_all.zsh
 print -P "%F{10}✓ Gate 4 Passed: all test suites passing (100%% green).%f\n"
 
 # Gate 5: Performance Benchmarks

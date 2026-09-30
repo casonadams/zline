@@ -11,7 +11,7 @@ Whenever adding, updating, or deprecating features, segment options, presets, co
 1. **Manual Pages (`man/man1/zline.1`)**:
    - Every registered segment in `lib/render.zsh` (`_zline_registered_segments`) must be documented under `.SH BUILT-IN SEGMENTS`.
    - Every CLI command and preset option must be documented under `.SH CLI COMMANDS` and `.SH PRESETS`.
-   - Automated tests (`test/test_man.zsh`, `test/test_slice11.zsh`, `test/test_slice14.zsh`, `test/test_slice15.zsh`) fail if any segment is missing from the man page.
+   - Automated tests (`test/test_man.zsh`, `test/test_packaging_and_docs.zsh`, `test/test_connect_lines_runtimes.zsh`, `test/test_compare_transient_dir.zsh`) fail if any segment is missing from the man page.
 
 2. **GitHub Documentation (`README.md` and `docs/*.md`)**:
    - `README.md`: Overview, quick start, visual presets, curated color themes, performance benchmarks, and links.
