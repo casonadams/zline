@@ -95,7 +95,10 @@ _zline() {
             '--no-notify[Disable desktop notifications]'
           ;;
         bench)
-          _arguments '1:iterations:(100 500 1000 5000)'
+          _arguments \
+            '--profile[Run per-segment micro-profiling latency benchmark]' \
+            '--startup[Run shell launch and instant prompt latency benchmark]' \
+            '1:iterations:(100 500 1000 5000)'
           ;;
         configure)
           _arguments \
