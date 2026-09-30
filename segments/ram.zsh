@@ -1,3 +1,5 @@
+typeset -g _zline_ram_cached_macos=""
+
 _zline_ram_read() {
   local -i total=0
   local -i avail=0
@@ -22,11 +24,16 @@ _zline_ram_read() {
       return 0
     fi
   elif [[ $+commands[vm_stat] -eq 1 && $+commands[sysctl] -eq 1 ]]; then
+    if [[ -n "$_zline_ram_cached_macos" ]]; then
+      REPLY="$_zline_ram_cached_macos"
+      return 0
+    fi
     local mem_total
     mem_total=$(sysctl -n hw.memsize 2>/dev/null)
     if (( mem_total > 0 )); then
       local -i total_gb=$(( mem_total / 1073741824 ))
-      REPLY="${total_gb}G"
+      _zline_ram_cached_macos="${total_gb}G"
+      REPLY="$_zline_ram_cached_macos"
       return 0
     fi
   fi

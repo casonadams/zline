@@ -1,4 +1,13 @@
+typeset -g _zline_battery_cache=""
+typeset -gi _zline_battery_cache_ts=0
+
 _zline_battery_read() {
+  zmodload -F zsh/datetime p:EPOCHSECONDS 2>/dev/null
+  if (( _zline_battery_cache_ts > 0 && EPOCHSECONDS - _zline_battery_cache_ts < 30 )); then
+    REPLY="$_zline_battery_cache"
+    return 0
+  fi
+
   local cap=""
   local stat=""
 
@@ -19,7 +28,9 @@ _zline_battery_read() {
     fi
   fi
 
-  REPLY="${cap}:${stat}"
+  _zline_battery_cache="${cap}:${stat}"
+  _zline_battery_cache_ts=$EPOCHSECONDS
+  REPLY="$_zline_battery_cache"
 }
 
 zline_segment_battery() {

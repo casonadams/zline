@@ -1,4 +1,13 @@
+typeset -g _zline_load_cache=""
+typeset -gi _zline_load_cache_ts=0
+
 _zline_load_read() {
+  zmodload -F zsh/datetime p:EPOCHSECONDS 2>/dev/null
+  if (( _zline_load_cache_ts > 0 && EPOCHSECONDS - _zline_load_cache_ts < 3 )); then
+    REPLY="$_zline_load_cache"
+    return 0
+  fi
+
   local lavg=""
   if [[ -r "/proc/loadavg" ]]; then
     local line
@@ -10,6 +19,8 @@ _zline_load_read() {
       lavg="${match[1]}"
     fi
   fi
+  _zline_load_cache="$lavg"
+  _zline_load_cache_ts=$EPOCHSECONDS
   REPLY="$lavg"
 }
 
