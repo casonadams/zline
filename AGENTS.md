@@ -60,7 +60,7 @@ Never submit changes to functionality or configuration options without updating 
   - Tests must pass cleanly on both macOS (`macos-latest`) and Ubuntu Linux (`ubuntu-latest`).
 
 - **Test-Driven Verification**:
-  - All 7 specification verification gates must pass:
+  - All 8 specification verification gates must pass:
     ```zsh
     zsh test/verify_all.zsh
     ```
@@ -71,7 +71,13 @@ Never submit changes to functionality or configuration options without updating 
   - Gate 5: Latency benchmarks (`zsh benchmark/bench.zsh`).
   - Gate 6: Zero-fork execution audit (`zsh test/test_zero_forks.zsh`).
   - Gate 7: Manual page and segment completeness (`zsh test/test_man.zsh`).
+  - Gate 8: Code quality, complexity, and ripwire quality gates (`./scripts/lint`).
 
+- **Ripwire Quality Discipline**:
+  - Run `./scripts/lint` before committing or opening a PR to verify AST syntax, installer syntax, zero-fork render invariants, complexity/CRAP scores ($cx \le 25, ccx \le 30$), dead code, and documentation drift.
+  - Run `ripwire . --situ` before pushing to inspect diff situational awareness (blast radius, co-change coupling, affected tests).
+  - Run `ripwire . --doc-drift` to confirm all code symbol mentions across documentation remain valid.
+  - Run `ripwire . --quality-delta` to ensure zero regressions vs git HEAD.
 ---
 
 ## 4. Git & Commit Standards

@@ -130,6 +130,12 @@ Run benchmarks locally:
 zsh benchmark/bench.zsh
 ```
 
+Run quality linting and specification verification gates:
+```zsh
+./scripts/lint
+zsh test/verify_all.zsh
+```
+
 ---
 
 ## Documentation

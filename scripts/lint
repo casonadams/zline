@@ -1,0 +1,425 @@
+#!/usr/bin/env zsh
+emulate -L zsh
+setopt extended_glob
+
+cd "${0:A:h:h}" || exit 1
+
+local mode="run"
+local -i json_mode=0
+
+while (($# > 0)); do
+  case "$1" in
+    -j | --json)
+      json_mode=1
+      shift
+      ;;
+    -h | --help)
+      print -P "%F{14}%Bzline lint%b%f - Code quality, style, and complexity gates"
+      print ""
+      print "Usage: ./scripts/lint [options]"
+      print ""
+      print "Options:"
+      print "  -j, --json   Output results as structured JSON"
+      print "  -h, --help   Show this help message"
+      exit 0
+      ;;
+    *)
+      print -u2 -P "%F{9}Unknown option: $1%f"
+      exit 1
+      ;;
+  esac
+done
+
+local -i errors=0
+local -i warnings=0
+
+# Define source file collections
+local -a core_files lib_files segment_files theme_files test_files all_source_files
+core_files=(zline.zsh zline.plugin.zsh(N))
+lib_files=(lib/*.zsh(N))
+segment_files=(segments/*.zsh(N))
+theme_files=(themes/*.zsh(N))
+test_files=(test/*.zsh(N) benchmark/*.zsh(N) spec/*.sh(N))
+all_source_files=(
+  "${core_files[@]}"
+  "${lib_files[@]}"
+  "${segment_files[@]}"
+  "${theme_files[@]}"
+  "${test_files[@]}"
+  completion/_zline(N)
+  scripts/*(N)
+)
+
+local f res_status name file cx ccx loc crap color table_data
+local -a syntax_failures installer_failures zero_fork_failures
+
+# -----------------------------------------------------------------------------
+# 1. Syntax Check (zsh -n)
+# -----------------------------------------------------------------------------
+if ((json_mode == 0)); then
+  print -P "%F{14}%B[1/7] Syntax validation (zsh -n)...%b%f"
+fi
+
+for f in "${all_source_files[@]}"; do
+  [[ -f "$f" ]] || continue
+  if ! zsh -n "$f" >/dev/null 2>&1; then
+    syntax_failures+=("$f")
+    ((errors++))
+  fi
+done
+
+if ((json_mode == 0)); then
+  if ((${#syntax_failures} == 0)); then
+    print -P "  %F{10}✓%f %F{15}All source files have valid Zsh syntax.%f"
+  else
+    for f in "${syntax_failures[@]}"; do
+      print -P "  %F{9}✗%f Syntax error in: %F{15}%B$f%b%f"
+    done
+  fi
+  print ""
+fi
+
+# -----------------------------------------------------------------------------
+# 2. POSIX Installer & ShellCheck Audit
+# -----------------------------------------------------------------------------
+if ((json_mode == 0)); then
+  print -P "%F{14}%B[2/7] POSIX installer syntax and ShellCheck audit...%b%f"
+fi
+
+if [[ -f "install.sh" ]]; then
+  if ! sh -n install.sh 2>&1; then
+    installer_failures+=("install.sh: POSIX syntax error")
+    ((errors++))
+  elif (($+commands[shellcheck])); then
+    local sc_out
+    if ! sc_out=$(shellcheck install.sh 2>&1); then
+      installer_failures+=("install.sh: shellcheck warnings")
+      ((errors++))
+      if ((json_mode == 0)); then
+        print -P "  %F{9}✗%f ShellCheck audit failed for %F{15}install.sh%f:"
+        print -r -- "$sc_out"
+      fi
+    fi
+  fi
+fi
+
+if ((json_mode == 0)); then
+  if ((${#installer_failures} == 0)); then
+    print -P "  %F{10}✓%f %F{15}install.sh passes POSIX syntax and ShellCheck audit.%f"
+  fi
+  print ""
+fi
+
+# -----------------------------------------------------------------------------
+# 3. Zero-Fork Synchronous Render Path Audit
+# -----------------------------------------------------------------------------
+if ((json_mode == 0)); then
+  print -P "%F{14}%B[3/7] Zero-fork synchronous render path audit...%b%f"
+fi
+
+local -a hot_files
+hot_files=(
+  lib/render.zsh
+  lib/color.zsh
+  lib/osc.zsh
+  lib/notify.zsh
+  segments/dir.zsh
+  segments/git.zsh
+  segments/status.zsh
+  segments/exec_time.zsh
+  segments/prompt_char.zsh
+  segments/venv.zsh
+  segments/nix_shell.zsh
+  segments/direnv.zsh
+  segments/lua.zsh
+  segments/zig.zsh
+  segments/bun.zsh
+  segments/deno.zsh
+  segments/vi_mode.zsh
+  segments/gcp.zsh
+  segments/azure.zsh
+  segments/elixir.zsh
+  segments/os.zsh
+  segments/container.zsh
+  segments/shlvl.zsh
+  segments/crystal.zsh
+  segments/haskell.zsh
+  segments/scala.zsh
+  segments/kotlin.zsh
+  segments/swift.zsh
+  segments/dart.zsh
+  segments/julia.zsh
+  segments/ocaml.zsh
+  segments/helm.zsh
+  segments/pulumi.zsh
+  segments/cmake.zsh
+  segments/text.zsh
+)
+local -i subshell_count=0
+for f in "${hot_files[@]}"; do
+  [[ -f "$f" ]] || continue
+  while IFS= read -r line; do
+    [[ "$line" == [[:space:]]#\#* ]] && continue
+    if [[ "$line" =~ '\$\([^ (]' ]]; then
+      ((subshell_count++))
+      zero_fork_failures+=("${f}:${line}")
+    fi
+  done < "$f"
+done
+
+if ((subshell_count > 0)); then
+  ((errors += subshell_count))
+  if ((json_mode == 0)); then
+    for item in "${zero_fork_failures[@]}"; do
+      print -P "  %F{9}✗%f Subshell detected: %F{15}$item%f"
+    done
+  fi
+else
+  if ((json_mode == 0)); then
+    print -P "  %F{10}✓%f %F{15}Zero subshells \$(...) on the synchronous render path.%f"
+  fi
+fi
+
+if ((json_mode == 0)); then
+  print ""
+fi
+
+# -----------------------------------------------------------------------------
+# Check Ripwire Availability
+# -----------------------------------------------------------------------------
+local -i ripwire_available=0
+local metrics_json=""
+
+if (($+commands[ripwire])); then
+  ripwire_available=1
+fi
+
+# -----------------------------------------------------------------------------
+# 4. Complexity & CRAP Quality Gate (ripwire --metrics)
+# -----------------------------------------------------------------------------
+local -i qg_failed=0
+local -i qg_warn=0
+local metrics_summary="[]"
+
+if ((ripwire_available)); then
+  if ((json_mode == 0)); then
+    print -P "%F{14}%B[4/7] Complexity & CRAP Quality Gate (ripwire)...%b%f"
+  fi
+
+  metrics_json=$(ripwire . --metrics --json 2>/dev/null)
+
+  if (($+commands[jq])) && [[ -n "$metrics_json" ]]; then
+    metrics_summary=$(print -r -- "$metrics_json" | jq '[
+      .r[] as $file | $file.s[]? | select(.t == "fn" and .n != "TRAPINT") | {
+        function: .n,
+        file: $file.p,
+        cyclomatic: .cx,
+        cognitive: .ccx,
+        loc: .loc,
+        crap: (((.cx * .cx * 0.008) + .cx) * 10 | round / 10),
+        status: (if .ccx > 30 or .cx > 25 or (((.cx * .cx * 0.008) + .cx) > 30) then "FAIL" elif .ccx > 15 or .cx > 15 then "WARN" else "PASS" end)
+      }
+    ] | sort_by(.cognitive) | reverse')
+
+    if ((json_mode == 0)); then
+      printf "  \033[1m%-32s %-24s %-5s %-5s %-6s %s\033[0m\n" "Function" "File" "cx" "ccx" "CRAP" "Status"
+      print -P "  %F{8}----------------------------------------------------------------------------%f"
+
+      table_data=$(print -r -- "$metrics_summary" | jq -r '.[] | "\(.status)\t\(.function)\t\(.file)\t\(.cyclomatic)\t\(.cognitive)\t\(.crap)"')
+
+      while IFS=$'\t' read -r res_status name file cx ccx crap; do
+        [[ -z "$name" ]] && continue
+        if [[ "$res_status" == "FAIL" ]]; then
+          color="\033[31m"
+          ((qg_failed++))
+        elif [[ "$res_status" == "WARN" ]]; then
+          color="\033[33m"
+          ((qg_warn++))
+        else
+          color="\033[32m"
+        fi
+        printf "  %-32s %-24s %-5s %-5s %-6s ${color}%s\033[0m\n" "$name" "$file" "$cx" "$ccx" "$crap" "$res_status"
+      done <<<"$table_data"
+
+      print -P "  %F{8}----------------------------------------------------------------------------%f"
+      if ((qg_failed > 0)); then
+        print -P "  %F{9}✗ Quality gate failed: $qg_failed function(s) exceed complexity limits.%f"
+        ((errors += qg_failed))
+      else
+        print -P "  %F{10}✓%f %F{15}All functions within complexity and CRAP limits.%f %F{8}($qg_warn warnings)%f"
+      fi
+      print ""
+    fi
+  fi
+else
+  if ((json_mode == 0)); then
+    print -P "%F{14}%B[4/7] Complexity & CRAP Quality Gate (ripwire)...%b%f"
+    print -P "  %F{11}⚠ ripwire not found on PATH.%f\n"
+  fi
+fi
+
+# -----------------------------------------------------------------------------
+# 5. Clones & Duplication Audit (ripwire --clones)
+# -----------------------------------------------------------------------------
+local -i clone_groups=0
+if ((ripwire_available)); then
+  if ((json_mode == 0)); then
+    print -P "%F{14}%B[5/7] Code duplication & clones audit (ripwire)...%b%f"
+  fi
+
+  local clones_out
+  clones_out=$(ripwire lib zline.zsh --clones 2>/dev/null)
+  local non_exempt_clones
+  non_exempt_clones=$(print -r -- "$clones_out" | tr '>' '\n' | grep -E '^<group type="2"' | grep -v 'exempt=' || true)
+
+  if [[ -n "$non_exempt_clones" ]]; then
+    clone_groups=$(print -r -- "$non_exempt_clones" | grep -c '^<group type="2"' || echo "0")
+    ((errors += clone_groups))
+    if ((json_mode == 0)); then
+      print -P "  %F{9}✗ Duplicate code clones detected in core engine ($clone_groups group(s)):%f"
+      print -r -- "$clones_out" | tr '>' '\n' | grep -E '<f n=' | sed 's/.*n="\([^"]*\)".*p="\([^"]*\)".*/    - \1 (\2)/'
+    fi
+  else
+    if ((json_mode == 0)); then
+      print -P "  %F{10}✓%f %F{15}Zero duplicate code clones detected in core engine.%f"
+    fi
+  fi
+
+  if ((json_mode == 0)); then
+    print ""
+  fi
+fi
+
+# -----------------------------------------------------------------------------
+# 6. Dead Code Audit (ripwire --dead-code)
+# -----------------------------------------------------------------------------
+local -i dead_count=0
+if ((ripwire_available)); then
+  if ((json_mode == 0)); then
+    print -P "%F{14}%B[6/7] Dead code audit (ripwire)...%b%f"
+  fi
+
+  local dc_out
+  dc_out=$(ripwire . --dead-code 2>/dev/null)
+  dead_count=$(print -r -- "$dc_out" | grep -oE 'count="[0-9]+"' | head -n 1 | cut -d '"' -f 2 || echo "0")
+
+  if ((dead_count > 0)); then
+    ((errors += dead_count))
+    if ((json_mode == 0)); then
+      print -P "  %F{9}✗ $dead_count unreferenced function(s) detected.%f"
+    fi
+  else
+    if ((json_mode == 0)); then
+      print -P "  %F{10}✓%f %F{15}Zero dead code functions detected.%f"
+    fi
+  fi
+
+  if ((json_mode == 0)); then
+    print ""
+  fi
+fi
+
+# -----------------------------------------------------------------------------
+# 7. Documentation Drift & Quality Delta Gates (ripwire)
+# -----------------------------------------------------------------------------
+local -i drift_count=0
+local -i delta_gating=0
+local -i delta_regressions=0
+
+if ((ripwire_available)); then
+  if ((json_mode == 0)); then
+    print -P "%F{14}%B[7/7] Documentation drift & quality regressions (ripwire)...%b%f"
+  fi
+
+  local dd_out
+  dd_out=$(ripwire . --doc-drift 2>/dev/null)
+  drift_count=$(print -r -- "$dd_out" | grep -oE 'drift="[0-9]+"' | head -n 1 | cut -d '"' -f 2 || echo "0")
+
+  if ((drift_count > 0)); then
+    ((errors += drift_count))
+    if ((json_mode == 0)); then
+      print -P "  %F{9}✗ $drift_count drifted documentation claim(s) detected.%f"
+    fi
+  else
+    if ((json_mode == 0)); then
+      print -P "  %F{10}✓%f %F{15}Documentation anchors verified (zero drift).%f"
+    fi
+  fi
+
+  local qd_json
+  qd_json=$(ripwire . --quality-delta --json 2>/dev/null)
+  if [[ -n "$qd_json" ]] && (($+commands[jq])); then
+    delta_gating=$(print -r -- "$qd_json" | jq -r '.gating // 0')
+    delta_regressions=$(print -r -- "$qd_json" | jq -r '.regressions // 0')
+    if ((delta_gating > 0)); then
+      ((errors += delta_gating))
+      if ((json_mode == 0)); then
+        print -P "  %F{9}✗ $delta_gating gating quality regression(s) vs git HEAD.%f"
+      fi
+    else
+      if ((json_mode == 0)); then
+        print -P "  %F{10}✓%f %F{15}Zero quality regressions vs git HEAD.%f"
+      fi
+    fi
+  fi
+
+  if ((json_mode == 0)); then
+    print ""
+  fi
+fi
+
+# -----------------------------------------------------------------------------
+# Summary & Output
+# -----------------------------------------------------------------------------
+if ((json_mode == 1)); then
+  local is_passed="true"
+  ((errors > 0)) && is_passed="false"
+  local syntax_json="[]"
+  ((${#syntax_failures} > 0)) && syntax_json=$(printf '%s\n' "${syntax_failures[@]}" | jq -R . | jq -s .)
+  local installer_json="[]"
+  ((${#installer_failures} > 0)) && installer_json=$(printf '%s\n' "${installer_failures[@]}" | jq -R . | jq -s .)
+  local zero_fork_json="[]"
+  ((${#zero_fork_failures} > 0)) && zero_fork_json=$(printf '%s\n' "${zero_fork_failures[@]}" | jq -R . | jq -s .)
+
+  jq -n \
+    --argjson passed "$is_passed" \
+    --argjson errors "$errors" \
+    --argjson warnings "$warnings" \
+    --argjson syntax_failures "$syntax_json" \
+    --argjson installer_failures "$installer_json" \
+    --argjson zero_fork_failures "$zero_fork_json" \
+    --argjson clone_groups "$clone_groups" \
+    --argjson dead_count "$dead_count" \
+    --argjson drift_count "$drift_count" \
+    --argjson delta_gating "$delta_gating" \
+    --argjson delta_regressions "$delta_regressions" \
+    --argjson metrics "$metrics_summary" \
+    '{
+      passed: $passed,
+      errors: $errors,
+      warnings: $warnings,
+      checks: {
+        syntax_errors: $syntax_failures,
+        installer_violations: $installer_failures,
+        zero_fork_violations: $zero_fork_failures,
+        clone_groups: $clone_groups,
+        dead_functions: $dead_count,
+        doc_drift: $drift_count,
+        quality_delta: {
+          gating: $delta_gating,
+          regressions: $delta_regressions
+        }
+      },
+      metrics: $metrics
+    }'
+  exit $errors
+fi
+
+print -P "%F{8}============================================================================%f"
+if ((errors == 0)); then
+  print -P "%F{10}%BAll lint and quality checks passed!%b%f"
+  exit 0
+else
+  print -P "%F{9}%BLint failed with $errors error(s).%b%f"
+  exit 1
+fi

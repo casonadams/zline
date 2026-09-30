@@ -20,12 +20,12 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update
-          sudo apt-get install -y zsh git
+          sudo apt-get install -y zsh git jq shellcheck curl
 
       - name: Install dependencies (macOS)
         if: runner.os == 'macOS'
         run: |
-          brew install zsh git || true
+          brew install zsh git jq shellcheck || true
 
       - name: Install ShellSpec
         run: |
@@ -33,17 +33,27 @@ jobs:
           echo "$HOME/.local/lib/shellspec" >> $GITHUB_PATH
           echo "$HOME/.local/bin" >> $GITHUB_PATH
 
-      - name: Syntax check (zsh -n)
-        run: zsh -n zline.zsh zline.plugin.zsh lib/*.zsh segments/*.zsh themes/*.zsh test/*.zsh spec/*.sh benchmark/*.zsh
+      - name: Install Ripwire
+        run: |
+          mkdir -p "$HOME/.local/bin"
+          if [ "${{ runner.os }}" = "Linux" ]; then
+            ARCH="linux-x64"
+          elif [ "${{ runner.os }}" = "macOS" ]; then
+            ARCH="macos-arm64"
+          fi
+          if [ -n "$ARCH" ]; then
+            curl -fsSL "https://github.com/redhat-et/ripwire/releases/download/v0.6.5/ripwire-0.6.5-${ARCH}.tar.gz" | tar -xz -C "$HOME/.local/bin" --strip-components=1 "ripwire-0.6.5-${ARCH}/ripwire" || true
+            chmod +x "$HOME/.local/bin/ripwire" 2>/dev/null || true
+          fi
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+          "$HOME/.local/bin/ripwire" --version || true
 
-      # - name: Run ShellSpec BDD suite
-      #   run: $HOME/.local/bin/shellspec
+      - name: Ripwire situational awareness
+        run: ripwire . --situ || true
 
-      # - name: Run unit test suites
-      #   run: zsh test/run_all.zsh
+      - name: Run lint & quality gate
+        run: ./scripts/lint
 
-      # - name: Run performance benchmarks
-      #   run: zsh benchmark/bench.zsh
+      - name: Master Specification Verification (All Gates)
+        run: zsh test/verify_all.zsh
 
-      # - name: Master Specification Verification (All Gates)
-      #   run: zsh test/verify_all.zsh
