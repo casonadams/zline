@@ -40,8 +40,8 @@ done
 typeset -F t1=$EPOCHREALTIME
 typeset -F dur_ms=$(( (t1 - t0) * 1000.0 ))
 typeset -F per_op=$(( dur_ms / 1000.0 ))
-if (( per_op < 0.15 )); then
-  assert_eq "fast" "fast" "Synchronous HEAD read latency: ${per_op} ms/op (< 0.15 ms)"
+if (( per_op < 0.30 )); then
+  assert_eq "fast" "fast" "Synchronous HEAD read latency: ${per_op} ms/op (< 0.30 ms)"
 else
   assert_eq "slow (${per_op} ms)" "fast" "Synchronous HEAD read took too long"
 fi

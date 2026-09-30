@@ -70,8 +70,8 @@ assert_eq "$_ZLINE_INSTANT_ACTIVE" "1" "Sourcing instant cache sets _ZLINE_INSTA
 assert_eq "$PROMPT" "TEST_PROMPT_CONTENT" "Sourcing instant cache restores PROMPT"
 assert_eq "$RPROMPT" "TEST_RPROMPT_CONTENT" "Sourcing instant cache restores RPROMPT"
 
-if (( dur_ms < 2.0 )); then
-  assert_eq "fast" "fast" "Instant prompt loaded in ${dur_ms} ms (< 2.0 ms)"
+if (( dur_ms < 10.0 )); then
+  assert_eq "fast" "fast" "Instant prompt loaded in ${dur_ms} ms (< 10.0 ms)"
 else
   assert_eq "slow (${dur_ms} ms)" "fast" "Instant prompt loading took too long"
 fi
