@@ -1,0 +1,78 @@
+# Changelog
+
+## [0.1.1](https://github.com/casonadams/zline/compare/v0.1.0...v0.1.1) (2026-09-30)
+
+
+### Features
+
+* **cli:** implement font capability detection in configure wizard and terminal color diagnostics ([b9498d2](https://github.com/casonadams/zline/commit/b9498d2ffe143ca97dfa44b794be5057fd3dfaf8))
+* **cli:** implement interactive configure wizard and doctor diagnostics ([7e3e35b](https://github.com/casonadams/zline/commit/7e3e35bca4d4b45991aea0c8b9efa061735eba9e))
+* **cli:** implement tab completion, self-updater, and pluggable git provider ([fd4c347](https://github.com/casonadams/zline/commit/fd4c347ed44cf80c87777994dd8c70274b3abc61))
+* **core:** implement bytecode compilation, frame connectors, responsive truncation, and system segments ([4c0a6ca](https://github.com/casonadams/zline/commit/4c0a6caf65721da51156b990d28562fcb717adcf))
+* **core:** implement instant prompt, transient prompt, and OSC 133/7 terminal protocols ([1344199](https://github.com/casonadams/zline/commit/1344199fa373b4ae0dbf8e3c5dea9cd1d8fb6a0b))
+* **core:** implement prompt engine, hooks, and base16 color subsystem ([d646740](https://github.com/casonadams/zline/commit/d646740cabf8c31de1ed3973eb8020640ca60c69))
+* **ecosystem:** implement p10k migration tool and developer segments ([40b84c4](https://github.com/casonadams/zline/commit/40b84c4a9b515306436fbfb436e0916b095c8049))
+* **frameworks:** implement oh-my-zsh theme bridge, preset inspection, and segment micro-profiling ([5812674](https://github.com/casonadams/zline/commit/58126745568e8991e4202f34c5b2b06e78d37ec9))
+* **git:** detect revert and bisect states and optimize host caching and android battery ([dc33ace](https://github.com/casonadams/zline/commit/dc33aceae3b0d4d0710756566a6b8e30957409a0))
+* **git:** implement synchronous fast-path git reader and async worker system ([a2611a3](https://github.com/casonadams/zline/commit/a2611a314db47c59eec2f473e46a71208723a1aa))
+* **golang:** support go.work workspace version detection and strip crlf ([59dbb7c](https://github.com/casonadams/zline/commit/59dbb7c0facf48926efcb487bc61fdc290d5dfb2))
+* **isolation:** implement emulate -L zsh and hostile shell options resilience ([6544384](https://github.com/casonadams/zline/commit/654438491e04ec13f18eebaee23dc13200dbb8ba))
+* **layout:** implement multiline rprompt line alignment and full frame corner terminations ([deb96dd](https://github.com/casonadams/zline/commit/deb96dd001c9168eeca3107fdb2e99802316a1c8))
+* **migrate:** expand p10k segment mapping for cloud, runtime, and system segments ([de94a3a](https://github.com/casonadams/zline/commit/de94a3acd0dbd21dfea4ad4e40606c97f4236e7c))
+* **package:** add pyproject.toml package version detection for Python projects ([72ce87b](https://github.com/casonadams/zline/commit/72ce87bef0c7e110d7ec5ea7eadb094e296f7137))
+* **parity:** implement universal surrounds, text segment, granular git styling, and dir truncation ([f776f4b](https://github.com/casonadams/zline/commit/f776f4ba5cbeff9cca492ad8a784852fe981cecb))
+* **perf:** implement comparison benchmark engine, transient directory mode, and git tuning ([5110359](https://github.com/casonadams/zline/commit/511035926d60586cd5808fa0b3e1a3ffa290d77b))
+* **pkg:** implement terminal title manager, homebrew formula, and install script ([6a67917](https://github.com/casonadams/zline/commit/6a67917dc7291945ea471ca760a6efd9826d169e))
+* **presets:** implement git stash detection, system load/ram segments, and curated themes ([6ae796b](https://github.com/casonadams/zline/commit/6ae796b43647c378d243badb0c195149299f5fa1))
+* **qa:** add ripwire lint harness and quality gates ([c80e09a](https://github.com/casonadams/zline/commit/c80e09a8f5f9f52a676151ec4aab6f213be58cb9))
+* **render:** implement progressive right prompt overflow dropping and lazy segment loading ([67deb31](https://github.com/casonadams/zline/commit/67deb31313dc09b34de2f0b23a19a1ce66ecbc5e))
+* **render:** preserve empty string arguments to support --icon "" ([faf9171](https://github.com/casonadams/zline/commit/faf9171617f5be52a3a4d57d025f0bfcab66dcfa))
+* **render:** support unquoted array tokens and add --no-icons global style flag ([f4029d0](https://github.com/casonadams/zline/commit/f4029d06103ce0e87c25b66853142d2eca65e846))
+* **runtimes:** implement bun, deno runtime detection and desktop notifications ([e4d1c3d](https://github.com/casonadams/zline/commit/e4d1c3d31b917457b946881e38d7bfb4e73ccc90))
+* **runtimes:** implement nix-shell, direnv, lua, zig, and universal tool-versions detection ([d29b301](https://github.com/casonadams/zline/commit/d29b301cc0f56b88b68bfaa6cecabc3e81d8c5f6))
+* **runtimes:** implement prompt connection lines and extended language runtimes ([ed1fb64](https://github.com/casonadams/zline/commit/ed1fb642746a3a6118857a40f22681043146ed2b))
+* **segments:** add _zline_find_up helper for parent directory project detection ([4554e87](https://github.com/casonadams/zline/commit/4554e87cc27b8db7e0eed1bdc1339af0159bfe52))
+* **segments:** implement clojure, erlang, perl, r, solidity, mise, jj, meson, and bazel segments ([d42cad0](https://github.com/casonadams/zline/commit/d42cad0123e0a2e457defec5c2b6e54114b8dd54))
+* **segments:** implement cmake c/c++ build tooling segment ([538cddb](https://github.com/casonadams/zline/commit/538cddb9b28432a8cb4c0f7bcac3b26f7e9a9183))
+* **segments:** implement core segments and theme presets ([54060d1](https://github.com/casonadams/zline/commit/54060d163df212d978258a545102042bcbc3de9c))
+* **segments:** implement crystal, haskell, scala, and kotlin runtime segments ([615dd23](https://github.com/casonadams/zline/commit/615dd23eeae43392e56d76a56417ade83c95ae44))
+* **segments:** implement directory read-only lock, vi cursor shapes, and submodule badging ([93195a2](https://github.com/casonadams/zline/commit/93195a28208e36cc935a65ca22784300d594d255))
+* **segments:** implement directory segment with path shortening, aliases, and git anchoring ([45d1ead](https://github.com/casonadams/zline/commit/45d1ead1122f8cfd6fcebbf9f1cd500a3535f185))
+* **segments:** implement helm and pulumi cloud-native infrastructure segments ([9495268](https://github.com/casonadams/zline/commit/94952687f862d7bdb09e78ebd841ab953dbb45e6))
+* **segments:** implement os distro badge, container sandbox, and shlvl segments ([8c159e4](https://github.com/casonadams/zline/commit/8c159e43319d4c8caac3aa244e8f8f8d142d2cbc))
+* **segments:** implement swift, dart, julia, and ocaml runtime segments ([14f00bd](https://github.com/casonadams/zline/commit/14f00bde96d5e427161e469c53cb823c48a175d0))
+* **segments:** implement vi-mode indicator, gcp, azure, and elixir segments ([6b2570f](https://github.com/casonadams/zline/commit/6b2570fff1fc7251692a8bc2aef8d12ac73b16c2))
+* **spec:** add Slice 36 BDD specifications and protect exit code state ([9e25dd1](https://github.com/casonadams/zline/commit/9e25dd1963b822b4fa73bb01fd5ba092dab6c676))
+* **status:** implement --signal translation and optimize OSC prefix and wordcode compile ([b632827](https://github.com/casonadams/zline/commit/b6328271a89cf0d84a7dff8b82b1fffa7565ed4a))
+* **terminal:** implement window resize trap, osc 8 hyperlinks, ssh context, and battery segment ([4602b8c](https://github.com/casonadams/zline/commit/4602b8c86d0975469e8be60f32f469d827f4ddf2))
+
+
+### Bug Fixes
+
+* **bench:** calibrate benchmark thresholds for virtualized CI runners and unhide gate output ([fb1ad38](https://github.com/casonadams/zline/commit/fb1ad385c42080b35eb4c1ae2bd402fe93bd9d0d))
+* **bench:** calibrate path and git benchmark budgets for shared VM runners ([b29abf7](https://github.com/casonadams/zline/commit/b29abf755169a39ecabd3baec1fcb838cc123a40))
+* **core:** prevent worker stderr redirection and sanitize terminal escape hooks ([ead9692](https://github.com/casonadams/zline/commit/ead9692c42fddcf1c664ca8bddacb1ab16daac5e))
+* **docker:** handle JSON config without space after colon ([da623fe](https://github.com/casonadams/zline/commit/da623fe63216cbfd99bde95645b1aac15c079b2b))
+* **git:** re-render prompt on async reply and traverse parent dirs for rust/package ([ce096f0](https://github.com/casonadams/zline/commit/ce096f0cf88d9724abe12f43abe70c974eb315cf))
+* **ram:** parse Linux /proc/meminfo into array parts to avoid math evaluation crash ([29065ac](https://github.com/casonadams/zline/commit/29065ac568c0771300130194931346b6c202ea4f))
+* **rust:** parse rust-toolchain.toml channel with flexible spacing ([7d197ff](https://github.com/casonadams/zline/commit/7d197ffc6e98776dbd8b9a27b149d42b34023c04))
+* **spec:** add missing When call clauses and isolate hooks in BDD specs ([dded8da](https://github.com/casonadams/zline/commit/dded8dadfc4e99683496f49bfab8ead079f43e2a))
+* **spec:** encapsulate test setup and cleanup in function calls for shellspec ([0ab7516](https://github.com/casonadams/zline/commit/0ab75168b142c1947a143e2d49ff557d20f514fa))
+* **spec:** remove in-process setopt ksh_arrays from shellspec to prevent framework loop ([f1de5c8](https://github.com/casonadams/zline/commit/f1de5c8260a26181a74725f9ce622252e63cbc05))
+* **spec:** use After hook for temp dir cleanup in dir_spec ([8de4e22](https://github.com/casonadams/zline/commit/8de4e22340fc6ae34237c4cff2a1512fd4d4f47f))
+* **transient:** chain prior zle widgets and dispatch line_finish hook ([d3440c4](https://github.com/casonadams/zline/commit/d3440c43393283767358324e1e99821bce6233e4))
+* **update:** support git submodules and worktrees in zline update ([ecf6c6c](https://github.com/casonadams/zline/commit/ecf6c6cbd1b97ad6175c1cc665d089b264962395))
+* **worker:** break infinite redraw loop and guard ZLE interactive menus ([8b33963](https://github.com/casonadams/zline/commit/8b33963a022ab7acc7ad2d992144074ce4a27c59))
+* **worker:** detach background worker stdio to prevent CI runner hang ([0c3f463](https://github.com/casonadams/zline/commit/0c3f463bae08ff31a790981dd5bbbc388bb20e7e))
+
+
+### Performance Improvements
+
+* **container:** memoize sandbox detection to eliminate filesystem stat overhead ([778646c](https://github.com/casonadams/zline/commit/778646c4b3b3dfbd3aef91c71cf7bd7e820bca33))
+* **core:** optimize color lookup, eliminate user_host fork, fix worktree stash, and expand project detection ([75159e1](https://github.com/casonadams/zline/commit/75159e12a9ab557429b1ad906bfa11e7d3927ced))
+* **dir:** reuse precomputed osc host prefix for terminal hyperlinks ([92a07d4](https://github.com/casonadams/zline/commit/92a07d48e6220ead6a97315141def9f4cfed6faa))
+* **dir:** use native parameter filtering for path components ([acbd94f](https://github.com/casonadams/zline/commit/acbd94f69b8eb83fab909105d196721f71543463))
+* **k8s:** add zero-fork mtime caching and support colon-separated KUBECONFIG ([d169e2d](https://github.com/casonadams/zline/commit/d169e2dbabbd635990a7f6229617d8063da9ab08))
+* **os:** memoize Linux distribution ID to eliminate redundant /etc/os-release reads ([1dab15f](https://github.com/casonadams/zline/commit/1dab15f0b059c56e3415b7823e6bd75f7211bb9a))
+* **render:** fast-path visual length and install zsh completion in homebrew formula ([4fda0c6](https://github.com/casonadams/zline/commit/4fda0c672d0787ce27800e1259e869c7e6cb4db1))
+* **sysinfo:** add TTL caching to battery and load and memoize macOS hardware RAM ([d320bde](https://github.com/casonadams/zline/commit/d320bdeceb20f411d69b147c61937a58500cb309))
