@@ -5,11 +5,12 @@ zline_segment_golang() {
     -color:=opts -icon:=opts -bg:=opts -fg:=opts
 
   local ver=""
-  if _zline_find_up "go.mod"; then
+  if _zline_find_up "go.mod" "go.work"; then
     local line
     while IFS= read -r line; do
       if [[ "$line" == "go "* ]]; then
         ver="${line#go }"
+        ver="${ver%$'\r'}"
         break
       fi
     done < "$REPLY" 2>/dev/null

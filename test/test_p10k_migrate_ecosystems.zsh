@@ -42,6 +42,11 @@ zline_segment_golang
 assert_eq "$_zline_ret_content" "1.22.4" "Golang segment extracts version from go.mod"
 rm -f go.mod
 
+print -l "go 1.23.1" "use ./submodule" > go.work
+zline_segment_golang
+assert_eq "$_zline_ret_content" "1.23.1" "Golang segment extracts version from go.work"
+rm -f go.work
+
 # 3. Terraform segment
 TF_WORKSPACE="production" zline_segment_terraform
 assert_eq "$_zline_ret_content" "production" "Terraform segment detects TF_WORKSPACE"
