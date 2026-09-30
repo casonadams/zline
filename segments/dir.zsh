@@ -184,7 +184,7 @@ zline_segment_dir() {
   fi
 
   if (( _zline_osc_hyperlinks == 1 )); then
-    _zline_osc_hyperlink "file://${HOST:-localhost}${PWD}" "$_zline_ret_content"
+    _zline_osc_hyperlink "${_zline_osc_host_prefix}${PWD}" "$_zline_ret_content"
     _zline_ret_content="$REPLY"
   fi
 
