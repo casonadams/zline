@@ -36,6 +36,11 @@ assert_eq "$REPLY" "14" "Color name 'bright-cyan' maps to code 14"
 
 _zline_color_code "none"
 assert_eq "$REPLY" "reset" "Color 'none' maps to 'reset'"
+_zline_color_code "15"
+assert_eq "$REPLY" "15" "Numeric color code 15 returns directly"
+
+_zline_color_code "255"
+assert_eq "$REPLY" "255" "Numeric color code 255 returns directly"
 
 _zline_fg "green"
 assert_eq "$REPLY" "%F{2}" "Foreground escape for green is %F{2}"

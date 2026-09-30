@@ -19,7 +19,7 @@ zline_segment_user_host() {
     return 0
   fi
 
-  local user_part="${USER:-$(whoami 2>/dev/null)}"
+  local user_part="${USER:-${USERNAME:-${LOGNAME:-${(%):-%n}}}}"
   local host_part="${HOST:-localhost}"
   host_part="${host_part%%.*}"
 

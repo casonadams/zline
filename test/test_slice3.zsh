@@ -66,6 +66,19 @@ touch "${test_git_dir}/.git/MERGE_HEAD"
 _zline_git_read_head "$test_git_dir"
 assert_eq "$REPLY" "feature|MERGING" "Merge in progress appends |MERGING"
 
+
+# Worktree / Submodule gitdir file
+typeset wt_dir=$(mktemp -d "${TMPDIR:-/tmp}/zline-test-wt.XXXXXX")
+typeset actual_git_dir=$(mktemp -d "${TMPDIR:-/tmp}/zline-test-actualgit.XXXXXX")
+print -r "gitdir: ${actual_git_dir}" > "${wt_dir}/.git"
+mkdir -p "${actual_git_dir}/logs/refs"
+print -r "ref: refs/heads/worktree-branch" > "${actual_git_dir}/HEAD"
+printf "stash1\nstash2\n" > "${actual_git_dir}/logs/refs/stash"
+_zline_git_read_head "$wt_dir"
+assert_eq "$REPLY" "worktree-branch" "gitdir file resolves branch correctly in worktrees/submodules"
+_zline_git_read_stash "$wt_dir"
+assert_eq "$REPLY" "2" "gitdir file resolves stash count correctly in worktrees/submodules"
+rm -rf "$wt_dir" "$actual_git_dir"
 rm -rf "$test_git_dir"
 
 # 4. Git status v2 parsing logic

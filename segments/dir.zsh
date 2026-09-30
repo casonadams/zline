@@ -22,9 +22,11 @@ _zline_find_project_root() {
   emulate -L zsh
   local cur="$1"
   while [[ "$cur" != "/" && -n "$cur" ]]; do
-    if [[ -e "${cur}/.git" || -f "${cur}/package.json" || -f "${cur}/Cargo.toml" || \
+    if [[ -e "${cur}/.git" || -d "${cur}/.jj" || -f "${cur}/package.json" || -f "${cur}/Cargo.toml" || \
           -f "${cur}/go.mod" || -f "${cur}/pyproject.toml" || -f "${cur}/pom.xml" || \
-          -f "${cur}/build.gradle" || -f "${cur}/mix.exs" || -f "${cur}/CMakeLists.txt" ]]; then
+          -f "${cur}/build.gradle" || -f "${cur}/mix.exs" || -f "${cur}/CMakeLists.txt" || \
+          -f "${cur}/Gemfile" || -f "${cur}/composer.json" || -f "${cur}/build.zig" || \
+          -f "${cur}/deno.json" || -f "${cur}/bunfig.toml" || -f "${cur}/pubspec.yaml" ]]; then
       REPLY="$cur"
       return 0
     fi

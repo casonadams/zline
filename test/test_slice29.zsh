@@ -48,6 +48,20 @@ assert_eq "$REPLY" "${test_dir}/deep/nested/sub/project/src" "dir --last does no
 touch "${test_dir}/deep/nested/sub/project/package.json"
 _zline_find_project_root "${test_dir}/deep/nested/sub/project/src"
 assert_eq "$REPLY" "${test_dir}/deep/nested/sub/project" "find_project_root identifies package.json"
+rm -f "${test_dir}/deep/nested/sub/project/package.json"
+touch "${test_dir}/deep/nested/sub/project/Gemfile"
+_zline_find_project_root "${test_dir}/deep/nested/sub/project/src"
+assert_eq "$REPLY" "${test_dir}/deep/nested/sub/project" "find_project_root identifies Gemfile"
+
+rm -f "${test_dir}/deep/nested/sub/project/Gemfile"
+touch "${test_dir}/deep/nested/sub/project/build.zig"
+_zline_find_project_root "${test_dir}/deep/nested/sub/project/src"
+assert_eq "$REPLY" "${test_dir}/deep/nested/sub/project" "find_project_root identifies build.zig"
+
+rm -f "${test_dir}/deep/nested/sub/project/build.zig"
+mkdir -p "${test_dir}/deep/nested/sub/project/.jj"
+_zline_find_project_root "${test_dir}/deep/nested/sub/project/src"
+assert_eq "$REPLY" "${test_dir}/deep/nested/sub/project" "find_project_root identifies .jj"
 
 rm -rf "$test_dir"
 

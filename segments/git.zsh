@@ -14,19 +14,28 @@ _zline_git_on_change() {
 zline_hook add preexec _zline_git_on_change
 zline_hook add chpwd _zline_git_on_change
 
+_zline_git_resolve_dir() {
+  emulate -L zsh
+  local dir="$1"
+  local gp="${dir}/.git"
+  if [[ -f "$gp" ]]; then
+    local l
+    read -r l < "$gp" 2>/dev/null
+    if [[ "$l" == "gitdir: "* ]]; then
+      local gd="${l#gitdir: }"
+      [[ "$gd" != /* ]] && gd="${dir}/${gd}"
+      gp="$gd"
+    fi
+  fi
+  REPLY="$gp"
+}
+
 _zline_git_read_head() {
   emulate -L zsh
   local dir="$1"
-  local git_path="${dir}/.git"
-  if [[ -f "$git_path" ]]; then
-    local line
-    read -r line < "$git_path" 2>/dev/null
-    if [[ "$line" == "gitdir: "* ]]; then
-      local gd="${line#gitdir: }"
-      [[ "$gd" != /* ]] && gd="${dir}/${gd}"
-      git_path="$gd"
-    fi
-  fi
+  local git_path
+  _zline_git_resolve_dir "$dir"
+  git_path="$REPLY"
 
   local head_file="${git_path}/HEAD"
   [[ -r "$head_file" ]] || { REPLY=""; return 1; }
@@ -57,7 +66,10 @@ _zline_git_read_head() {
 _zline_git_read_stash() {
   emulate -L zsh
   local dir="$1"
-  local stash_file="${dir}/.git/logs/refs/stash"
+  local git_path
+  _zline_git_resolve_dir "$dir"
+  git_path="$REPLY"
+  local stash_file="${git_path}/logs/refs/stash"
   local -i count=0
   if [[ -f "$stash_file" ]]; then
     local line

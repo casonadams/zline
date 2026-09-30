@@ -20,11 +20,15 @@ typeset -gA _ZLINE_COLOR_MAP=(
 )
 
 _zline_color_code() {
-  local val="${1:l}"
-  if [[ -z "$val" || "$val" == "none" || "$val" == "transparent" || "$val" == "default" || "$val" == "reset" ]]; then
+  if [[ "$1" == <-> ]]; then
+    REPLY="$1"
+    return 0
+  fi
+  if [[ -z "$1" || "$1" == "none" || "$1" == "transparent" || "$1" == "default" || "$1" == "reset" ]]; then
     REPLY="reset"
     return 0
   fi
+  local val="${1:l}"
   if [[ -n "${_ZLINE_COLOR_MAP[$val]}" ]]; then
     REPLY="${_ZLINE_COLOR_MAP[$val]}"
     return 0

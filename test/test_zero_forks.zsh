@@ -27,42 +27,13 @@ assert_eq() {
 print -P "%F{14}Running Zero-Fork Audit Tests:%f"
 
 # 1. Static analysis: ensure no subshell $(...) syntax in render path files
+setopt localoptions extended_glob
 typeset -a hot_files=(
   "${REPO_ROOT}/lib/render.zsh"
   "${REPO_ROOT}/lib/color.zsh"
   "${REPO_ROOT}/lib/osc.zsh"
   "${REPO_ROOT}/lib/notify.zsh"
-  "${REPO_ROOT}/segments/dir.zsh"
-  "${REPO_ROOT}/segments/git.zsh"
-  "${REPO_ROOT}/segments/status.zsh"
-  "${REPO_ROOT}/segments/exec_time.zsh"
-  "${REPO_ROOT}/segments/prompt_char.zsh"
-  "${REPO_ROOT}/segments/venv.zsh"
-  "${REPO_ROOT}/segments/nix_shell.zsh"
-  "${REPO_ROOT}/segments/direnv.zsh"
-  "${REPO_ROOT}/segments/lua.zsh"
-  "${REPO_ROOT}/segments/zig.zsh"
-  "${REPO_ROOT}/segments/bun.zsh"
-  "${REPO_ROOT}/segments/deno.zsh"
-  "${REPO_ROOT}/segments/vi_mode.zsh"
-  "${REPO_ROOT}/segments/gcp.zsh"
-  "${REPO_ROOT}/segments/azure.zsh"
-  "${REPO_ROOT}/segments/elixir.zsh"
-  "${REPO_ROOT}/segments/os.zsh"
-  "${REPO_ROOT}/segments/container.zsh"
-  "${REPO_ROOT}/segments/shlvl.zsh"
-  "${REPO_ROOT}/segments/crystal.zsh"
-  "${REPO_ROOT}/segments/haskell.zsh"
-  "${REPO_ROOT}/segments/scala.zsh"
-  "${REPO_ROOT}/segments/kotlin.zsh"
-  "${REPO_ROOT}/segments/swift.zsh"
-  "${REPO_ROOT}/segments/dart.zsh"
-  "${REPO_ROOT}/segments/julia.zsh"
-  "${REPO_ROOT}/segments/ocaml.zsh"
-  "${REPO_ROOT}/segments/helm.zsh"
-  "${REPO_ROOT}/segments/pulumi.zsh"
-  "${REPO_ROOT}/segments/cmake.zsh"
-  "${REPO_ROOT}/segments/text.zsh"
+  "${REPO_ROOT}"/segments/*.zsh~*(battery|load|ram)*
 )
 
 typeset -i subshell_count=0

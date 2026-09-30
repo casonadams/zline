@@ -117,43 +117,14 @@ if ((json_mode == 0)); then
   print -P "%F{14}%B[3/7] Zero-fork synchronous render path audit...%b%f"
 fi
 
+setopt localoptions extended_glob
 local -a hot_files
 hot_files=(
   lib/render.zsh
   lib/color.zsh
   lib/osc.zsh
   lib/notify.zsh
-  segments/dir.zsh
-  segments/git.zsh
-  segments/status.zsh
-  segments/exec_time.zsh
-  segments/prompt_char.zsh
-  segments/venv.zsh
-  segments/nix_shell.zsh
-  segments/direnv.zsh
-  segments/lua.zsh
-  segments/zig.zsh
-  segments/bun.zsh
-  segments/deno.zsh
-  segments/vi_mode.zsh
-  segments/gcp.zsh
-  segments/azure.zsh
-  segments/elixir.zsh
-  segments/os.zsh
-  segments/container.zsh
-  segments/shlvl.zsh
-  segments/crystal.zsh
-  segments/haskell.zsh
-  segments/scala.zsh
-  segments/kotlin.zsh
-  segments/swift.zsh
-  segments/dart.zsh
-  segments/julia.zsh
-  segments/ocaml.zsh
-  segments/helm.zsh
-  segments/pulumi.zsh
-  segments/cmake.zsh
-  segments/text.zsh
+  segments/*.zsh~*(battery|load|ram)*
 )
 local -i subshell_count=0
 for f in "${hot_files[@]}"; do
