@@ -58,6 +58,16 @@ zline_segment_package
 assert_eq "$_zline_ret_content" "3.1.4" "Package segment extracts version from package.json"
 rm -f package.json
 
+print -l '[package]' 'name = "foo"' 'version = "0.2.1"' > Cargo.toml
+zline_segment_package
+assert_eq "$_zline_ret_content" "0.2.1" "Package segment extracts version from Cargo.toml"
+rm -f Cargo.toml
+
+print -l '[project]' 'name = "bar"' 'version = "0.4.2"' > pyproject.toml
+zline_segment_package
+assert_eq "$_zline_ret_content" "0.4.2" "Package segment extracts version from pyproject.toml"
+rm -f pyproject.toml
+
 # 6. P10k Migration Tool
 typeset p10k_file="${test_dir}/p10k.zsh"
 typeset out_file="${test_dir}/zline.zsh"

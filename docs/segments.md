@@ -218,7 +218,7 @@ docker --color 4
 
 ## `package` (Project Version)
 
-Displays project version extracted from `package.json` or `Cargo.toml`.
+Displays project version extracted from `package.json`, `Cargo.toml`, or `pyproject.toml`.
 
 ```zsh
 package --color 8

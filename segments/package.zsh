@@ -14,7 +14,7 @@ zline_segment_package() {
         break
       fi
     done < "$REPLY" 2>/dev/null
-  elif _zline_find_up "Cargo.toml"; then
+  elif _zline_find_up "Cargo.toml" "pyproject.toml"; then
     local line
     while IFS= read -r line; do
       if [[ "$line" == "version = "* ]]; then
