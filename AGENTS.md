@@ -21,9 +21,9 @@ Whenever adding, updating, or deprecating features, segment options, presets, co
    - `docs/hooks-and-extensibility.md`: Custom segment authoring and lifecycle hooks (`precmd`, `chpwd`, `keymap_select`).
    - `docs/migrating-from-p10k.md`: Powerlevel10k configuration translation mapping.
 
-3. **Web Documentation & Playground (`www/index.html` and `www/docs.html`)**:
+3. **Web Documentation & Overview (`www/index.html` and `www/docs.html`)**:
    - `www/docs.html`: Complete CLI command list, presets, themes, and built-in segments list.
-   - `www/index.html`: Interactive preview controls, configuration builder flags, and generated code snippet generator.
+   - `www/index.html`: Web overview, performance highlights, and feature architecture.
 
 Never submit changes to functionality or configuration options without updating the corresponding sections across `man/`, `docs/` + `README.md`, and `www/`.
 

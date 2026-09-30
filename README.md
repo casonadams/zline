@@ -147,7 +147,7 @@ zsh test/verify_all.zsh
 - [Migrating from Powerlevel10k](docs/migrating-from-p10k.md)
 - [Unix Manual Page](man/man1/zline.1) (`man zline`)
 
-Interactive Web Playground: [https://casonadams.github.io/zline/](https://casonadams.github.io/zline/)
+Web Documentation: [https://casonadams.github.io/zline/](https://casonadams.github.io/zline/)
 
 ---
 
