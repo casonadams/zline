@@ -6,9 +6,11 @@ _zline_ram_read() {
     local line
     while IFS= read -r line; do
       if [[ "$line" == "MemTotal:"* ]]; then
-        total="${${line#*:[[:space:]]#}%% *}"
+        local -a parts=(${=line})
+        total="${parts[2]}"
       elif [[ "$line" == "MemAvailable:"* ]]; then
-        avail="${${line#*:[[:space:]]#}%% *}"
+        local -a parts=(${=line})
+        avail="${parts[2]}"
       fi
       (( total > 0 && avail > 0 )) && break
     done < "/proc/meminfo" 2>/dev/null
@@ -30,6 +32,7 @@ _zline_ram_read() {
   fi
 
   REPLY=""
+  return 0
 }
 
 zline_segment_ram() {
@@ -69,4 +72,5 @@ zline_segment_ram() {
   else
     _zline_ret_icon=$'\uF035B '
   fi
+  return 0
 }
