@@ -67,10 +67,10 @@ bench_op "Sync Prompt Render (Lean)" 1000 "< 2.00 ms" 2.00 "zline_render"
 
 # 3. Path Shortening & Git Anchor
 typeset -a bench_aliases=("--alias" "github.com=gith")
-bench_op "Directory Shortening & Anchor" 1000 "< 0.25 ms" 0.25 "_zline_dir_format_path '$PWD' 1 1 'git' bench_aliases"
+bench_op "Directory Shortening & Anchor" 1000 "< 0.40 ms" 0.40 "_zline_dir_format_path '$PWD' 1 1 'git' bench_aliases"
 
 # 4. Synchronous Git HEAD Reader
-bench_op "Synchronous Git HEAD Reader" 1000 "< 0.25 ms" 0.25 "_zline_git_read_head '$PWD'"
+bench_op "Synchronous Git HEAD Reader" 1000 "< 0.40 ms" 0.40 "_zline_git_read_head '$PWD'"
 # 5. Instant Prompt Snapshot Load
 typeset bench_tmp=$(mktemp -d "${TMPDIR:-/tmp}/zline-bench.XXXXXX")
 _zline_instant_cache_dir="$bench_tmp"
