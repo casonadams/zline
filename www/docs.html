@@ -2,11 +2,11 @@
 <html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
   <title>Documentation · zline</title>
-  <meta name="description" content="Complete documentation and user guides for zline prompt engine.">
+  <meta name="description" content="Complete documentation, configuration reference, CLI commands, and built-in segment directory for the zline prompt engine.">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/style.css?v=2">
   <script>
     (function() {
       const saved = localStorage.getItem("zline:theme");
@@ -16,9 +16,10 @@
   </script>
 </head>
 <body>
+  <!-- Navigation -->
   <nav class="navbar">
     <div class="container navbar-inner">
-      <a href="index.html" class="brand">
+      <a href="index.html" class="brand" aria-label="zline home">
         <svg class="brand-icon" viewBox="0 0 100 100" fill="none">
           <rect width="100" height="100" rx="22" fill="#0f172a"/>
           <path d="M24 30H76L34 70H76" stroke="#38bdf8" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
@@ -30,7 +31,8 @@
 
       <div class="nav-actions">
         <a href="index.html" class="nav-link">Home</a>
-        <a href="https://github.com/casonadams/zline" target="_blank" rel="noopener" class="btn-icon" aria-label="GitHub">
+        <a href="docs.html" class="nav-link" style="color: var(--accent); font-weight: 600;">Docs</a>
+        <a href="https://github.com/casonadams/zline" target="_blank" rel="noopener" class="btn-icon" aria-label="GitHub Repository">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
         </a>
         <button id="themeToggle" class="btn-icon" aria-label="Toggle Theme">
@@ -40,34 +42,132 @@
     </div>
   </nav>
 
-  <main class="container" style="padding: 3rem 1.5rem; max-width: 900px;">
-    <h1 style="font-size: 2.5rem; margin-bottom: 1rem;">zline Documentation</h1>
-    <p style="color: var(--text-secondary); margin-bottom: 2rem;">Fast, modern, and flexible pure-Zsh prompt engine.</p>
+  <!-- Mobile Table of Contents Bar -->
+  <div class="docs-mobile-toc-bar">
+    <div class="container">
+      <button id="docsTocToggleBtn" class="docs-mobile-toc-toggle" aria-expanded="false">
+        <span>Table of Contents</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+    </div>
+  </div>
 
-    <div class="feature-card" style="margin-bottom: 2rem;">
-      <h2 style="margin-bottom: 0.75rem;">Installation</h2>
-      <p style="margin-bottom: 1rem;">With <strong>zload</strong> (recommended):</p>
-      <div class="code-box" style="margin-bottom: 1rem;">
-        <div class="code-content">plugins=(
+  <div id="docsTocDrawer" class="docs-mobile-toc-drawer">
+    <ul class="docs-nav-links">
+      <li><a href="#getting-started" class="docs-nav-link" onclick="closeDocsToc()">Getting Started</a></li>
+      <li><a href="#configuration" class="docs-nav-link" onclick="closeDocsToc()">Configuration Syntax</a></li>
+      <li><a href="#universal-flags" class="docs-nav-link" onclick="closeDocsToc()">Universal Flags</a></li>
+      <li><a href="#global-styling" class="docs-nav-link" onclick="closeDocsToc()">Global Styling</a></li>
+      <li><a href="#presets-themes" class="docs-nav-link" onclick="closeDocsToc()">Presets &amp; Themes</a></li>
+      <li><a href="#cli-reference" class="docs-nav-link" onclick="closeDocsToc()">CLI Commands</a></li>
+      <li><a href="#segments" class="docs-nav-link" onclick="closeDocsToc()">Built-in Segments (58)</a></li>
+    </ul>
+  </div>
+
+  <div class="container docs-layout">
+    <!-- Desktop Sticky Sidebar -->
+    <aside class="docs-sidebar">
+      <div class="docs-nav-group">
+        <div class="docs-nav-title">Overview</div>
+        <ul class="docs-nav-links">
+          <li><a href="#getting-started" class="docs-nav-link active">Getting Started</a></li>
+          <li><a href="#core-architecture" class="docs-nav-link">Core Architecture</a></li>
+        </ul>
+      </div>
+
+      <div class="docs-nav-group">
+        <div class="docs-nav-title">Configuration</div>
+        <ul class="docs-nav-links">
+          <li><a href="#configuration" class="docs-nav-link">Array Syntax</a></li>
+          <li><a href="#universal-flags" class="docs-nav-link">Universal Flags</a></li>
+          <li><a href="#global-styling" class="docs-nav-link">Global Styling Flags</a></li>
+        </ul>
+      </div>
+
+      <div class="docs-nav-group">
+        <div class="docs-nav-title">Customization</div>
+        <ul class="docs-nav-links">
+          <li><a href="#presets-themes" class="docs-nav-link">Presets &amp; Themes</a></li>
+          <li><a href="#cli-reference" class="docs-nav-link">CLI Commands</a></li>
+        </ul>
+      </div>
+
+      <div class="docs-nav-group">
+        <div class="docs-nav-title">Directory</div>
+        <ul class="docs-nav-links">
+          <li><a href="#segments" class="docs-nav-link">Built-in Segments (58)</a></li>
+        </ul>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="docs-content">
+      <!-- Section: Getting Started -->
+      <section id="getting-started" class="docs-section">
+        <h1>Getting Started</h1>
+        <p>
+          <strong>zline</strong> is an ultra-fast, zero-dependency, pure-Zsh replacement for Powerlevel10k and Starship designed for sub-millisecond synchronous rendering and zero subshell forks.
+        </p>
+
+        <h2>Installation</h2>
+        <p>Using <strong>zload</strong> (recommended for sub-millisecond warm startup):</p>
+        <div class="code-box" style="margin-bottom: 1.5rem;">
+          <div class="code-header">
+            <span>~/.zshrc</span>
+          </div>
+          <div class="code-content">plugins=(
   casonadams/zline
 )
 zload "${plugins[@]}"</div>
-      </div>
-      <p style="margin-bottom: 1rem;">Or manual git clone:</p>
-      <div class="code-box">
-        <div class="code-content">git clone https://github.com/casonadams/zline.git ~/.zline
-echo 'source ~/.zline/zline.zsh' >> ~/.zshrc
-echo 'zline preset powerline --transient' >> ~/.zshrc
-echo 'zline init' >> ~/.zshrc</div>
-      </div>
-    </div>
-    <div class="feature-card" style="margin-bottom: 2rem;">
-      <h2 style="margin-bottom: 0.75rem;">Configuration & Universal Flags</h2>
-      <p style="margin-bottom: 1rem; color: var(--text-secondary); line-height: 1.6;">
-        Prompts are defined using clean, native Zsh token arrays. You do <strong>not</strong> need quotes around lines unless an argument contains spaces:
-      </p>
-      <div class="code-box" style="margin-bottom: 1rem;">
-        <div class="code-content">zline_left=(
+        </div>
+
+        <p>Manual Git clone installation:</p>
+        <div class="code-box" style="margin-bottom: 1.5rem;">
+          <div class="code-header">
+            <span>Terminal</span>
+          </div>
+          <div class="code-content">git clone https://github.com/casonadams/zline.git ~/.zline
+echo 'source ~/.zline/zline.zsh' &gt;&gt; ~/.zshrc
+echo 'zline preset powerline --transient' &gt;&gt; ~/.zshrc
+echo 'zline init' &gt;&gt; ~/.zshrc</div>
+        </div>
+      </section>
+
+      <!-- Section: Core Architecture -->
+      <section id="core-architecture" class="docs-section">
+        <h2>Core Architecture &amp; Performance Invariants</h2>
+        <div class="features-grid" style="margin: 1.5rem 0;">
+          <div class="feature-card">
+            <h3>Strict Zero-Fork Path</h3>
+            <p>Prompt rendering strictly executes 0 subprocesses and 0 subshell forks <code>$(...)</code> on the synchronous path. All string processing relies on native Zsh parameter expansions.</p>
+          </div>
+          <div class="feature-card">
+            <h3>Compile Once, Render Microseconds</h3>
+            <p>When <code>zline init</code> runs, token arrays are compiled into direct function pointers, eliminating <code>zparseopts</code> and argument-parsing overhead at prompt render time.</p>
+          </div>
+          <div class="feature-card">
+            <h3>Async Background Worker</h3>
+            <p>Slow I/O operations (such as deep Git status scans) run asynchronously in a dedicated non-blocking worker over FIFOs/pipes without blocking your prompt.</p>
+          </div>
+          <div class="feature-card">
+            <h3>Base16 Palette First</h3>
+            <p>Standardizes on ANSI colors 0 through 15 so prompt themes automatically adapt to your terminal's color scheme without hardcoded RGB values.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section: Configuration Syntax -->
+      <section id="configuration" class="docs-section">
+        <h2>Configuration &amp; Array Syntax</h2>
+        <p>
+          Prompts are declared using native Zsh token arrays. You do <strong>not</strong> need quotes around lines unless an argument contains spaces:
+        </p>
+
+        <div class="code-box" style="margin-bottom: 1.5rem;">
+          <div class="code-header">
+            <span>~/.zshrc</span>
+          </div>
+          <div class="code-content">zline_left=(
   dir --shorten 1 --anchor git
   git --clean 2 --dirty 3 --icon " "
   rust --icon ""
@@ -75,106 +175,984 @@ echo 'zline init' >> ~/.zshrc</div>
   newline
   prompt_char
 )
+
 zline_right=(
   exec_time --min 2
   time --color cyan
 )</div>
-      </div>
-      <ul style="margin-left: 1.5rem; color: var(--text-secondary); line-height: 1.8;">
-        <li><code style="color:var(--accent)">--icon &lt;glyph&gt;</code>: Universal icon override on any segment (e.g. <code style="color:var(--text-primary)">--icon " "</code>).</li>
-        <li><code style="color:var(--accent)">--icon ""</code>: Suppresses the icon for a specific segment, rendering only the text/content without an icon.</li>
-        <li><code style="color:var(--accent)">--no-icons</code> / <code style="color:var(--accent)">--icons</code>: Global flag on <code style="color:var(--text-primary)">zline preset</code> or <code style="color:var(--text-primary)">zline style</code> to toggle pure-text mode across all segments.</li>
-        <li><code style="color:var(--accent)">--color &lt;col&gt;</code> / <code style="color:var(--accent)">--fg &lt;col&gt;</code>: Sets foreground color (Base16 0–15, color name e.g. <code style="color:var(--text-primary)">cyan</code>, 256-index, or hex <code style="color:var(--text-primary)">#RRGGBB</code>).</li>
-        <li><code style="color:var(--accent)">--bg &lt;col&gt;</code>: Sets background block color in Powerline and Rainbow visual styles.</li>
-        <li><code style="color:var(--accent)">--prefix &lt;str&gt;</code> / <code style="color:var(--accent)">--suffix &lt;str&gt;</code>: Universal surrounds prepended or appended to any segment.</li>
-        <li><code style="color:var(--accent)">--format &lt;fn&gt;</code>: Post-processes segment content with a custom Zsh function setting <code style="color:var(--text-primary)">$REPLY</code>.</li>
-      </ul>
-    </div>
+        </div>
+      </section>
 
-    <div class="feature-card" style="margin-bottom: 2rem;">
-      <h2 style="margin-bottom: 0.75rem;">Command Line Interface</h2>
-      <ul style="margin-left: 1.5rem; color: var(--text-secondary); line-height: 1.8;">
-        <li><code style="color:var(--accent)">zline preset &lt;name&gt;</code>: Load built-in preset or curated theme (<code style="color:var(--text-primary)">powerline</code>, <code style="color:var(--text-primary)">lean</code>, <code style="color:var(--text-primary)">rainbow</code>, <code style="color:var(--text-primary)">pure</code>, <code style="color:var(--text-primary)">catppuccin</code>, <code style="color:var(--text-primary)">tokyonight</code>, <code style="color:var(--text-primary)">nord</code>, <code style="color:var(--text-primary)">gruvbox</code>).</li>
-        <li><code style="color:var(--accent)">zline preset list</code>: List all available layout presets and curated themes.</li>
-        <li><code style="color:var(--accent)">zline preset show &lt;name&gt;</code>: Inspect preset configuration source.</li>
-        <li><code style="color:var(--accent)">zline style &lt;name&gt;</code>: Set prompt styling flags (<code style="color:var(--text-primary)">--transient</code>, <code style="color:var(--text-primary)">--transient-dir</code>, <code style="color:var(--text-primary)">--ascii</code>, <code style="color:var(--text-primary)">--no-icons</code>, <code style="color:var(--text-primary)">--no-osc</code>, <code style="color:var(--text-primary)">--frame</code>, <code style="color:var(--text-primary)">--connect</code>).</li>
-        <li><code style="color:var(--accent)">zline init</code>: Pre-compile segments and attach lifecycle hooks.</li>
-        <li><code style="color:var(--accent)">zline bench [--profile] [iters]</code>: Run execution latency benchmark (< 1.5 ms assertion) or per-segment micro-profiling.</li>
-        <li><code style="color:var(--accent)">zline compare</code>: Run comparative benchmarks against other prompt architectures.</li>
-        <li><code style="color:var(--accent)">zline doctor</code>: Comprehensive diagnostics for shell version, UTF-8 locale, cache directory, and segments.</li>
-        <li><code style="color:var(--accent)">zline configure</code>: Interactive configuration wizard.</li>
-        <li><code style="color:var(--accent)">zline migrate &lt;p10k_file&gt;</code>: Automatically translate Powerlevel10k configurations to zline.</li>
-        <li><code style="color:var(--accent)">zline compile</code> / <code style="color:var(--accent)">clean</code>: Manage compiled wordcode (.zwc).</li>
-        <li><code style="color:var(--accent)">zline update</code>: Pull latest release and recompile bytecode.</li>
-        <li><code style="color:var(--accent)">zline notify [on|off|threshold|status]</code>: Configure desktop notifications on long-running commands (OSC 777 / OSC 9).</li>
-        <li><code style="color:var(--accent)">zline version</code>: Print current version.</li>
-      </ul>
-    </div>
+      <!-- Section: Universal Flags -->
+      <section id="universal-flags" class="docs-section">
+        <h2>Universal Segment Flags</h2>
+        <p>Every built-in and custom segment accepts these universal modifiers:</p>
 
-    <div class="feature-card">
-      <h2 style="margin-bottom: 0.75rem;">Built-in Segments (58 Segments)</h2>
-      <ul style="margin-left: 1.5rem; color: var(--text-secondary); line-height: 1.8;">
-        <li><strong>dir</strong>: Path shortening (<code style="color:var(--accent)">--shorten 1</code>), Git root anchor (<code style="color:var(--accent)">--anchor git</code>), path aliases (<code style="color:var(--accent)">--alias github.com=gith</code>), read-only lock indicator (<code style="color:var(--accent)">--readonly-icon</code>).</li>
-        <li><strong>git</strong>: Instant branch read (< 0.1 ms) + async status badges (<code style="color:var(--accent)">--clean 2 --dirty 3 --ahead 12</code>), submodules (<code style="color:var(--accent)">--submodule</code>), stashes (<code style="color:var(--accent)">--stash</code>).</li>
-        <li><strong>status</strong>: Exit code failure badge (<code style="color:var(--accent)">--hide-zero</code>, <code style="color:var(--accent)">--color 9</code>).</li>
-        <li><strong>exec_time</strong>: Duration thresholding and precision (<code style="color:var(--accent)">--min 2 --precision 2</code>).</li>
-        <li><strong>prompt_char</strong>: Dynamic symbol with error and Vi-mode tracking (<code style="color:var(--accent)">--symbol '❯'</code>).</li>
-        <li><strong>venv</strong>: Virtualenv, Conda, and Poetry environment detection.</li>
-        <li><strong>node</strong>: Node.js version detection from <code style="color:var(--text-primary)">.node-version</code> or <code style="color:var(--text-primary)">.nvmrc</code>.</li>
-        <li><strong>k8s</strong>: Current Kubernetes context from <code style="color:var(--text-primary)">~/.kube/config</code>.</li>
-        <li><strong>time</strong>: Local time formatted with pure Zsh prompt escapes.</li>
-        <li><strong>jobs</strong>: Active background job count indicator.</li>
-        <li><strong>aws</strong>: AWS profile and active region detection.</li>
-        <li><strong>rust</strong>: Rust toolchain version from <code style="color:var(--text-primary)">rust-toolchain</code> or <code style="color:var(--text-primary)">rust-toolchain.toml</code>.</li>
-        <li><strong>golang</strong>: Go version from <code style="color:var(--text-primary)">go.mod</code>.</li>
-        <li><strong>terraform</strong>: Workspace from <code style="color:var(--text-primary)">$TF_WORKSPACE</code> or <code style="color:var(--text-primary)">.terraform/environment</code>.</li>
-        <li><strong>docker</strong>: Active context from <code style="color:var(--text-primary)">$DOCKER_CONTEXT</code> or <code style="color:var(--text-primary)">~/.docker/config.json</code>.</li>
-        <li><strong>package</strong>: Application version from <code style="color:var(--text-primary)">package.json</code> or <code style="color:var(--text-primary)">Cargo.toml</code>.</li>
-        <li><strong>user_host</strong>: User and hostname for SSH and root sessions.</li>
-        <li><strong>battery</strong>: Battery charge percentage and charging state.</li>
-        <li><strong>ruby</strong>: Ruby version from <code style="color:var(--text-primary)">.ruby-version</code>.</li>
-        <li><strong>php</strong>: PHP version from <code style="color:var(--text-primary)">.php-version</code>.</li>
-        <li><strong>java</strong>: Java version from <code style="color:var(--text-primary)">.java-version</code>.</li>
-        <li><strong>dotnet</strong>: .NET SDK version from <code style="color:var(--text-primary)">global.json</code>.</li>
-        <li><strong>load</strong>: System 1-minute load average with configurable warning thresholds (<code style="color:var(--accent)">--warn 4.0</code>).</li>
-        <li><strong>ram</strong>: Memory utilization percentage with warning alerts (<code style="color:var(--accent)">--warn 80</code>).</li>
-        <li><strong>nix_shell</strong>: Active Nix shell indicator from <code style="color:var(--text-primary)">$IN_NIX_SHELL</code> or <code style="color:var(--text-primary)">$name</code>.</li>
-        <li><strong>direnv</strong>: Active Direnv environment indicator from <code style="color:var(--text-primary)">$DIRENV_DIR</code>.</li>
-        <li><strong>lua</strong>: Lua runtime version from <code style="color:var(--text-primary)">.lua-version</code> or <code style="color:var(--text-primary)">.tool-versions</code>.</li>
-        <li><strong>zig</strong>: Zig toolchain version from <code style="color:var(--text-primary)">.zigversion</code> or <code style="color:var(--text-primary)">build.zig</code>.</li>
-        <li><strong>bun</strong>: Bun runtime version or indicator from <code style="color:var(--text-primary)">bun.lockb</code> or <code style="color:var(--text-primary)">.tool-versions</code>.</li>
-        <li><strong>deno</strong>: Deno runtime version or indicator from <code style="color:var(--text-primary)">deno.json</code> or <code style="color:var(--text-primary)">.tool-versions</code>.</li>
-        <li><strong>vi_mode</strong>: Modal editing mode badge (<code style="color:var(--accent)">--normal NOR --insert INS --hide-insert</code>).</li>
-        <li><strong>gcp</strong>: Active Google Cloud project from <code style="color:var(--text-primary)">$CLOUDSDK_CORE_PROJECT</code> or config.</li>
-        <li><strong>azure</strong>: Active Microsoft Azure subscription from <code style="color:var(--text-primary)">$ARM_SUBSCRIPTION_NAME</code>.</li>
-        <li><strong>elixir</strong>: Elixir runtime version from <code style="color:var(--text-primary)">mix.exs</code> or <code style="color:var(--text-primary)">.tool-versions</code>.</li>
-        <li><strong>os</strong>: Operating system or Linux distribution icon and label (<code style="color:var(--accent)">--text</code>).</li>
-        <li><strong>container</strong>: Container or sandbox environment badge (<code style="color:var(--accent)">docker</code>, <code style="color:var(--accent)">podman</code>, <code style="color:var(--accent)">wsl</code>).</li>
-        <li><strong>shlvl</strong>: Nested shell depth alert (<code style="color:var(--accent)">--threshold 2 --warn 9</code>).</li>
-        <li><strong>crystal</strong>: Crystal runtime version from <code style="color:var(--text-primary)">shard.yml</code> or <code style="color:var(--text-primary)">.tool-versions</code>.</li>
-        <li><strong>haskell</strong>: Haskell / GHC version from <code style="color:var(--text-primary)">stack.yaml</code>, <code style="color:var(--text-primary)">cabal</code>, or <code style="color:var(--text-primary)">.tool-versions</code>.</li>
-        <li><strong>scala</strong>: Scala version from <code style="color:var(--text-primary)">build.sbt</code> or <code style="color:var(--text-primary)">.tool-versions</code>.</li>
-        <li><strong>kotlin</strong>: Kotlin version from <code style="color:var(--text-primary)">build.gradle.kts</code> or <code style="color:var(--text-primary)">.tool-versions</code>.</li>
-        <li><strong>swift</strong>: Swift runtime version from <code style="color:var(--text-primary)">Package.swift</code> or <code style="color:var(--text-primary)">.tool-versions</code>.</li>
-        <li><strong>dart</strong>: Dart / Flutter version from <code style="color:var(--text-primary)">pubspec.yaml</code> or <code style="color:var(--text-primary)">.tool-versions</code>.</li>
-        <li><strong>julia</strong>: Julia version from <code style="color:var(--text-primary)">Project.toml</code> or <code style="color:var(--text-primary)">.tool-versions</code>.</li>
-        <li><strong>ocaml</strong>: OCaml version from <code style="color:var(--text-primary)">dune-project</code> or <code style="color:var(--text-primary)">.tool-versions</code>.</li>
-        <li><strong>helm</strong>: Helm chart name and version from <code style="color:var(--text-primary)">Chart.yaml</code> or <code style="color:var(--text-primary)">helmfile.yaml</code>.</li>
-        <li><strong>pulumi</strong>: Pulumi project and stack from <code style="color:var(--text-primary)">Pulumi.yaml</code>.</li>
-        <li><strong>cmake</strong>: CMake C/C++ project name from <code style="color:var(--text-primary)">CMakeLists.txt</code> or presets.</li>
-        <li><strong>clojure</strong>: Clojure version from <code style="color:var(--text-primary)">deps.edn</code> or <code style="color:var(--text-primary)">.tool-versions</code>.</li>
-        <li><strong>erlang</strong>: Erlang version from <code style="color:var(--text-primary)">rebar.config</code> or <code style="color:var(--text-primary)">.tool-versions</code>.</li>
-        <li><strong>perl</strong>: Perl version from <code style="color:var(--text-primary)">cpanfile</code> or <code style="color:var(--text-primary)">.tool-versions</code>.</li>
-        <li><strong>r</strong>: R environment from <code style="color:var(--text-primary)">DESCRIPTION</code>, <code style="color:var(--text-primary)">.Rprofile</code>, or <code style="color:var(--text-primary)">renv.lock</code>.</li>
-        <li><strong>solidity</strong>: Solidity smart contract project from <code style="color:var(--text-primary)">foundry.toml</code> or <code style="color:var(--text-primary)">hardhat.config.js</code>.</li>
-        <li><strong>mise</strong>: Active mise environment from <code style="color:var(--text-primary)">$MISE_ENV</code> or <code style="color:var(--text-primary)">mise.toml</code>.</li>
-        <li><strong>jj</strong>: Jujutsu repository indicator from <code style="color:var(--text-primary)">.jj/</code>.</li>
-        <li><strong>meson</strong>: Meson C/C++ project name from <code style="color:var(--text-primary)">meson.build</code>.</li>
-        <li><strong>bazel</strong>: Bazel workspace from <code style="color:var(--text-primary)">MODULE.bazel</code> or <code style="color:var(--text-primary)">BUILD</code>.</li>
-        <li><strong>text</strong>: Static text badge or evaluated shell variable (<code style="color:var(--accent)">text "PROD" --color 9</code>).</li>
-      </ul>
-    </div>
-  </main>
+        <div class="docs-table-wrapper">
+          <table class="docs-table">
+            <thead>
+              <tr>
+                <th>Flag</th>
+                <th>Target</th>
+                <th>Default</th>
+                <th>Description &amp; Example</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>--icon &lt;glyph&gt;</code></td>
+                <td>Any Segment</td>
+                <td>Built-in glyph</td>
+                <td>Overrides the default icon (e.g. <code>--icon " "</code>).</td>
+              </tr>
+              <tr>
+                <td><code>--icon ""</code></td>
+                <td>Any Segment</td>
+                <td>—</td>
+                <td>Suppresses the icon, rendering only text/content.</td>
+              </tr>
+              <tr>
+                <td><code>--color &lt;col&gt;</code><br><code>--fg &lt;col&gt;</code></td>
+                <td>Any Segment</td>
+                <td>Theme Default</td>
+                <td>Sets foreground color: Base16 index (<code>0-15</code>), color name (<code>cyan</code>), or hex (<code>#38bdf8</code>).</td>
+              </tr>
+              <tr>
+                <td><code>--bg &lt;col&gt;</code></td>
+                <td>Any Segment</td>
+                <td>Theme Default</td>
+                <td>Sets background block color in Powerline and Rainbow visual styles.</td>
+              </tr>
+              <tr>
+                <td><code>--prefix &lt;str&gt;</code></td>
+                <td>Any Segment</td>
+                <td>None</td>
+                <td>String prepended immediately before the segment content.</td>
+              </tr>
+              <tr>
+                <td><code>--suffix &lt;str&gt;</code></td>
+                <td>Any Segment</td>
+                <td>None</td>
+                <td>String appended immediately after the segment content.</td>
+              </tr>
+              <tr>
+                <td><code>--format &lt;fn&gt;</code></td>
+                <td>Any Segment</td>
+                <td>None</td>
+                <td>Passes raw content to custom Zsh function which mutates <code>$REPLY</code>.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Section: Global Styling Flags -->
+      <section id="global-styling" class="docs-section">
+        <h2>Global Styling Flags</h2>
+        <p>Passed to <code>zline preset &lt;name&gt; [flags]</code> or <code>zline style &lt;name&gt; [flags]</code>:</p>
+
+        <div class="docs-table-wrapper">
+          <table class="docs-table">
+            <thead>
+              <tr>
+                <th>Flag</th>
+                <th>Default</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>--transient</code></td>
+                <td>Off</td>
+                <td>Collapses prompt history into a compact symbol upon executing a command.</td>
+              </tr>
+              <tr>
+                <td><code>--transient-dir</code></td>
+                <td>Off</td>
+                <td>Retains current working directory along with symbol in transient prompt history.</td>
+              </tr>
+              <tr>
+                <td><code>--no-transient</code></td>
+                <td>On</td>
+                <td>Disables transient prompt behavior (preserves full prompt in terminal scrollback).</td>
+              </tr>
+              <tr>
+                <td><code>--no-icons</code> / <code>--icons</code></td>
+                <td>Icons On</td>
+                <td>Toggles icon glyphs globally across all prompt segments.</td>
+              </tr>
+              <tr>
+                <td><code>--ascii</code></td>
+                <td>NerdFont</td>
+                <td>Renders ASCII-safe separators (<code>&gt;</code>) for minimal or standard terminal fonts.</td>
+              </tr>
+              <tr>
+                <td><code>--nerdfont</code></td>
+                <td>NerdFont</td>
+                <td>Enables high-resolution Nerd Font Powerline glyphs (<code></code>, <code></code>, <code></code>).</td>
+              </tr>
+              <tr>
+                <td><code>--frame [full|left|none]</code></td>
+                <td>none</td>
+                <td>Draws framing line around multi-line prompt layouts.</td>
+              </tr>
+              <tr>
+                <td><code>--connect</code></td>
+                <td>Off</td>
+                <td>Draws connecting line between left and right prompt segments.</td>
+              </tr>
+              <tr>
+                <td><code>--no-osc</code></td>
+                <td>OSC On</td>
+                <td>Disables OSC 133 semantic prompt annotations and OSC 7 directory tracking.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Section: Presets & Curated Themes -->
+      <section id="presets-themes" class="docs-section">
+        <h2>Visual Presets &amp; Curated Themes</h2>
+
+        <h3>Layout Presets</h3>
+        <div class="docs-table-wrapper">
+          <table class="docs-table">
+            <thead>
+              <tr>
+                <th>Preset</th>
+                <th>Visual Style</th>
+                <th>Command</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Powerline</strong></td>
+                <td>Classic solid block backgrounds with interlocking arrow glyphs.</td>
+                <td><code>zline preset powerline</code></td>
+              </tr>
+              <tr>
+                <td><strong>Lean</strong></td>
+                <td>Minimalist two-line prompt with pure colors and zero background blocks.</td>
+                <td><code>zline preset lean</code></td>
+              </tr>
+              <tr>
+                <td><strong>Rainbow</strong></td>
+                <td>Vibrant rounded pill segments with distinct functional color grouping.</td>
+                <td><code>zline preset rainbow</code></td>
+              </tr>
+              <tr>
+                <td><strong>Pure</strong></td>
+                <td>Clean, uncluttered, prompt-symbol-first modern aesthetic.</td>
+                <td><code>zline preset pure</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Curated Base16 Color Themes</h3>
+        <div class="docs-table-wrapper">
+          <table class="docs-table">
+            <thead>
+              <tr>
+                <th>Theme</th>
+                <th>Palette Style</th>
+                <th>Command</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Catppuccin</strong></td>
+                <td>Soothing pastel dark palette with Mocha accents.</td>
+                <td><code>zline preset catppuccin</code></td>
+              </tr>
+              <tr>
+                <td><strong>Tokyo Night</strong></td>
+                <td>Dark, vibrant aesthetic inspired by Tokyo nightlife.</td>
+                <td><code>zline preset tokyonight</code></td>
+              </tr>
+              <tr>
+                <td><strong>Nord</strong></td>
+                <td>Arctic, north-bluish clean and muted palette.</td>
+                <td><code>zline preset nord</code></td>
+              </tr>
+              <tr>
+                <td><strong>Gruvbox</strong></td>
+                <td>Warm retro groove color scheme with rich contrast.</td>
+                <td><code>zline preset gruvbox</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Section: CLI Reference -->
+      <section id="cli-reference" class="docs-section">
+        <h2>Command Line Interface</h2>
+        <p>Complete reference of <code>zline</code> commands:</p>
+
+        <div class="docs-table-wrapper">
+          <table class="docs-table">
+            <thead>
+              <tr>
+                <th>Command</th>
+                <th>Arguments / Flags</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>zline preset &lt;name&gt;</code></td>
+                <td><code>[--transient] [--ascii] [--no-icons]</code></td>
+                <td>Loads layout preset or curated theme with optional styling flags.</td>
+              </tr>
+              <tr>
+                <td><code>zline preset list</code></td>
+                <td>—</td>
+                <td>Lists all available presets and curated themes.</td>
+              </tr>
+              <tr>
+                <td><code>zline preset show &lt;name&gt;</code></td>
+                <td>—</td>
+                <td>Displays the full Zsh configuration code for a preset.</td>
+              </tr>
+              <tr>
+                <td><code>zline style &lt;name&gt;</code></td>
+                <td><code>[styling flags]</code></td>
+                <td>Applies visual frame, separators, or mode overrides without reloading segments.</td>
+              </tr>
+              <tr>
+                <td><code>zline init</code></td>
+                <td>—</td>
+                <td>Compiles prompt tokens into wordcode and attaches shell lifecycle hooks.</td>
+              </tr>
+              <tr>
+                <td><code>zline bench</code></td>
+                <td><code>[--profile] [iterations]</code></td>
+                <td>Measures render latency against &lt; 1.5 ms budget, with optional per-segment profiling.</td>
+              </tr>
+              <tr>
+                <td><code>zline compare</code></td>
+                <td>—</td>
+                <td>Runs comparative microbenchmarks against other prompt architectures.</td>
+              </tr>
+              <tr>
+                <td><code>zline doctor</code></td>
+                <td>—</td>
+                <td>Runs health check on Zsh version, UTF-8 locale, cache directory, and segments.</td>
+              </tr>
+              <tr>
+                <td><code>zline configure</code></td>
+                <td>—</td>
+                <td>Interactive CLI configuration wizard.</td>
+              </tr>
+              <tr>
+                <td><code>zline migrate &lt;file&gt;</code></td>
+                <td><code>~/.p10k.zsh</code></td>
+                <td>Translates Powerlevel10k configurations into native zline syntax.</td>
+              </tr>
+              <tr>
+                <td><code>zline compile</code></td>
+                <td>—</td>
+                <td>Compiles all zline modules into wordcode (<code>.zwc</code>) for instant loading.</td>
+              </tr>
+              <tr>
+                <td><code>zline clean</code></td>
+                <td>—</td>
+                <td>Removes compiled wordcode bytecode artifacts.</td>
+              </tr>
+              <tr>
+                <td><code>zline update</code></td>
+                <td>—</td>
+                <td>Pulls the latest git release and recompiles bytecode.</td>
+              </tr>
+              <tr>
+                <td><code>zline notify</code></td>
+                <td><code>[on|off|threshold|status]</code></td>
+                <td>Configures desktop notifications for long-running commands (OSC 777 / OSC 9).</td>
+              </tr>
+              <tr>
+                <td><code>zline version</code></td>
+                <td>—</td>
+                <td>Prints current zline version.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Section: Built-in Segments -->
+      <section id="segments" class="docs-section">
+        <h2>Built-in Segments Directory (58 Segments)</h2>
+        <p>
+          <code>zline</code> ships with 58 built-in segments covering source control, system monitoring, cloud infrastructure, and 26+ programming language runtimes.
+        </p>
+
+        <!-- Segment Controls & Live Filter -->
+        <div class="segment-controls">
+          <div class="segment-search-box">
+            <svg class="segment-search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" id="segmentSearch" class="segment-search-input" placeholder="Filter 58 segments by name, trigger file, or flag (e.g. git, rust, kube, load)..." autocomplete="off" spellcheck="false">
+          </div>
+
+          <div class="segment-filter-chips">
+            <button class="filter-chip active" data-category="all">All (58)</button>
+            <button class="filter-chip" data-category="vcs">VCS &amp; Filesystem (3)</button>
+            <button class="filter-chip" data-category="system">System &amp; Shell (13)</button>
+            <button class="filter-chip" data-category="cloud">Cloud &amp; DevOps (11)</button>
+            <button class="filter-chip" data-category="lang">Languages &amp; Runtimes (26)</button>
+            <button class="filter-chip" data-category="env">Environment &amp; Meta (5)</button>
+          </div>
+        </div>
+
+        <!-- Segments Grid -->
+        <div id="segmentsGrid" class="segments-grid">
+          <!-- VCS & Filesystem -->
+          <div class="segment-card" data-category="vcs" data-name="dir" data-keywords="path folder directory shorten anchor git cwd">
+            <div>
+              <div class="segment-card-header">
+                <span class="segment-card-title">dir</span>
+                <span class="segment-badge badge-vcs">VCS &amp; FS</span>
+              </div>
+              <p class="segment-card-desc">Working directory with fish-style shortening, Git root anchoring, path aliasing, and read-only lock indicator.</p>
+            </div>
+            <div class="segment-card-flags">--shorten 1 | --anchor git | --alias key=val | --readonly-icon</div>
+          </div>
+
+          <div class="segment-card" data-category="vcs" data-name="git" data-keywords="vcs branch status dirty clean ahead behind stash submodule async">
+            <div>
+              <div class="segment-card-header">
+                <span class="segment-card-title">git</span>
+                <span class="segment-badge badge-vcs">VCS &amp; FS</span>
+              </div>
+              <p class="segment-card-desc">Instant synchronous HEAD branch read (&lt; 0.1 ms) + non-blocking async worker badges for dirty, ahead/behind, stash, and submodules.</p>
+            </div>
+            <div class="segment-card-flags">--clean 2 | --dirty 3 | --ahead 12 | --submodule | --stash</div>
+          </div>
+
+          <div class="segment-card" data-category="vcs" data-name="jj" data-keywords="jujutsu vcs vcs-alternative mercurial git">
+            <div>
+              <div class="segment-card-header">
+                <span class="segment-card-title">jj</span>
+                <span class="segment-badge badge-vcs">VCS &amp; FS</span>
+              </div>
+              <p class="segment-card-desc">Jujutsu VCS repository change ID and bookmark tracking from active <code>.jj/</code> working copy.</p>
+            </div>
+            <div class="segment-card-flags">Trigger: .jj/</div>
+          </div>
+
+          <!-- System & Shell -->
+          <div class="segment-card" data-category="system" data-name="status" data-keywords="exit code return code error failure pipe">
+            <div>
+              <div class="segment-card-header">
+                <span class="segment-card-title">status</span>
+                <span class="segment-badge badge-system">System</span>
+              </div>
+              <p class="segment-card-desc">Command exit code badge with error signal translation and conditional zero suppression.</p>
+            </div>
+            <div class="segment-card-flags">--hide-zero | --color 9</div>
+          </div>
+
+          <div class="segment-card" data-category="system" data-name="exec_time" data-keywords="execution duration elapsed command time ms">
+            <div>
+              <div class="segment-card-header">
+                <span class="segment-card-title">exec_time</span>
+                <span class="segment-badge badge-system">System</span>
+              </div>
+              <p class="segment-card-desc">Execution duration of last command with minimum threshold gating and decimal precision controls.</p>
+            </div>
+            <div class="segment-card-flags">--min 2 | --precision 2</div>
+          </div>
+
+          <div class="segment-card" data-category="system" data-name="prompt_char" data-keywords="symbol prompt char arrow vicmd error root">
+            <div>
+              <div class="segment-card-header">
+                <span class="segment-card-title">prompt_char</span>
+                <span class="segment-badge badge-system">System</span>
+              </div>
+              <p class="segment-card-desc">Dynamic prompt symbol with color state tracking for successful exit, error code, and Vi mode.</p>
+            </div>
+            <div class="segment-card-flags">--symbol '❯' | --error '❯'</div>
+          </div>
+
+          <div class="segment-card" data-category="system" data-name="vi_mode" data-keywords="modal normal insert visual keymap vi vim">
+            <div>
+              <div class="segment-card-header">
+                <span class="segment-card-title">vi_mode</span>
+                <span class="segment-badge badge-system">System</span>
+              </div>
+              <p class="segment-card-desc">Zsh Line Editor (ZLE) modal editing mode badge tracking NORMAL, INSERT, and VISUAL keymaps.</p>
+            </div>
+            <div class="segment-card-flags">--normal NOR | --insert INS | --hide-insert</div>
+          </div>
+
+          <div class="segment-card" data-category="system" data-name="shlvl" data-keywords="shell level depth nesting subshell">
+            <div>
+              <div class="segment-card-header">
+                <span class="segment-card-title">shlvl</span>
+                <span class="segment-badge badge-system">System</span>
+              </div>
+              <p class="segment-card-desc">Nested shell depth warning alert displayed when <code>$SHLVL</code> exceeds configurable threshold.</p>
+            </div>
+            <div class="segment-card-flags">--threshold 2 | --warn 9</div>
+          </div>
+
+          <div class="segment-card" data-category="system" data-name="jobs" data-keywords="background jobs bg workers tasks">
+            <div>
+              <div class="segment-card-header">
+                <span class="segment-card-title">jobs</span>
+                <span class="segment-badge badge-system">System</span>
+              </div>
+              <p class="segment-card-desc">Active background job counter indicator tracking asynchronous processes suspended or running in current shell.</p>
+            </div>
+            <div class="segment-card-flags">Pure Zsh builtin (%j)</div>
+          </div>
+
+          <div class="segment-card" data-category="system" data-name="time" data-keywords="clock current time date timestamp">
+            <div>
+              <div class="segment-card-header">
+                <span class="segment-card-title">time</span>
+                <span class="segment-badge badge-system">System</span>
+              </div>
+              <p class="segment-card-desc">Current local time formatted with zero-fork prompt expansion escapes (e.g. <code>%*</code>, <code>%T</code>, <code>%D</code>).</p>
+            </div>
+            <div class="segment-card-flags">--format '%*'</div>
+          </div>
+
+          <div class="segment-card" data-category="system" data-name="os" data-keywords="operating system distro macos ubuntu arch debian linux alpine">
+            <div>
+              <div class="segment-card-header">
+                <span class="segment-card-title">os</span>
+                <span class="segment-badge badge-system">System</span>
+              </div>
+              <p class="segment-card-desc">Operating system and Linux distribution identification with matching logo glyphs.</p>
+            </div>
+            <div class="segment-card-flags">--text</div>
+          </div>
+
+          <div class="segment-card" data-category="system" data-name="user_host" data-keywords="ssh remote hostname username root privilege">
+            <div>
+              <div class="segment-card-header">
+                <span class="segment-card-title">user_host</span>
+                <span class="segment-badge badge-system">System</span>
+              </div>
+              <p class="segment-card-desc">User and hostname indicator automatically surfacing for SSH remote sessions or root user privileges.</p>
+            </div>
+            <div class="segment-card-flags">SSH &amp; UID == 0 detection</div>
+          </div>
+
+          <div class="segment-card" data-category="system" data-name="container" data-keywords="docker podman wsl container sandbox devcontainer">
+            <div>
+              <div class="segment-card-header">
+                <span class="segment-card-title">container</span>
+                <span class="segment-badge badge-system">System</span>
+              </div>
+              <p class="segment-card-desc">Container runtime environment badge identifying Docker, Podman, LXC, systemd-nspawn, or WSL.</p>
+            </div>
+            <div class="segment-card-flags">Trigger: /.dockerenv | /run/.containerenv</div>
+          </div>
+
+          <div class="segment-card" data-category="system" data-name="battery" data-keywords="power charge battery percentage ac adapter">
+            <div>
+              <div class="segment-card-header">
+                <span class="segment-card-title">battery</span>
+                <span class="segment-badge badge-system">System</span>
+              </div>
+              <p class="segment-card-desc">Hardware battery level percentage and charging state with configurable low-battery alert threshold.</p>
+            </div>
+            <div class="segment-card-flags">--warn 20</div>
+          </div>
+
+          <div class="segment-card" data-category="system" data-name="ram" data-keywords="memory ram usage hardware memory utilization">
+            <div>
+              <div class="segment-card-header">
+                <span class="segment-card-title">ram</span>
+                <span class="segment-badge badge-system">System</span>
+              </div>
+              <p class="segment-card-desc">System physical memory utilization percentage with warning color thresholding.</p>
+            </div>
+            <div class="segment-card-flags">--warn 80</div>
+          </div>
+
+          <div class="segment-card" data-category="system" data-name="load" data-keywords="cpu load average sysctl proc">
+            <div>
+              <div class="segment-card-header">
+                <span class="segment-card-title">load</span>
+                <span class="segment-badge badge-system">System</span>
+              </div>
+              <p class="segment-card-desc">System 1-minute CPU load average with configurable warning threshold.</p>
+            </div>
+            <div class="segment-card-flags">--warn 4.0</div>
+          </div>
+
+          <!-- Cloud & DevOps -->
+          <div class="segment-card" data-category="cloud" data-name="k8s" data-keywords="kubernetes k8s kubectl kubecontext namespace cluster">
+            <div>
+              <div class="segment-card-header">
+                <span class="segment-card-title">k8s</span>
+                <span class="segment-badge badge-cloud">Cloud</span>
+              </div>
+              <p class="segment-card-desc">Active Kubernetes cluster and namespace parsed directly from <code>~/.kube/config</code>.</p>
+            </div>
+            <div class="segment-card-flags">Trigger: ~/.kube/config</div>
+          </div>
+
+          <div class="segment-card" data-category="cloud" data-name="docker" data-keywords="docker compose context swarm daemon">
+            <div>
+              <div class="segment-card-header">
+                <span class="segment-card-title">docker</span>
+                <span class="segment-badge badge-cloud">Cloud</span>
+              </div>
+              <p class="segment-card-desc">Active Docker context name read from <code>$DOCKER_CONTEXT</code> or <code>~/.docker/config.json</code>.</p>
+            </div>
+            <div class="segment-card-flags">Trigger: Dockerfile | compose.yaml</div>
+          </div>
+
+          <div class="segment-card" data-category="cloud" data-name="aws" data-keywords="amazon aws profile region cloud ec2 s3">
+            <div>
+              <div class="segment-card-header">
+                <span class="segment-card-title">aws</span>
+                <span class="segment-badge badge-cloud">Cloud</span>
+              </div>
+              <p class="segment-card-desc">Active AWS profile and configured region read from environment variables or <code>~/.aws/config</code>.</p>
+            </div>
+            <div class="segment-card-flags">Trigger: $AWS_PROFILE | ~/.aws/</div>
+          </div>
+
+          <div class="segment-card" data-category="cloud" data-name="gcp" data-keywords="google cloud gcp gcloud project core">
+            <div>
+              <div class="segment-card-header">
+                <span class="segment-card-title">gcp</span>
+                <span class="segment-badge badge-cloud">Cloud</span>
+              </div>
+              <p class="segment-card-desc">Active Google Cloud Platform project name extracted from <code>$CLOUDSDK_CORE_PROJECT</code> or active gcloud configuration.</p>
+            </div>
+            <div class="segment-card-flags">Trigger: $CLOUDSDK_CORE_PROJECT | ~/.config/gcloud/</div>
+          </div>
+
+          <div class="segment-card" data-category="cloud" data-name="azure" data-keywords="microsoft azure subscription arm cloud">
+            <div>
+              <div class="segment-card-header">
+                <span class="segment-card-title">azure</span>
+                <span class="segment-badge badge-cloud">Cloud</span>
+              </div>
+              <p class="segment-card-desc">Active Microsoft Azure subscription name from <code>$ARM_SUBSCRIPTION_NAME</code> or azure profile.</p>
+            </div>
+            <div class="segment-card-flags">Trigger: $AZURE_CONFIG_DIR | ~/.azure/</div>
+          </div>
+
+          <div class="segment-card" data-category="cloud" data-name="terraform" data-keywords="hashicorp terraform tf workspace hcl iac">
+            <div>
+              <div class="segment-card-header">
+                <span class="segment-card-title">terraform</span>
+                <span class="segment-badge badge-cloud">Cloud</span>
+              </div>
+              <p class="segment-card-desc">Active Terraform workspace read from <code>$TF_WORKSPACE</code> or <code>.terraform/environment</code>.</p>
+            </div>
+            <div class="segment-card-flags">Trigger: *.tf | .terraform/</div>
+          </div>
+
+          <div class="segment-card" data-category="cloud" data-name="pulumi" data-keywords="pulumi iac stack project cloud">
+            <div>
+              <div class="segment-card-header">
+                <span class="segment-card-title">pulumi</span>
+                <span class="segment-badge badge-cloud">Cloud</span>
+              </div>
+              <p class="segment-card-desc">Active Pulumi stack and project configuration parsed from <code>Pulumi.yaml</code>.</p>
+            </div>
+            <div class="segment-card-flags">Trigger: Pulumi.yaml</div>
+          </div>
+
+          <div class="segment-card" data-category="cloud" data-name="helm" data-keywords="helm charts kubernetes k8s package release">
+            <div>
+              <div class="segment-card-header">
+                <span class="segment-card-title">helm</span>
+                <span class="segment-badge badge-cloud">Cloud</span>
+              </div>
+              <p class="segment-card-desc">Helm chart name and release version parsed from <code>Chart.yaml</code> or <code>helmfile.yaml</code>.</p>
+            </div>
+            <div class="segment-card-flags">Trigger: Chart.yaml | helmfile.yaml</div>
+          </div>
+
+          <div class="segment-card" data-category="cloud" data-name="cmake" data-keywords="cmake c cpp build native compile">
+            <div>
+              <div class="segment-card-header">
+                <span class="segment-card-title">cmake</span>
+                <span class="segment-badge badge-cloud">Cloud</span>
+              </div>
+              <p class="segment-card-desc">CMake project name and minimum version parsed from <code>CMakeLists.txt</code> or presets.</p>
+            </div>
+            <div class="segment-card-flags">Trigger: CMakeLists.txt | CMakePresets.json</div>
+          </div>
+
+          <div class="segment-card" data-category="cloud" data-name="meson" data-keywords="meson ninja c cpp build">
+            <div>
+              <div class="segment-card-header">
+                <span class="segment-card-title">meson</span>
+                <span class="segment-badge badge-cloud">Cloud</span>
+              </div>
+              <p class="segment-card-desc">Meson C/C++ project name and release version parsed from <code>meson.build</code>.</p>
+            </div>
+            <div class="segment-card-flags">Trigger: meson.build</div>
+          </div>
+
+          <div class="segment-card" data-category="cloud" data-name="bazel" data-keywords="bazel bzl workspace build google mono">
+            <div>
+              <div class="segment-card-header">
+                <span class="segment-card-title">bazel</span>
+                <span class="segment-badge badge-cloud">Cloud</span>
+              </div>
+              <p class="segment-card-desc">Bazel monorepo workspace name parsed from <code>MODULE.bazel</code> or <code>WORKSPACE</code>.</p>
+            </div>
+            <div class="segment-card-flags">Trigger: MODULE.bazel | WORKSPACE | BUILD</div>
+          </div>
+
+          <!-- Languages & Runtimes -->
+          <div class="segment-card" data-category="lang" data-name="rust" data-keywords="rust cargo toolchain rustc crates">
+            <div>
+              <div class="segment-card-header">
+                <span class="segment-card-title">rust</span>
+                <span class="segment-badge badge-lang">Runtime</span>
+              </div>
+              <p class="segment-card-desc">Rust toolchain release version parsed from <code>rust-toolchain</code>, <code>rust-toolchain.toml</code>, or <code>Cargo.toml</code>.</p>
+            </div>
+            <div class="segment-card-flags">Trigger: Cargo.toml | rust-toolchain.toml</div>
+          </div>
+
+          <div class="segment-card" data-category="lang" data-name="golang" data-keywords="go golang gopath mod go.mod go.sum">
+            <div>
+              <div class="segment-card-header">
+                <span class="segment-card-title">golang</span>
+                <span class="segment-badge badge-lang">Runtime</span>
+              </div>
+              <p class="segment-card-desc">Go runtime version parsed from <code>go.mod</code> directive or local Go toolchain.</p>
+            </div>
+            <div class="segment-card-flags">Trigger: go.mod | *.go</div>
+          </div>
+
+          <div class="segment-card" data-category="lang" data-name="node" data-keywords="node nodejs javascript npm nvm pnpm yarn">
+            <div>
+              <div class="segment-card-header">
+                <span class="segment-card-title">node</span>
+                <span class="segment-badge badge-lang">Runtime</span>
+              </div>
+              <p class="segment-card-desc">Node.js version read from <code>.node-version</code>, <code>.nvmrc</code>, or <code>package.json</code> engines.</p>
+            </div>
+            <div class="segment-card-flags">Trigger: package.json | .nvmrc | .node-version</div>
+          </div>
+
+          <div class="segment-card" data-category="lang" data-name="bun" data-keywords="bun bunjs runtime lockb fast javascript">
+            <div>
+              <div class="segment-card-header">
+                <span class="segment-card-title">bun</span>
+                <span class="segment-badge badge-lang">Runtime</span>
+              </div>
+              <p class="segment-card-desc">Bun runtime version or project badge detected from <code>bun.lockb</code> or <code>bunfig.toml</code>.</p>
+            </div>
+            <div class="segment-card-flags">Trigger: bun.lockb | bunfig.toml</div>
+          </div>
+
+          <div class="segment-card" data-category="lang" data-name="deno" data-keywords="deno typescript javascript secure">
+            <div>
+              <div class="segment-card-header">
+                <span class="segment-card-title">deno</span>
+                <span class="segment-badge badge-lang">Runtime</span>
+              </div>
+              <p class="segment-card-desc">Deno runtime version or project badge detected from <code>deno.json</code> or <code>deno.lock</code>.</p>
+            </div>
+            <div class="segment-card-flags">Trigger: deno.json | deno.jsonc | deno.lock</div>
+          </div>
+
+          <div class="segment-card" data-category="lang" data-name="venv" data-keywords="python venv conda poetry pipenv virtualenv pyproject">
+            <div>
+              <div class="segment-card-header">
+                <span class="segment-card-title">venv</span>
+                <span class="segment-badge badge-lang">Runtime</span>
+              </div>
+              <p class="segment-card-desc">Python virtual environment, Conda environment, or Poetry project indicator.</p>
+            </div>
+            <div class="segment-card-flags">Trigger: $VIRTUAL_ENV | $CONDA_DEFAULT_ENV | .venv</div>
+          </div>
+
+          <div class="segment-card" data-category="lang" data-name="ruby" data-keywords="ruby gem rvm rbenv bundler gemfile">
+            <div>
+              <div class="segment-card-header">
+                <span class="segment-card-title">ruby</span>
+                <span class="segment-badge badge-lang">Runtime</span>
+              </div>
+              <p class="segment-card-desc">Ruby version detected from <code>.ruby-version</code>, <code>Gemfile</code>, or <code>.tool-versions</code>.</p>
+            </div>
+            <div class="segment-card-flags">Trigger: Gemfile | .ruby-version</div>
+          </div>
+
+          <div class="segment-card" data-category="lang" data-name="java" data-keywords="java jvm jdk maven gradle jar">
+            <div>
+              <div class="segment-card-header">
+                <span class="segment-card-title">java</span>
+                <span class="segment-badge badge-lang">Runtime</span>
+              </div>
+              <p class="segment-card-desc">Java JDK version parsed from <code>.java-version</code>, <code>pom.xml</code>, or active <code>$JAVA_HOME</code>.</p>
+            </div>
+            <div class="segment-card-flags">Trigger: pom.xml | build.gradle | .java-version</div>
+          </div>
+
+          <div class="segment-card" data-category="lang" data-name="kotlin" data-keywords="kotlin kt gradle kts android jvm">
+            <div>
+              <div class="segment-card-header">
+                <span class="segment-card-title">kotlin</span>
+                <span class="segment-badge badge-lang">Runtime</span>
+              </div>
+              <p class="segment-card-desc">Kotlin compiler version parsed from <code>build.gradle.kts</code> or <code>.tool-versions</code>.</p>
+            </div>
+            <div class="segment-card-flags">Trigger: *.kt | *.kts | build.gradle.kts</div>
+          </div>
+
+          <div class="segment-card" data-category="lang" data-name="scala" data-keywords="scala sbt jvm dotty">
+            <div>
+              <div class="segment-card-header">
+                <span class="segment-card-title">scala</span>
+                <span class="segment-badge badge-lang">Runtime</span>
+              </div>
+              <p class="segment-card-desc">Scala language version parsed from <code>build.sbt</code> or <code>.tool-versions</code>.</p>
+            </div>
+            <div class="segment-card-flags">Trigger: build.sbt | *.scala</div>
+          </div>
+
+          <div class="segment-card" data-category="lang" data-name="swift" data-keywords="swift apple spm package ios macos">
+            <div>
+              <div class="segment-card-header">
+                <span class="segment-card-title">swift</span>
+                <span class="segment-badge badge-lang">Runtime</span>
+              </div>
+              <p class="segment-card-desc">Swift compiler and Swift Package Manager version from <code>Package.swift</code>.</p>
+            </div>
+            <div class="segment-card-flags">Trigger: Package.swift | *.swift</div>
+          </div>
+
+          <div class="segment-card" data-category="lang" data-name="dart" data-keywords="dart flutter pub pubspec mobile">
+            <div>
+              <div class="segment-card-header">
+                <span class="segment-card-title">dart</span>
+                <span class="segment-badge badge-lang">Runtime</span>
+              </div>
+              <p class="segment-card-desc">Dart SDK and Flutter version parsed from <code>pubspec.yaml</code> or <code>.tool-versions</code>.</p>
+            </div>
+            <div class="segment-card-flags">Trigger: pubspec.yaml | *.dart</div>
+          </div>
+
+          <div class="segment-card" data-category="lang" data-name="zig" data-keywords="zig ziglang build.zig native systems">
+            <div>
+              <div class="segment-card-header">
+                <span class="segment-card-title">zig</span>
+                <span class="segment-badge badge-lang">Runtime</span>
+              </div>
+              <p class="segment-card-desc">Zig toolchain version parsed from <code>.zigversion</code>, <code>build.zig</code>, or <code>build.zig.zon</code>.</p>
+            </div>
+            <div class="segment-card-flags">Trigger: build.zig | .zigversion</div>
+          </div>
+
+          <div class="segment-card" data-category="lang" data-name="php" data-keywords="php composer laravel symfony web">
+            <div>
+              <div class="segment-card-header">
+                <span class="segment-card-title">php</span>
+                <span class="segment-badge badge-lang">Runtime</span>
+              </div>
+              <p class="segment-card-desc">PHP runtime version read from <code>.php-version</code> or <code>composer.json</code>.</p>
+            </div>
+            <div class="segment-card-flags">Trigger: composer.json | .php-version</div>
+          </div>
+
+          <div class="segment-card" data-category="lang" data-name="elixir" data-keywords="elixir mix phoenix otp erlang">
+            <div>
+              <div class="segment-card-header">
+                <span class="segment-card-title">elixir</span>
+                <span class="segment-badge badge-lang">Runtime</span>
+              </div>
+              <p class="segment-card-desc">Elixir runtime version parsed from <code>mix.exs</code> or <code>.tool-versions</code>.</p>
+            </div>
+            <div class="segment-card-flags">Trigger: mix.exs | *.ex | *.exs</div>
+          </div>
+
+          <div class="segment-card" data-category="lang" data-name="erlang" data-keywords="erlang otp rebar rebar3 beam">
+            <div>
+              <div class="segment-card-header">
+                <span class="segment-card-title">erlang</span>
+                <span class="segment-badge badge-lang">Runtime</span>
+              </div>
+              <p class="segment-card-desc">Erlang/OTP version parsed from <code>rebar.config</code> or <code>.tool-versions</code>.</p>
+            </div>
+            <div class="segment-card-flags">Trigger: rebar.config | *.erl</div>
+          </div>
+
+          <div class="segment-card" data-category="lang" data-name="julia" data-keywords="julia jl project.toml scientific">
+            <div>
+              <div class="segment-card-header">
+                <span class="segment-card-title">julia</span>
+                <span class="segment-badge badge-lang">Runtime</span>
+              </div>
+              <p class="segment-card-desc">Julia environment release version parsed from <code>Project.toml</code> or <code>.tool-versions</code>.</p>
+            </div>
+            <div class="segment-card-flags">Trigger: Project.toml | *.jl</div>
+          </div>
+
+          <div class="segment-card" data-category="lang" data-name="crystal" data-keywords="crystal shard shards fast compiled">
+            <div>
+              <div class="segment-card-header">
+                <span class="segment-card-title">crystal</span>
+                <span class="segment-badge badge-lang">Runtime</span>
+              </div>
+              <p class="segment-card-desc">Crystal language runtime version from <code>shard.yml</code> or <code>.tool-versions</code>.</p>
+            </div>
+            <div class="segment-card-flags">Trigger: shard.yml | *.cr</div>
+          </div>
+
+          <div class="segment-card" data-category="lang" data-name="clojure" data-keywords="clojure lein deps.edn lisp functional">
+            <div>
+              <div class="segment-card-header">
+                <span class="segment-card-title">clojure</span>
+                <span class="segment-badge badge-lang">Runtime</span>
+              </div>
+              <p class="segment-card-desc">Clojure project environment from <code>deps.edn</code>, <code>project.clj</code>, or <code>.tool-versions</code>.</p>
+            </div>
+            <div class="segment-card-flags">Trigger: deps.edn | project.clj | *.clj</div>
+          </div>
+
+          <div class="segment-card" data-category="lang" data-name="haskell" data-keywords="haskell ghc stack cabal pure">
+            <div>
+              <div class="segment-card-header">
+                <span class="segment-card-title">haskell</span>
+                <span class="segment-badge badge-lang">Runtime</span>
+              </div>
+              <p class="segment-card-desc">Haskell GHC compiler version parsed from <code>stack.yaml</code>, <code>cabal.project</code>, or <code>.tool-versions</code>.</p>
+            </div>
+            <div class="segment-card-flags">Trigger: stack.yaml | *.cabal | *.hs</div>
+          </div>
+
+          <div class="segment-card" data-category="lang" data-name="ocaml" data-keywords="ocaml dune opam reasonml">
+            <div>
+              <div class="segment-card-header">
+                <span class="segment-card-title">ocaml</span>
+                <span class="segment-badge badge-lang">Runtime</span>
+              </div>
+              <p class="segment-card-desc">OCaml toolchain version parsed from <code>dune-project</code>, <code>dune</code>, or <code>.tool-versions</code>.</p>
+            </div>
+            <div class="segment-card-flags">Trigger: dune-project | *.ml</div>
+          </div>
+
+          <div class="segment-card" data-category="lang" data-name="solidity" data-keywords="solidity foundry hardhat smart-contracts evm web3 ethereum">
+            <div>
+              <div class="segment-card-header">
+                <span class="segment-card-title">solidity</span>
+                <span class="segment-badge badge-lang">Runtime</span>
+              </div>
+              <p class="segment-card-desc">Solidity smart contract workspace parsed from <code>foundry.toml</code> or <code>hardhat.config.js</code>.</p>
+            </div>
+            <div class="segment-card-flags">Trigger: foundry.toml | hardhat.config.js | *.sol</div>
+          </div>
+
+          <div class="segment-card" data-category="lang" data-name="perl" data-keywords="perl cpan cpanfile scripting">
+            <div>
+              <div class="segment-card-header">
+                <span class="segment-card-title">perl</span>
+                <span class="segment-badge badge-lang">Runtime</span>
+              </div>
+              <p class="segment-card-desc">Perl version parsed from <code>cpanfile</code> or <code>.tool-versions</code>.</p>
+            </div>
+            <div class="segment-card-flags">Trigger: cpanfile | *.pl | *.pm</div>
+          </div>
+
+          <div class="segment-card" data-category="lang" data-name="r" data-keywords="r rstats cran renv data analysis">
+            <div>
+              <div class="segment-card-header">
+                <span class="segment-card-title">r</span>
+                <span class="segment-badge badge-lang">Runtime</span>
+              </div>
+              <p class="segment-card-desc">R environment version detected from <code>DESCRIPTION</code>, <code>.Rprofile</code>, or <code>renv.lock</code>.</p>
+            </div>
+            <div class="segment-card-flags">Trigger: DESCRIPTION | renv.lock | *.R</div>
+          </div>
+
+          <div class="segment-card" data-category="lang" data-name="dotnet" data-keywords="dotnet csharp fsharp microsoft sdk clr">
+            <div>
+              <div class="segment-card-header">
+                <span class="segment-card-title">dotnet</span>
+                <span class="segment-badge badge-lang">Runtime</span>
+              </div>
+              <p class="segment-card-desc">.NET SDK release version parsed from <code>global.json</code> or project solution.</p>
+            </div>
+            <div class="segment-card-flags">Trigger: global.json | *.csproj | *.fsproj</div>
+          </div>
+
+          <div class="segment-card" data-category="lang" data-name="lua" data-keywords="lua luajit neovim scripting">
+            <div>
+              <div class="segment-card-header">
+                <span class="segment-card-title">lua</span>
+                <span class="segment-badge badge-lang">Runtime</span>
+              </div>
+              <p class="segment-card-desc">Lua runtime release version from <code>.lua-version</code> or <code>.tool-versions</code>.</p>
+            </div>
+            <div class="segment-card-flags">Trigger: .lua-version | *.lua</div>
+          </div>
+
+          <!-- Environment & Meta -->
+          <div class="segment-card" data-category="env" data-name="package" data-keywords="version semantic package app cargo npm">
+            <div>
+              <div class="segment-card-header">
+                <span class="segment-card-title">package</span>
+                <span class="segment-badge badge-env">Environment</span>
+              </div>
+              <p class="segment-card-desc">Application package version extracted from <code>package.json</code>, <code>Cargo.toml</code>, or <code>pyproject.toml</code>.</p>
+            </div>
+            <div class="segment-card-flags">Trigger: package.json | Cargo.toml | pyproject.toml</div>
+          </div>
+
+          <div class="segment-card" data-category="env" data-name="direnv" data-keywords="direnv envrc environment directory environment">
+            <div>
+              <div class="segment-card-header">
+                <span class="segment-card-title">direnv</span>
+                <span class="segment-badge badge-env">Environment</span>
+              </div>
+              <p class="segment-card-desc">Active Direnv loaded environment indicator triggered by <code>$DIRENV_DIR</code> or <code>.envrc</code>.</p>
+            </div>
+            <div class="segment-card-flags">Trigger: $DIRENV_DIR | .envrc</div>
+          </div>
+
+          <div class="segment-card" data-category="env" data-name="mise" data-keywords="mise rtx tool-versions polyglot asdf">
+            <div>
+              <div class="segment-card-header">
+                <span class="segment-card-title">mise</span>
+                <span class="segment-badge badge-env">Environment</span>
+              </div>
+              <p class="segment-card-desc">Active mise polyglot runtime environment indicator from <code>$MISE_ENV</code> or <code>mise.toml</code>.</p>
+            </div>
+            <div class="segment-card-flags">Trigger: mise.toml | .tool-versions</div>
+          </div>
+
+          <div class="segment-card" data-category="env" data-name="nix_shell" data-keywords="nix nix-shell nixos flake devshell">
+            <div>
+              <div class="segment-card-header">
+                <span class="segment-card-title">nix_shell</span>
+                <span class="segment-badge badge-env">Environment</span>
+              </div>
+              <p class="segment-card-desc">Active Nix development shell indicator from <code>$IN_NIX_SHELL</code> or <code>default.nix</code>.</p>
+            </div>
+            <div class="segment-card-flags">Trigger: $IN_NIX_SHELL | flake.nix | shell.nix</div>
+          </div>
+
+          <div class="segment-card" data-category="env" data-name="text" data-keywords="custom text badge label literal string">
+            <div>
+              <div class="segment-card-header">
+                <span class="segment-card-title">text</span>
+                <span class="segment-badge badge-env">Environment</span>
+              </div>
+              <p class="segment-card-desc">Static text badge or evaluated shell variable (e.g. <code>text "PRODUCTION" --color 9</code>).</p>
+            </div>
+            <div class="segment-card-flags">text &lt;content&gt; [--color &lt;col&gt;]</div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
 
   <footer>
     <div class="container">
@@ -183,6 +1161,7 @@ zline_right=(
   </footer>
 
   <script>
+    // Theme toggle
     const themeToggle = document.getElementById("themeToggle");
     themeToggle.addEventListener("click", () => {
       const current = document.documentElement.dataset.theme;
@@ -190,6 +1169,83 @@ zline_right=(
       document.documentElement.dataset.theme = next;
       localStorage.setItem("zline:theme", next);
     });
+
+    // Mobile TOC Drawer Toggle
+    const tocToggleBtn = document.getElementById("docsTocToggleBtn");
+    const tocDrawer = document.getElementById("docsTocDrawer");
+    if (tocToggleBtn && tocDrawer) {
+      tocToggleBtn.addEventListener("click", () => {
+        const isOpen = tocDrawer.classList.toggle("open");
+        tocToggleBtn.setAttribute("aria-expanded", isOpen);
+      });
+    }
+    function closeDocsToc() {
+      if (tocDrawer) {
+        tocDrawer.classList.remove("open");
+        if (tocToggleBtn) tocToggleBtn.setAttribute("aria-expanded", "false");
+      }
+    }
+
+    // Interactive Segment Search & Category Filter
+    const segmentSearch = document.getElementById("segmentSearch");
+    const filterChips = document.querySelectorAll(".filter-chip");
+    const segmentCards = document.querySelectorAll(".segment-card");
+
+    let activeCategory = "all";
+
+    function filterSegments() {
+      const query = (segmentSearch ? segmentSearch.value : "").trim().toLowerCase();
+
+      segmentCards.forEach(card => {
+        const category = card.dataset.category;
+        const name = (card.dataset.name || "").toLowerCase();
+        const keywords = (card.dataset.keywords || "").toLowerCase();
+        const textContent = card.textContent.toLowerCase();
+
+        const matchesCategory = (activeCategory === "all" || category === activeCategory);
+        const matchesQuery = !query || name.includes(query) || keywords.includes(query) || textContent.includes(query);
+
+        if (matchesCategory && matchesQuery) {
+          card.style.display = "flex";
+        } else {
+          card.style.display = "none";
+        }
+      });
+    }
+
+    if (segmentSearch) {
+      segmentSearch.addEventListener("input", filterSegments);
+    }
+
+    filterChips.forEach(chip => {
+      chip.addEventListener("click", () => {
+        filterChips.forEach(c => c.classList.remove("active"));
+        chip.classList.add("active");
+        activeCategory = chip.dataset.category;
+        filterSegments();
+      });
+    });
+
+    // Active link highlighting on scroll
+    const sections = document.querySelectorAll(".docs-section");
+    const navLinks = document.querySelectorAll(".docs-sidebar .docs-nav-link");
+
+    window.addEventListener("scroll", () => {
+      let currentSection = "";
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop - 120;
+        if (window.pageYOffset >= sectionTop) {
+          currentSection = section.getAttribute("id");
+        }
+      });
+
+      navLinks.forEach(link => {
+        link.classList.remove("active");
+        if (link.getAttribute("href") === `#${currentSection}`) {
+          link.classList.add("active");
+        }
+      });
+    }, { passive: true });
   </script>
 </body>
 </html>
