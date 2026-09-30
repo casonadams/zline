@@ -1,5 +1,5 @@
 #!/usr/bin/env zsh
-# Test suite for Slice 19: Git Stash Detection, System Load & Memory, and Curated Presets
+# Test suite for Slice 19: Git Stash Detection, System Load & Memory, and Layout Presets
 
 set -e
 
@@ -59,13 +59,13 @@ typeset -i ram_ok=0
 [[ -n "$_zline_ret_content" || -z "$_zline_ret_content" ]] && ram_ok=1
 assert_eq "$ram_ok" "1" "RAM segment executes cleanly"
 
-# 4. Curated Color Presets
-for p in catppuccin tokyonight nord gruvbox; do
+# 4. Built-in Structural Presets
+for p in powerline lean rainbow pure; do
   zline preset "$p" --no-osc
   zline init
   typeset -i p_ok=0
   [[ -n "$PROMPT" ]] && p_ok=1
-  assert_eq "$p_ok" "1" "Curated preset '${p}' initialized successfully"
+  assert_eq "$p_ok" "1" "Preset '${p}' initialized successfully"
 done
 
 # 5. Documentation completeness

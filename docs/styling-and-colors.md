@@ -49,7 +49,27 @@ Minimalist two-line prompt inspired by Sindre Sorhus's Pure prompt.
 
 ---
 
-## 3. Font Modes
+## 3. Frames & Connecting Lines
+
+On multiline prompts, `zline` can render connecting lines between left and right segments and draw decorative corner frames:
+
+```zsh
+zline style powerline --frame full --frame-shape rounded --connect dashed --connect-color 8
+```
+
+### Frame Options
+
+| Flag | Options | Description |
+| :--- | :--- | :--- |
+| `--frame` | `none`, `left`, `full` | Selects corner frame connector layout (default: `none`). |
+| `--frame-shape` | `rounded`, `sharp`, `double` | Corner glyphs: rounded (`╭─`), sharp (`┌─`), or double (`╔═`). |
+| `--connect` | `solid`, `dashed`, `dotted`, `none` | Connecting line glyph: solid (`─`), dashed (`┄`), dotted (`┈`), or custom character. |
+| `--connect-color` | `0`–`15` / color name | Sets the color for connecting line glyphs (default: `8` / grey). |
+| `--rprompt-line` | `1`, `2` | Placement of right prompt: `1` embeds right segments into line 1 via connecting line; `2` keeps native right prompt on the input line. |
+
+---
+
+## 4. Font Modes
 
 - **Nerd Fonts v3 (Default)**: Uses official Nerd Font symbols (` `, ``, `❯`).
 - **ASCII Mode**: Pure ASCII fallback (`zline style lean --ascii`) using `[`, `]`, `>`, `$` characters.

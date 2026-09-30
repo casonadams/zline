@@ -26,8 +26,8 @@ assert_eq() {
 
 print -P "%F{14}Running ZLE Safety & Cursor Alignment Audit:%f"
 
-# 1. Audit all 8 presets for visual width and line integrity
-typeset -a presets=(powerline lean rainbow pure catppuccin tokyonight nord gruvbox)
+# 1. Audit all 4 structural presets for visual width and line integrity
+typeset -a presets=(powerline lean rainbow pure)
 local p
 for p in "${presets[@]}"; do
   zline preset "$p" --no-osc

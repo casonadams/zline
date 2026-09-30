@@ -14,7 +14,7 @@ Whenever adding, updating, or deprecating features, segment options, presets, co
    - Automated tests (`test/test_man.zsh`, `test/test_packaging_and_docs.zsh`, `test/test_connect_lines_runtimes.zsh`, `test/test_compare_transient_dir.zsh`) fail if any segment is missing from the man page.
 
 2. **GitHub Documentation (`README.md` and `docs/*.md`)**:
-   - `README.md`: Overview, quick start, visual presets, curated color themes, performance benchmarks, and links.
+    - `README.md`: Overview, quick start, visual presets, performance benchmarks, and links.
    - `docs/segments.md`: Comprehensive segment option table, default values, and example invocations.
    - `docs/syntax.md`: Array configuration syntax, inline overrides, global styling flags, and CLI command reference.
    - `docs/styling-and-colors.md`: Base16 / Term16 palette definitions, Nerd Font / ASCII modes, and frame/connecting lines.
@@ -22,7 +22,7 @@ Whenever adding, updating, or deprecating features, segment options, presets, co
    - `docs/migrating-from-p10k.md`: Powerlevel10k configuration translation mapping.
 
 3. **Web Documentation & Overview (`www/index.html` and `www/docs.html`)**:
-   - `www/docs.html`: Complete CLI command list, presets, themes, and built-in segments list.
+    - `www/docs.html`: Complete CLI command list, presets, and built-in segments list.
    - `www/index.html`: Web overview, performance highlights, and feature architecture.
 
 Never submit changes to functionality or configuration options without updating the corresponding sections across `man/`, `docs/` + `README.md`, and `www/`.

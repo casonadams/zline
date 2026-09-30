@@ -104,8 +104,8 @@ You can customize prompt behavior using flags on `zline preset` or `zline style`
 
 | Command | Description |
 | :--- | :--- |
-| `zline preset <name>` | Loads built-in layout or curated color theme (`powerline`, `lean`, `rainbow`, `pure`, `catppuccin`, `tokyonight`, `nord`, `gruvbox`). |
-| `zline preset list` | Displays all available presets and curated themes. |
+| `zline preset <name>` | Loads a built-in layout preset (`powerline`, `lean`, `rainbow`, `pure`). |
+| `zline preset list` | Displays all available layout presets. |
 | `zline preset show <name>` | Dumps the full source definition of a preset. |
 | `zline style <name>` | Configures visual styling flags (`--transient`, `--ascii`, `--no-osc`, `--frame`, `--connect`). |
 | `zline init` | Compiles segment arguments and installs Zsh hooks. |
@@ -114,7 +114,8 @@ You can customize prompt behavior using flags on `zline preset` or `zline style`
 | `zline doctor` | Comprehensive health check (shell version, UTF-8 locale, cache directory, valid segments). |
 | `zline configure` | Interactive setup wizard for generating a custom configuration. |
 | `zline migrate <p10k_file>` | Automatically translates Powerlevel10k configurations into idiomatic `zline` syntax. |
-| `zline compile` / `clean` | Manages memory-mapped `.zwc` wordcode compilation. |
+| `zline compile` | Pre-compiles scripts into Zsh wordcode (`.zwc`) for fast startup. |
+| `zline clean` | Removes all compiled `.zwc` wordcode files. |
 | `zline update` | Pulls the latest release and recompiles bytecode. |
 | `zline notify [on\|off\|threshold\|status]` | Configures long-running command desktop notifications (OSC 777 / OSC 9). |
 | `zline version` | Prints active `zline` release version. |

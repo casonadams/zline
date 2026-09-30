@@ -58,7 +58,7 @@
       <li><a href="#configuration" class="docs-nav-link" onclick="closeDocsToc()">Configuration Syntax</a></li>
       <li><a href="#universal-flags" class="docs-nav-link" onclick="closeDocsToc()">Universal Flags</a></li>
       <li><a href="#global-styling" class="docs-nav-link" onclick="closeDocsToc()">Global Styling</a></li>
-      <li><a href="#presets-themes" class="docs-nav-link" onclick="closeDocsToc()">Presets &amp; Themes</a></li>
+       <li><a href="#presets" class="docs-nav-link" onclick="closeDocsToc()">Visual Presets</a></li>
       <li><a href="#cli-reference" class="docs-nav-link" onclick="closeDocsToc()">CLI Commands</a></li>
       <li><a href="#segments" class="docs-nav-link" onclick="closeDocsToc()">Built-in Segments (58)</a></li>
     </ul>
@@ -87,7 +87,7 @@
       <div class="docs-nav-group">
         <div class="docs-nav-title">Customization</div>
         <ul class="docs-nav-links">
-          <li><a href="#presets-themes" class="docs-nav-link">Presets &amp; Themes</a></li>
+           <li><a href="#presets" class="docs-nav-link">Visual Presets</a></li>
           <li><a href="#cli-reference" class="docs-nav-link">CLI Commands</a></li>
         </ul>
       </div>
@@ -311,11 +311,12 @@ zline_right=(
         </div>
       </section>
 
-      <!-- Section: Presets & Curated Themes -->
-      <section id="presets-themes" class="docs-section">
-        <h2>Visual Presets &amp; Curated Themes</h2>
+       <!-- Section: Visual Presets -->
+       <section id="presets" class="docs-section">
+         <h2>Visual Presets</h2>
 
-        <h3>Layout Presets</h3>
+         <p>zline standardizes on Base16 / Term16 ANSI colors (0–15), so every preset automatically adapts to your terminal's active color scheme (Catppuccin, Tokyo Night, Gruvbox, Nord, Solarized, Dracula) with no manual adjustments.</p>
+
         <div class="docs-table-wrapper">
           <table class="docs-table">
             <thead>
@@ -350,40 +351,6 @@ zline_right=(
           </table>
         </div>
 
-        <h3>Curated Base16 Color Themes</h3>
-        <div class="docs-table-wrapper">
-          <table class="docs-table">
-            <thead>
-              <tr>
-                <th>Theme</th>
-                <th>Palette Style</th>
-                <th>Command</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><strong>Catppuccin</strong></td>
-                <td>Soothing pastel dark palette with Mocha accents.</td>
-                <td><code>zline preset catppuccin</code></td>
-              </tr>
-              <tr>
-                <td><strong>Tokyo Night</strong></td>
-                <td>Dark, vibrant aesthetic inspired by Tokyo nightlife.</td>
-                <td><code>zline preset tokyonight</code></td>
-              </tr>
-              <tr>
-                <td><strong>Nord</strong></td>
-                <td>Arctic, north-bluish clean and muted palette.</td>
-                <td><code>zline preset nord</code></td>
-              </tr>
-              <tr>
-                <td><strong>Gruvbox</strong></td>
-                <td>Warm retro groove color scheme with rich contrast.</td>
-                <td><code>zline preset gruvbox</code></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
       </section>
 
       <!-- Section: CLI Reference -->
@@ -404,12 +371,12 @@ zline_right=(
               <tr>
                 <td><code>zline preset &lt;name&gt;</code></td>
                 <td><code>[--transient] [--ascii] [--no-icons]</code></td>
-                <td>Loads layout preset or curated theme with optional styling flags.</td>
+                 <td>Loads a layout preset with optional styling flags.</td>
               </tr>
               <tr>
                 <td><code>zline preset list</code></td>
                 <td>—</td>
-                <td>Lists all available presets and curated themes.</td>
+                 <td>Lists all available layout presets.</td>
               </tr>
               <tr>
                 <td><code>zline preset show &lt;name&gt;</code></td>
