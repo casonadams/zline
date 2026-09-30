@@ -78,6 +78,7 @@ status --hide-zero --color 9
 | `--show-zero` | Off | Explicitly renders `0` in green on success. |
 | `--color <col>` | `9` (red) | Color for non-zero exit codes. |
 | `--ok <col>` | `10` (green) | Color when exit code is 0 (with `--show-zero`). |
+| `--signal` | Off | Translates signal exit codes (129–156) into signal names (e.g. `SIGINT`, `SIGKILL`). |
 
 ---
 

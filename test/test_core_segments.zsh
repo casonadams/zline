@@ -40,6 +40,13 @@ _zline_last_exit_code=1
 zline_segment_status
 assert_eq "$_zline_ret_content" "1" "Status segment displays non-zero exit code"
 assert_eq "$_zline_ret_fg" "9" "Status non-zero foreground color is red (9)"
+_zline_last_exit_code=130
+zline_segment_status --signal
+assert_eq "$_zline_ret_content" "SIGINT" "Status segment converts 130 to SIGINT with --signal"
+
+_zline_last_exit_code=137
+zline_segment_status --signal
+assert_eq "$_zline_ret_content" "SIGKILL" "Status segment converts 137 to SIGKILL with --signal"
 
 _zline_last_exit_code=127
 zline_segment_status

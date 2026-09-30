@@ -17,7 +17,7 @@ zline_compile_all() {
   local -i compiled=0
   local file
 
-  for file in "${ZLINE_DIR}"/zline.zsh "${ZLINE_DIR}"/lib/*.zsh(N) "${ZLINE_DIR}"/segments/*.zsh(N) "${ZLINE_DIR}"/themes/*.zsh(N); do
+  for file in "${ZLINE_DIR}"/zline.zsh "${ZLINE_DIR}"/zline.plugin.zsh "${ZLINE_DIR}"/completion/_zline(N) "${ZLINE_DIR}"/lib/*.zsh(N) "${ZLINE_DIR}"/segments/*.zsh(N) "${ZLINE_DIR}"/themes/*.zsh(N); do
     if zline_compile_file "$file"; then
       (( compiled += 1 ))
     fi

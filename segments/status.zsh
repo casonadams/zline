@@ -19,7 +19,18 @@ zline_segment_status() {
       return 0
     fi
   else
-    _zline_ret_content="${code}"
+    if (( ${flags[(Ie)--signal]} > 0 && code > 128 && code <= 156 )); then
+      local -a sig_names=(HUP INT QUIT ILL TRAP ABRT BUS FPE KILL USR1 SEGV USR2 PIPE ALRM TERM)
+      local -i sig_idx=$(( code - 128 ))
+      local sname="${sig_names[sig_idx]}"
+      if [[ -n "$sname" ]]; then
+        _zline_ret_content="SIG${sname}"
+      else
+        _zline_ret_content="${code}"
+      fi
+    else
+      _zline_ret_content="${code}"
+    fi
     _zline_ret_fg="${opts[--color]:-9}"
     _zline_ret_bg="${opts[--bg]:-1}"
   fi
