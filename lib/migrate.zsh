@@ -20,6 +20,30 @@ typeset -gA _ZLINE_P10K_SEG_MAP=(
   terraform terraform
   package package
   newline newline
+  battery battery
+  load load
+  ram ram
+  dotnet_version dotnet
+  php_version php
+  java_version java
+  ruby_version ruby
+  rbenv ruby
+  rvm ruby
+  elixir_version elixir
+  crystal_version crystal
+  julia_version julia
+  lua lua
+  perl perl
+  erlang_version erlang
+  direnv direnv
+  nix_shell nix_shell
+  docker_context docker
+  gcloud gcp
+  google_app_cred gcp
+  azure azure
+  vi_mode vi_mode
+  shlvl shlvl
+  os_icon os
 )
 
 _zline_migrate_extract_elements() {

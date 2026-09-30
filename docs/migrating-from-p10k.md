@@ -58,6 +58,57 @@ zline_right=(
 
 zline init
 ```
+---
+
+## Automated Migration Tool
+
+`zline` includes an automated migration tool that parses your existing `~/.p10k.zsh` configuration and generates an equivalent `zline` configuration:
+
+```zsh
+zline migrate ~/.p10k.zsh ~/.zshrc.zline
+```
+
+### Supported Segment Mappings
+
+| Powerlevel10k Element | `zline` Segment |
+| :--- | :--- |
+| `dir` | `dir` (`--shorten 1 --anchor git`) |
+| `vcs` | `git` (`--clean 2 --dirty 3`) |
+| `status` | `status` (`--hide-zero`) |
+| `command_execution_time` | `exec_time` (`--min 2`) |
+| `context` | `user_host` |
+| `prompt_char` | `prompt_char` |
+| `virtualenv`, `anaconda`, `pyenv` | `venv` |
+| `nodenv`, `nvm`, `node_version` | `node` |
+| `kubecontext` | `k8s` |
+| `time` | `time` |
+| `background_jobs` | `jobs` |
+| `aws` | `aws` |
+| `gcloud`, `google_app_cred` | `gcp` |
+| `azure` | `azure` |
+| `docker_context` | `docker` |
+| `rust_version` | `rust` |
+| `go_version` | `golang` |
+| `dotnet_version` | `dotnet` |
+| `php_version` | `php` |
+| `java_version` | `java` |
+| `ruby_version`, `rbenv`, `rvm` | `ruby` |
+| `elixir_version` | `elixir` |
+| `crystal_version` | `crystal` |
+| `julia_version` | `julia` |
+| `lua` | `lua` |
+| `perl` | `perl` |
+| `erlang_version` | `erlang` |
+| `terraform` | `terraform` |
+| `package` | `package` |
+| `battery` | `battery` |
+| `load` | `load` |
+| `ram` | `ram` |
+| `direnv` | `direnv` |
+| `nix_shell` | `nix_shell` |
+| `vi_mode` | `vi_mode` |
+| `shlvl` | `shlvl` |
+| `os_icon` | `os` |
 
 ---
 
