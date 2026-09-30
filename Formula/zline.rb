@@ -9,6 +9,7 @@ class Zline < Formula
   def install
     pkgshare.install "zline.zsh", "zline.plugin.zsh"
     pkgshare.install "lib", "segments", "themes"
+    zsh_completion.install "completion/_zline"
     man1.install "man/man1/zline.1"
   end
 

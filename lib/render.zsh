@@ -115,6 +115,11 @@ typeset -g _zline_frame_shape="rounded"
 
 _zline_visual_len() {
   local s="$1"
+  [[ -z "$s" ]] && { REPLY=0; return 0; }
+  if [[ "$s" != *[%$'\e']* ]]; then
+    REPLY=${#${(m)s}}
+    return 0
+  fi
   setopt localoptions extended_glob
   s="${s//\%\{[^\%]#%\}/}"
   s="${s//\%[FK]\{[^\}]#\}/}"

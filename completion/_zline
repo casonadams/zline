@@ -47,6 +47,14 @@ _zline() {
             '--transient-dir[Enable transient prompt retaining directory]' \
             '--no-transient[Disable transient prompt]' \
             '--frame[Select frame connector style]:frame:(none left full)' \
+            '--frame-shape[Select frame corner shape]:shape:(rounded sharp double)' \
+            '--connect[Select prompt line connection style]:style:(solid dashed dotted none)' \
+            '--connect-color[Color for line connector glyphs]:color:(0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15)' \
+            '--rprompt-line[Right prompt line placement]:line:(1 2)' \
+            '--icons[Enable icons in segments]' \
+            '--no-icons[Disable icons across all segments]' \
+            '--hyperlinks[Enable OSC 8 terminal hyperlinks]' \
+            '--no-hyperlinks[Disable OSC 8 terminal hyperlinks]' \
             '--ascii[Enable pure ASCII mode]' \
             '--nerdfont[Enable Nerd Fonts v3 mode]' \
             '--no-osc[Disable OSC 133/7 escape sequences]' \
@@ -64,10 +72,25 @@ _zline() {
           _arguments \
             '1:style:(powerline lean rainbow pure)' \
             '--transient[Enable transient prompt]' \
+            '--transient-dir[Enable transient prompt retaining directory]' \
+            '--no-transient[Disable transient prompt]' \
+            '--transient-symbol[Custom transient prompt symbol]:symbol:' \
+            '--transient-color[Color for transient prompt symbol]:color:(0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15)' \
             '--frame[Select frame connector style]:frame:(none left full)' \
+            '--frame-shape[Select frame corner shape]:shape:(rounded sharp double)' \
+            '--connect[Select prompt line connection style]:style:(solid dashed dotted none)' \
+            '--connect-color[Color for line connector glyphs]:color:(0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15)' \
+            '--rprompt-line[Right prompt line placement]:line:(1 2)' \
+            '--icons[Enable icons in segments]' \
+            '--no-icons[Disable icons across all segments]' \
+            '--hyperlinks[Enable OSC 8 terminal hyperlinks]' \
+            '--no-hyperlinks[Disable OSC 8 terminal hyperlinks]' \
             '--ascii[Enable pure ASCII mode]' \
+            '--nerdfont[Enable Nerd Fonts v3 mode]' \
             '--no-osc[Disable OSC escape sequences]' \
             '--title[Enable terminal tab title manager]' \
+            '--no-title[Disable terminal tab title manager]' \
+            '--title-format[Custom title format string]:format:' \
             '--notify[Enable long-running command desktop notifications]' \
             '--no-notify[Disable desktop notifications]'
           ;;
