@@ -1,3 +1,6 @@
+typeset -g _zline_os_dist_id=""
+typeset -gi _zline_os_detected=0
+
 zline_segment_os() {
   emulate -L zsh
   local -A opts=()
@@ -39,7 +42,9 @@ zline_segment_os() {
     *)
       # Linux / other
       local dist_id=""
-      if [[ -f "/etc/os-release" ]]; then
+      if (( _zline_os_detected == 1 )); then
+        dist_id="$_zline_os_dist_id"
+      elif [[ -f "/etc/os-release" ]]; then
         local line
         while IFS= read -r line; do
           if [[ "$line" == "ID="* ]]; then
@@ -48,6 +53,8 @@ zline_segment_os() {
             break
           fi
         done < "/etc/os-release" 2>/dev/null
+        _zline_os_dist_id="$dist_id"
+        _zline_os_detected=1
       fi
 
       case "$dist_id" in
