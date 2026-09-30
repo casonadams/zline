@@ -1,5 +1,5 @@
 zline_update() {
-  if [[ ! -d "${ZLINE_DIR}/.git" ]]; then
+  if [[ ! -e "${ZLINE_DIR}/.git" ]]; then
     print -u2 -P "%F{9}zline: cannot update (installation at ${ZLINE_DIR} is not a git repository)%f"
     return 1
   fi
