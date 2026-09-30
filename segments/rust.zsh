@@ -10,9 +10,9 @@ zline_segment_rust() {
   elif _zline_find_up "rust-toolchain.toml"; then
     local line
     while IFS= read -r line; do
-      if [[ "$line" == *"channel ="* ]]; then
-        ver="${line#*channel = }"
-        ver="${ver//[\"\']}"
+      if [[ "$line" == *"channel"* ]]; then
+        ver="${line#*=}"
+        ver="${ver//[[:space:]\"\']}"
         break
       fi
     done < "$REPLY" 2>/dev/null
