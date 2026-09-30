@@ -8,8 +8,8 @@ zline_segment_docker() {
     local line
     while IFS= read -r line; do
       if [[ "$line" == *'"currentContext":'* ]]; then
-        ctx="${line#*': '}"
-        ctx="${ctx//[\",]}"
+        ctx="${line#*\"currentContext\":}"
+        ctx="${ctx//[\",[:space:]\}]}"
         break
       fi
     done < "${HOME}/.docker/config.json" 2>/dev/null
