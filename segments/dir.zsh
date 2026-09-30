@@ -60,11 +60,7 @@ _zline_dir_format_path() {
 
   if (( last_n > 0 )); then
     local -a raw_parts=("${(s:/:)p}")
-    local -a non_empty_parts=()
-    local pt
-    for pt in "${raw_parts[@]}"; do
-      [[ -n "$pt" ]] && non_empty_parts+=("$pt")
-    done
+    local -a non_empty_parts=("${raw_parts[@]:#}")
     local -i n_parts=${#non_empty_parts}
     if (( n_parts > last_n )); then
       local -a tail_parts=("${non_empty_parts[@]: -${last_n}}")
