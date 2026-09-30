@@ -66,6 +66,19 @@ touch "${test_git_dir}/.git/MERGE_HEAD"
 _zline_git_read_head "$test_git_dir"
 assert_eq "$REPLY" "feature|MERGING" "Merge in progress appends |MERGING"
 
+# Reverting state
+rm -f "${test_git_dir}/.git/MERGE_HEAD"
+touch "${test_git_dir}/.git/REVERT_HEAD"
+_zline_git_read_head "$test_git_dir"
+assert_eq "$REPLY" "feature|REVERTING" "Revert in progress appends |REVERTING"
+
+# Bisecting state
+rm -f "${test_git_dir}/.git/REVERT_HEAD"
+touch "${test_git_dir}/.git/BISECT_LOG"
+_zline_git_read_head "$test_git_dir"
+assert_eq "$REPLY" "feature|BISECT" "Bisect in progress appends |BISECT"
+rm -f "${test_git_dir}/.git/BISECT_LOG"
+
 
 # Worktree / Submodule gitdir file
 typeset wt_dir=$(mktemp -d "${TMPDIR:-/tmp}/zline-test-wt.XXXXXX")

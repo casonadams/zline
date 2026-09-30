@@ -12,7 +12,7 @@ _zline_battery_read() {
   local stat=""
 
   local bat_cap
-  for bat_cap in /sys/class/power_supply/BAT*/capacity(N); do
+  for bat_cap in /sys/class/power_supply/(BAT*|battery)/capacity(N); do
     read -r cap < "$bat_cap" 2>/dev/null
     local bat_stat="${bat_cap:h}/status"
     [[ -r "$bat_stat" ]] && read -r stat < "$bat_stat" 2>/dev/null

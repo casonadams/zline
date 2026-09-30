@@ -57,6 +57,10 @@ _zline_git_read_head() {
     branch="${branch}|REBASE"
   elif [[ -f "${git_path}/CHERRY_PICK_HEAD" ]]; then
     branch="${branch}|CHERRY-PICK"
+  elif [[ -f "${git_path}/REVERT_HEAD" ]]; then
+    branch="${branch}|REVERTING"
+  elif [[ -f "${git_path}/BISECT_LOG" ]]; then
+    branch="${branch}|BISECT"
   fi
 
   REPLY="$branch"

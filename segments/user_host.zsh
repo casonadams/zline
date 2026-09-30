@@ -1,3 +1,5 @@
+typeset -g _zline_cached_short_host="${${HOST:-localhost}%%.*}"
+
 zline_segment_user_host() {
   local -A opts=()
   local -a flags=()
@@ -20,10 +22,7 @@ zline_segment_user_host() {
   fi
 
   local user_part="${USER:-${USERNAME:-${LOGNAME:-${(%):-%n}}}}"
-  local host_part="${HOST:-localhost}"
-  host_part="${host_part%%.*}"
-
-  _zline_ret_content="${user_part}@${host_part}"
+  _zline_ret_content="${user_part}@${_zline_cached_short_host}"
 
   local col="${opts[--color]:-8}"
   if (( is_root == 1 )); then
