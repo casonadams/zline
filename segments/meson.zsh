@@ -1,8 +1,8 @@
 zline_segment_meson() {
   emulate -L zsh
   setopt extended_glob
-  zparseopts -E -D -A opts -K \
-    -color:=opts -icon:=opts -bg:=opts -fg:=opts
+  local -A opts=()
+  _zline_std_opts "$@"
 
   local name=""
   if _zline_find_up "meson.build"; then
@@ -24,11 +24,5 @@ zline_segment_meson() {
     name="meson"
   fi
 
-  if [[ -z "$name" ]]; then
-    _zline_ret_content=""
-    return 0
-  fi
-
-  _zline_ret_content="${name}"
-  _zline_segment_finish 14 14 0 "meson:" $'\uF0AD '
+  _zline_segment_emit "$name" 14 14 0 "meson:" $'\uF0AD '
 }

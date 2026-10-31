@@ -1,7 +1,6 @@
 zline_segment_terraform() {
   local -A opts=()
-  zparseopts -E -D -A opts -K \
-    -color:=opts -icon:=opts -bg:=opts -fg:=opts
+  _zline_std_opts "$@"
 
   local ws="${TF_WORKSPACE}"
   if [[ -z "$ws" && -f ".terraform/environment" ]]; then

@@ -4,8 +4,7 @@ typeset -gi _zline_container_detected=0
 zline_segment_container() {
   emulate -L zsh
   local -A opts=()
-  zparseopts -E -D -A opts -K \
-    -color:=opts -icon:=opts -bg:=opts -fg:=opts
+  _zline_std_opts "$@"
 
   local ctype=""
   if [[ -n "$WSL_DISTRO_NAME" ]]; then
@@ -31,11 +30,5 @@ zline_segment_container() {
     _zline_container_detected=1
   fi
 
-  if [[ -z "$ctype" ]]; then
-    _zline_ret_content=""
-    return 0
-  fi
-
-  _zline_ret_content="${ctype}"
-  _zline_segment_finish 14 14 0 "box:" $'\u2B22 '
+  _zline_segment_emit "$ctype" 14 14 0 "box:" $'\u2B22 '
 }

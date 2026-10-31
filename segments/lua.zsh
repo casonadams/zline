@@ -1,8 +1,7 @@
 zline_segment_lua() {
   emulate -L zsh
   local -A opts=()
-  zparseopts -E -D -A opts -K \
-    -color:=opts -icon:=opts -bg:=opts -fg:=opts
+  _zline_std_opts "$@"
 
   local ver=""
   if [[ -f ".lua-version" ]]; then
@@ -18,11 +17,5 @@ zline_segment_lua() {
     fi
   fi
 
-  if [[ -z "$ver" ]]; then
-    _zline_ret_content=""
-    return 0
-  fi
-
-  _zline_ret_content="${ver}"
-  _zline_segment_finish 4 4 15 "lua:" $'\uE620 '
+  _zline_segment_emit "$ver" 4 4 15 "lua:" $'\uE620 '
 }

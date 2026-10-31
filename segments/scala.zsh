@@ -1,8 +1,7 @@
 zline_segment_scala() {
   emulate -L zsh
   local -A opts=()
-  zparseopts -E -D -A opts -K \
-    -color:=opts -icon:=opts -bg:=opts -fg:=opts
+  _zline_std_opts "$@"
 
   local ver=""
   if _zline_read_tool_version "scala"; then
@@ -16,11 +15,5 @@ zline_segment_scala() {
     fi
   fi
 
-  if [[ -z "$ver" ]]; then
-    _zline_ret_content=""
-    return 0
-  fi
-
-  _zline_ret_content="${ver}"
-  _zline_segment_finish 9 9 15 "scala:" $'\uE737 '
+  _zline_segment_emit "$ver" 9 9 15 "scala:" $'\uE737 '
 }

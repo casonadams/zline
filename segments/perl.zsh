@@ -1,8 +1,7 @@
 zline_segment_perl() {
   emulate -L zsh
   local -A opts=()
-  zparseopts -E -D -A opts -K \
-    -color:=opts -icon:=opts -bg:=opts -fg:=opts
+  _zline_std_opts "$@"
 
   local ver=""
   if _zline_find_up ".perl-version"; then
@@ -13,11 +12,5 @@ zline_segment_perl() {
     ver="pl"
   fi
 
-  if [[ -z "$ver" ]]; then
-    _zline_ret_content=""
-    return 0
-  fi
-
-  _zline_ret_content="${ver}"
-  _zline_segment_finish 12 12 15 "pl:" $'\uE769 '
+  _zline_segment_emit "$ver" 12 12 15 "pl:" $'\uE769 '
 }

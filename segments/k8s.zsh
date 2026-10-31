@@ -6,8 +6,7 @@ typeset -gi _zline_k8s_cache_mtime=0
 
 zline_segment_k8s() {
   local -A opts=()
-  zparseopts -E -D -A opts -K \
-    -color:=opts -icon:=opts -bg:=opts -fg:=opts
+  _zline_std_opts "$@"
 
   local config_file="${KUBECONFIG:-${HOME}/.kube/config}"
   config_file="${config_file%%:*}"
@@ -36,11 +35,5 @@ zline_segment_k8s() {
     _zline_k8s_cache_ctx="$ctx"
   fi
 
-  if [[ -z "$ctx" ]]; then
-    _zline_ret_content=""
-    return 0
-  fi
-
-  _zline_ret_content="${ctx}"
-  _zline_segment_finish 6 6 0 "k8s:" $'\u2388 '
+  _zline_segment_emit "$ctx" 6 6 0 "k8s:" $'\u2388 '
 }

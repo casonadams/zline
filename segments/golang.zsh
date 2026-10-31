@@ -1,8 +1,7 @@
 zline_segment_golang() {
   emulate -L zsh
   local -A opts=()
-  zparseopts -E -D -A opts -K \
-    -color:=opts -icon:=opts -bg:=opts -fg:=opts
+  _zline_std_opts "$@"
 
   local ver=""
   if _zline_find_up "go.mod" "go.work"; then
@@ -18,11 +17,5 @@ zline_segment_golang() {
     ver="$REPLY"
   fi
 
-  if [[ -z "$ver" ]]; then
-    _zline_ret_content=""
-    return 0
-  fi
-
-  _zline_ret_content="${ver}"
-  _zline_segment_finish 6 6 0 "go:" $'\uE627 '
+  _zline_segment_emit "$ver" 6 6 0 "go:" $'\uE627 '
 }

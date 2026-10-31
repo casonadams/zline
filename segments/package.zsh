@@ -1,7 +1,6 @@
 zline_segment_package() {
   local -A opts=()
-  zparseopts -E -D -A opts -K \
-    -color:=opts -icon:=opts -bg:=opts -fg:=opts
+  _zline_std_opts "$@"
 
   local ver=""
   if _zline_find_up "package.json"; then
@@ -25,11 +24,5 @@ zline_segment_package() {
     done < "$REPLY" 2>/dev/null
   fi
 
-  if [[ -z "$ver" ]]; then
-    _zline_ret_content=""
-    return 0
-  fi
-
-  _zline_ret_content="${ver}"
-  _zline_segment_finish 8 0 15 "v:" $'\uF1B2 '
+  _zline_segment_emit "$ver" 8 0 15 "v:" $'\uF1B2 '
 }

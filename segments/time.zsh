@@ -9,11 +9,5 @@ zline_segment_time() {
   local res=""
   strftime -s res "$fmt" "$EPOCHSECONDS" 2>/dev/null || res=""
 
-  if [[ -z "$res" ]]; then
-    _zline_ret_content=""
-    return 0
-  fi
-
-  _zline_ret_content="${res}"
-  _zline_segment_finish 8 0 15 "" $'\uF017 '
+  _zline_segment_emit "$res" 8 0 15 "" $'\uF017 '
 }

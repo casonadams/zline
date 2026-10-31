@@ -1,8 +1,7 @@
 zline_segment_java() {
   emulate -L zsh
   local -A opts=()
-  zparseopts -E -D -A opts -K \
-    -color:=opts -icon:=opts -bg:=opts -fg:=opts
+  _zline_std_opts "$@"
 
   local ver=""
   if [[ -f ".java-version" ]]; then
@@ -13,11 +12,5 @@ zline_segment_java() {
     ver="java"
   fi
 
-  if [[ -z "$ver" ]]; then
-    _zline_ret_content=""
-    return 0
-  fi
-
-  _zline_ret_content="${ver}"
-  _zline_segment_finish 3 3 0 "java:" $'\uE738 '
+  _zline_segment_emit "$ver" 3 3 0 "java:" $'\uE738 '
 }

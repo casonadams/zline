@@ -1,8 +1,7 @@
 zline_segment_helm() {
   emulate -L zsh
   local -A opts=()
-  zparseopts -E -D -A opts -K \
-    -color:=opts -icon:=opts -bg:=opts -fg:=opts
+  _zline_std_opts "$@"
 
   local name=""
   local ver=""
@@ -29,11 +28,5 @@ zline_segment_helm() {
     content="${name}"
   fi
 
-  if [[ -z "$content" ]]; then
-    _zline_ret_content=""
-    return 0
-  fi
-
-  _zline_ret_content="${content}"
-  _zline_segment_finish 14 14 0 "helm:" $'\u2388 '
+  _zline_segment_emit "$content" 14 14 0 "helm:" $'\u2388 '
 }

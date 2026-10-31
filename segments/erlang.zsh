@@ -1,8 +1,7 @@
 zline_segment_erlang() {
   emulate -L zsh
   local -A opts=()
-  zparseopts -E -D -A opts -K \
-    -color:=opts -icon:=opts -bg:=opts -fg:=opts
+  _zline_std_opts "$@"
 
   local ver=""
   if _zline_find_up ".erlang-version"; then
@@ -13,11 +12,5 @@ zline_segment_erlang() {
     ver="erl"
   fi
 
-  if [[ -z "$ver" ]]; then
-    _zline_ret_content=""
-    return 0
-  fi
-
-  _zline_ret_content="${ver}"
-  _zline_segment_finish 9 9 15 "erl:" $'\uE7B1 '
+  _zline_segment_emit "$ver" 9 9 15 "erl:" $'\uE7B1 '
 }

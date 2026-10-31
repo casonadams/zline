@@ -1,8 +1,7 @@
 zline_segment_venv() {
   emulate -L zsh
   local -A opts=()
-  zparseopts -E -D -A opts -K \
-    -color:=opts -icon:=opts -bg:=opts -fg:=opts
+  _zline_std_opts "$@"
 
   local name=""
   if [[ -n "$VIRTUAL_ENV" ]]; then
@@ -17,11 +16,5 @@ zline_segment_venv() {
     name="$REPLY"
   fi
 
-  if [[ -z "$name" ]]; then
-    _zline_ret_content=""
-    return 0
-  fi
-
-  _zline_ret_content="${name}"
-  _zline_segment_finish 5 5 15 "(py)" $'\uE235 '
+  _zline_segment_emit "$name" 5 5 15 "(py)" $'\uE235 '
 }

@@ -1,7 +1,6 @@
 zline_segment_jobs() {
   local -A opts=()
-  zparseopts -E -D -A opts -K \
-    -color:=opts -icon:=opts -bg:=opts -fg:=opts
+  _zline_std_opts "$@"
 
   local -i count=${#jobstates}
   if (( count == 0 )); then

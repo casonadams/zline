@@ -1,8 +1,7 @@
 zline_segment_node() {
   emulate -L zsh
   local -A opts=()
-  zparseopts -E -D -A opts -K \
-    -color:=opts -icon:=opts -bg:=opts -fg:=opts
+  _zline_std_opts "$@"
 
   local ver=""
   if _zline_find_up ".node-version"; then
@@ -17,11 +16,5 @@ zline_segment_node() {
     ver="node"
   fi
 
-  if [[ -z "$ver" ]]; then
-    _zline_ret_content=""
-    return 0
-  fi
-
-  _zline_ret_content="${ver}"
-  _zline_segment_finish 2 2 0 "node:" $'\uE718 '
+  _zline_segment_emit "$ver" 2 2 0 "node:" $'\uE718 '
 }

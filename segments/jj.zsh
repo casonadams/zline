@@ -15,8 +15,7 @@ _zline_find_jj_root() {
 zline_segment_jj() {
   emulate -L zsh
   local -A opts=()
-  zparseopts -E -D -A opts -K \
-    -color:=opts -icon:=opts -bg:=opts -fg:=opts
+  _zline_std_opts "$@"
 
   _zline_find_jj_root "$PWD" || true
   local jj_root="$REPLY"

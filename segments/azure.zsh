@@ -1,8 +1,7 @@
 zline_segment_azure() {
   emulate -L zsh
   local -A opts=()
-  zparseopts -E -D -A opts -K \
-    -color:=opts -icon:=opts -bg:=opts -fg:=opts
+  _zline_std_opts "$@"
 
   local sub=""
   if [[ -n "$ARM_SUBSCRIPTION_NAME" ]]; then
@@ -34,11 +33,5 @@ zline_segment_azure() {
     fi
   fi
 
-  if [[ -z "$sub" ]]; then
-    _zline_ret_content=""
-    return 0
-  fi
-
-  _zline_ret_content="${sub}"
-  _zline_segment_finish 14 14 0 "az:" $'\uF0C2 '
+  _zline_segment_emit "$sub" 14 14 0 "az:" $'\uF0C2 '
 }

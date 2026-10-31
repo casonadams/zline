@@ -156,6 +156,19 @@ typeset -gA _zline_escaped_segments=(
 
 typeset -gi _zline_is_pl=0
 
+# Parses the standard segment flags into the caller's local `opts` assoc.
+_zline_std_opts() {
+  zparseopts -E -A opts -K -color:=opts -icon:=opts -bg:=opts -fg:=opts
+}
+
+# Sets content and styling for a segment, or clears it when content is empty.
+# Args: content default_fg default_bg powerline_fg ascii_icon nerd_icon
+_zline_segment_emit() {
+  _zline_ret_content="$1"
+  [[ -n "$1" ]] && _zline_segment_finish "${@:2}"
+  return 0
+}
+
 _zline_segment_finish() {
   # Reads the calling segment's local `opts` assoc (dynamic scope).
   # Args: default_fg default_bg powerline_fg ascii_icon nerd_icon

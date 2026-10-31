@@ -2,8 +2,7 @@ zline_segment_cmake() {
   emulate -L zsh
   setopt extended_glob
   local -A opts=()
-  zparseopts -E -D -A opts -K \
-    -color:=opts -icon:=opts -bg:=opts -fg:=opts
+  _zline_std_opts "$@"
 
   local name=""
   if [[ -f "CMakeLists.txt" ]]; then
@@ -25,11 +24,5 @@ zline_segment_cmake() {
     name="cmake"
   fi
 
-  if [[ -z "$name" ]]; then
-    _zline_ret_content=""
-    return 0
-  fi
-
-  _zline_ret_content="${name}"
-  _zline_segment_finish 4 4 15 "cmake:" $'\uE61D '
+  _zline_segment_emit "$name" 4 4 15 "cmake:" $'\uE61D '
 }

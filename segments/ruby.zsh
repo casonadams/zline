@@ -1,8 +1,7 @@
 zline_segment_ruby() {
   emulate -L zsh
   local -A opts=()
-  zparseopts -E -D -A opts -K \
-    -color:=opts -icon:=opts -bg:=opts -fg:=opts
+  _zline_std_opts "$@"
 
   local ver=""
   if [[ -f ".ruby-version" ]]; then
@@ -15,11 +14,5 @@ zline_segment_ruby() {
     ver="ruby"
   fi
 
-  if [[ -z "$ver" ]]; then
-    _zline_ret_content=""
-    return 0
-  fi
-
-  _zline_ret_content="${ver}"
-  _zline_segment_finish 1 1 15 "rb:" $'\uE21E '
+  _zline_segment_emit "$ver" 1 1 15 "rb:" $'\uE21E '
 }

@@ -1,8 +1,7 @@
 zline_segment_direnv() {
   emulate -L zsh
   local -A opts=()
-  zparseopts -E -D -A opts -K \
-    -color:=opts -icon:=opts -bg:=opts -fg:=opts
+  _zline_std_opts "$@"
 
   local content=""
   if [[ -n "$DIRENV_DIR" ]]; then
@@ -13,11 +12,5 @@ zline_segment_direnv() {
     content="env"
   fi
 
-  if [[ -z "$content" ]]; then
-    _zline_ret_content=""
-    return 0
-  fi
-
-  _zline_ret_content="${content}"
-  _zline_segment_finish 11 11 0 "direnv:" $'\u25BC '
+  _zline_segment_emit "$content" 11 11 0 "direnv:" $'\u25BC '
 }

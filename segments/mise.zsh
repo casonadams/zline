@@ -1,8 +1,7 @@
 zline_segment_mise() {
   emulate -L zsh
   local -A opts=()
-  zparseopts -E -D -A opts -K \
-    -color:=opts -icon:=opts -bg:=opts -fg:=opts
+  _zline_std_opts "$@"
 
   local content=""
   if [[ -n "$MISE_ENV" ]]; then
@@ -11,11 +10,5 @@ zline_segment_mise() {
     content="mise"
   fi
 
-  if [[ -z "$content" ]]; then
-    _zline_ret_content=""
-    return 0
-  fi
-
-  _zline_ret_content="${content}"
-  _zline_segment_finish 11 11 0 "mise:" $'\uF0AD '
+  _zline_segment_emit "$content" 11 11 0 "mise:" $'\uF0AD '
 }

@@ -1,8 +1,7 @@
 zline_segment_kotlin() {
   emulate -L zsh
   local -A opts=()
-  zparseopts -E -D -A opts -K \
-    -color:=opts -icon:=opts -bg:=opts -fg:=opts
+  _zline_std_opts "$@"
 
   local ver=""
   if _zline_read_tool_version "kotlin"; then
@@ -16,11 +15,5 @@ zline_segment_kotlin() {
     fi
   fi
 
-  if [[ -z "$ver" ]]; then
-    _zline_ret_content=""
-    return 0
-  fi
-
-  _zline_ret_content="${ver}"
-  _zline_segment_finish 13 13 15 "kt:" $'\uF1219 '
+  _zline_segment_emit "$ver" 13 13 15 "kt:" $'\uF1219 '
 }

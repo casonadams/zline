@@ -1,8 +1,7 @@
 zline_segment_gcp() {
   emulate -L zsh
   local -A opts=()
-  zparseopts -E -D -A opts -K \
-    -color:=opts -icon:=opts -bg:=opts -fg:=opts
+  _zline_std_opts "$@"
 
   local proj=""
   if [[ -n "$CLOUDSDK_CORE_PROJECT" ]]; then
@@ -31,11 +30,5 @@ zline_segment_gcp() {
     fi
   fi
 
-  if [[ -z "$proj" ]]; then
-    _zline_ret_content=""
-    return 0
-  fi
-
-  _zline_ret_content="${proj}"
-  _zline_segment_finish 12 12 0 "gcp:" $'\uF0C2 '
+  _zline_segment_emit "$proj" 12 12 0 "gcp:" $'\uF0C2 '
 }
