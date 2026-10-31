@@ -11,6 +11,7 @@ typeset -gi _zline_worker_sent_at=0
 typeset -gi _zline_worker_timeout=5
 typeset -g _zline_worker_pending_dir=""
 typeset -g _zline_git_provider="cli"
+typeset -g _zline_git_untracked="normal"
 
 _zline_worker_git_task() {
   local seq="$1"
@@ -25,7 +26,7 @@ _zline_worker_git_task() {
   local branch=""
 
   local raw
-  raw=$(GIT_OPTIONAL_LOCKS=0 git -C "$dir" status --porcelain=v2 --branch 2>/dev/null) || {
+  raw=$(GIT_OPTIONAL_LOCKS=0 git -C "$dir" status --porcelain=v2 --branch --untracked-files="$_zline_git_untracked" 2>/dev/null) || {
     print -r -- "${seq}:git:none:0:0:0:0:0:0:${dir}"
     return 0
   }
@@ -132,7 +133,8 @@ _zline_worker_stop() {
   fi
 
   if (( _zline_worker_pid > 0 )); then
-    kill -TERM "$_zline_worker_pid" 2>/dev/null
+    (( $+commands[pkill] )) && { pkill -TERM -P "$_zline_worker_pid" 2>/dev/null || true; }
+    kill -TERM "$_zline_worker_pid" 2>/dev/null || true
     _zline_worker_pid=0
   fi
 

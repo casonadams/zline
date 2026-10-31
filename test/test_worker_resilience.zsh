@@ -106,6 +106,44 @@ assert_eq "$(( _zline_worker_pid > 0 && _zline_worker_pid != old_pid ))" "1" "wo
 assert_eq "$_zline_worker_pending_dir" "/fresh" "fresh request sent after restart"
 _zline_worker_stop
 
+# 6. Stopping the worker also stops its in-flight git process
+if (( $+commands[pgrep] )); then
+  _zline_git_provider_slow() { sleep 7.31; print -r -- "${1}:git:b:0:0:0:0:0:0:${2}" }
+  _zline_worker_seq=0
+  _zline_worker_last_acked=0
+  _zline_worker_pending_dir=""
+  _zline_worker_start --force
+  _zline_worker_send git /slow
+  typeset -i tries
+  for (( tries = 0; tries < 40; tries++ )); do
+    pgrep -f "sleep 7.31" >/dev/null && break
+    sleep 0.05
+  done
+  _zline_worker_stop
+  sleep 0.2
+  typeset -i still_running=0
+  pgrep -f "sleep 7.31" >/dev/null && still_running=1
+  assert_eq "$still_running" "0" "in-flight git child is terminated when the worker stops"
+fi
+
+# 7. Untracked scanning can be disabled
+if (( $+commands[git] )); then
+  typeset untracked_repo
+  untracked_repo="$(mktemp -d "${TMPDIR:-/tmp}/zline-ut.XXXXXX")"
+  git -C "$untracked_repo" init -q 2>/dev/null
+  : > "${untracked_repo}/a.txt"
+  : > "${untracked_repo}/b.txt"
+  _zline_git_provider="cli"
+  typeset -a ut_parts
+  ut_parts=("${(@s/:/)$(_zline_worker_git_task 1 "$untracked_repo")}")
+  assert_eq "${ut_parts[6]}" "2" "untracked files are counted by default"
+  _zline_git_untracked="no"
+  ut_parts=("${(@s/:/)$(_zline_worker_git_task 2 "$untracked_repo")}")
+  assert_eq "${ut_parts[6]}" "0" "untracked files are skipped when _zline_git_untracked=no"
+  _zline_git_untracked="normal"
+  rm -rf "$untracked_repo"
+fi
+
 cd /
 rm -rf "$tmp_repo"
 
