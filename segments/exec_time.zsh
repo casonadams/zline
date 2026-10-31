@@ -59,12 +59,10 @@ zline_segment_exec_time() {
   min_val="${min_val%s}"
   typeset -F min_sec="${min_val:-2.0}"
 
-  if (( _zline_last_duration < min_sec )); then
-    _zline_ret_content=""
-    return 0
+  local content=""
+  if (( _zline_last_duration >= min_sec )); then
+    _zline_format_duration "$_zline_last_duration" "${opts[--precision]:-1}"
+    content="$REPLY"
   fi
-
-  _zline_format_duration "$_zline_last_duration" "${opts[--precision]:-1}"
-  _zline_ret_content="$REPLY"
-  _zline_segment_finish 11 3 0 "s:" $'\uF252 '
+  _zline_segment_emit "$content" 11 3 0 "s:" $'\uF252 '
 }

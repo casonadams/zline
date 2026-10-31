@@ -5,11 +5,6 @@ zline_segment_aws() {
   local profile="${AWS_PROFILE:-${AWS_DEFAULT_PROFILE:-$AWS_VAULT}}"
   local region="${AWS_REGION:-$AWS_DEFAULT_REGION}"
 
-  if [[ -z "$profile" && -z "$region" ]]; then
-    _zline_ret_content=""
-    return 0
-  fi
-
   local content="$profile"
   if [[ -n "$region" ]]; then
     if [[ -n "$content" ]]; then
@@ -19,6 +14,5 @@ zline_segment_aws() {
     fi
   fi
 
-  _zline_ret_content="${content}"
-  _zline_segment_finish 3 3 0 "aws:" $'\u2601 '
+  _zline_segment_emit "$content" 3 3 0 "aws:" $'\u2601 '
 }

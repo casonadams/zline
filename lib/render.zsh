@@ -1,3 +1,6 @@
+zmodload -F zsh/datetime p:EPOCHSECONDS 2>/dev/null
+zmodload -F zsh/stat b:zstat 2>/dev/null
+
 typeset -g _zline_style="lean"
 typeset -g _zline_mode="nerdfont"
 typeset -g _zline_sep_left=""
@@ -159,6 +162,18 @@ typeset -gi _zline_is_pl=0
 # Parses the standard segment flags into the caller's local `opts` assoc.
 _zline_std_opts() {
   zparseopts -E -A opts -K -color:=opts -icon:=opts -bg:=opts -fg:=opts
+}
+
+# REPLY = "mtime:size" of a file, used as a cache key. Empty when stat is unavailable
+# or the file changed in the last 2 seconds, since a same-size edit within one mtime
+# tick would be indistinguishable from the cached version.
+_zline_file_stamp() {
+  REPLY=""
+  (( $+builtins[zstat] )) || return 0
+  local -A st=()
+  zstat -H st "$1" 2>/dev/null || return 0
+  (( EPOCHSECONDS - st[mtime] < 2 )) && return 0
+  REPLY="${st[mtime]}:${st[size]}"
 }
 
 # Sets content and styling for a segment, or clears it when content is empty.

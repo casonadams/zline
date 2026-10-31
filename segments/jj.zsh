@@ -17,14 +17,7 @@ zline_segment_jj() {
   local -A opts=()
   _zline_std_opts "$@"
 
-  _zline_find_jj_root "$PWD" || true
-  local jj_root="$REPLY"
-  if [[ -z "$jj_root" ]]; then
-    _zline_ret_content=""
-    return 0
-  fi
-
-  local info="jj"
-  _zline_ret_content="${info}"
-  _zline_segment_finish 13 13 0 "jj:" $'\uF126 '
+  local info=""
+  _zline_find_jj_root "$PWD" && info="jj"
+  _zline_segment_emit "$info" 13 13 0 "jj:" $'\uF126 '
 }

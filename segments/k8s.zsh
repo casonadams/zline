@@ -2,7 +2,7 @@ zmodload -F zsh/stat b:zstat 2>/dev/null
 
 typeset -g _zline_k8s_cache_file=""
 typeset -g _zline_k8s_cache_ctx=""
-typeset -gi _zline_k8s_cache_mtime=0
+typeset -g _zline_k8s_cache_stamp=""
 
 zline_segment_k8s() {
   local -A opts=()
@@ -12,13 +12,10 @@ zline_segment_k8s() {
   config_file="${config_file%%:*}"
   [[ -r "$config_file" ]] || { _zline_ret_content=""; return 0; }
 
-  local -i mtime=0
-  if (( $+builtins[zstat] )); then
-    zstat -A mtime +mtime "$config_file" 2>/dev/null
-  fi
-
   local ctx=""
-  if (( mtime > 0 && mtime == _zline_k8s_cache_mtime )) && [[ "$_zline_k8s_cache_file" == "$config_file" ]]; then
+  _zline_file_stamp "$config_file"
+  local stamp="$REPLY"
+  if [[ -n "$stamp" && "$stamp" == "$_zline_k8s_cache_stamp" && "$_zline_k8s_cache_file" == "$config_file" ]]; then
     ctx="$_zline_k8s_cache_ctx"
   else
     local line
@@ -30,7 +27,7 @@ zline_segment_k8s() {
         break
       fi
     done < "$config_file"
-    _zline_k8s_cache_mtime=$mtime
+    _zline_k8s_cache_stamp="$stamp"
     _zline_k8s_cache_file="$config_file"
     _zline_k8s_cache_ctx="$ctx"
   fi
