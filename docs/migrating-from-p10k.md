@@ -16,7 +16,7 @@ Migrating from Powerlevel10k to `zline` replaces up to 1,600 lines of `~/.p10k.z
 | `typeset -g POWERLEVEL9K_STATUS_OK=false` | `status --hide-zero` |
 | `typeset -g POWERLEVEL9K_COMMAND_EXECUTION_TIME_THRESHOLD=2` | `exec_time --min 2` |
 | `typeset -g POWERLEVEL9K_TRANSIENT_PROMPT=always` | `zline style <style> --transient` |
-| `typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet` | Built-in by default (`instant.zsh`) |
+| `typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet` | Not needed: `source zline.zsh` + `zline init` takes under 10 ms |
 
 ---
 

@@ -71,16 +71,6 @@ bench_op "Directory Shortening & Anchor" 1000 "< 0.40 ms" 0.40 "_zline_dir_forma
 
 # 4. Synchronous Git HEAD Reader
 bench_op "Synchronous Git HEAD Reader" 1000 "< 0.40 ms" 0.40 "_zline_git_read_head '$PWD'"
-# 5. Instant Prompt Snapshot Load
-typeset bench_tmp=$(mktemp -d "${TMPDIR:-/tmp}/zline-bench.XXXXXX")
-_zline_instant_cache_dir="$bench_tmp"
-_zline_instant_file="${bench_tmp}/instant-bench.zsh"
-_zline_instant_last_prompt=""
-_zline_instant_last_rprompt=""
-_zline_instant_save
-bench_op "Instant Prompt Load" 500 "< 0.50 ms" 0.50 "source '$_zline_instant_file' >/dev/null"
-rm -rf "$bench_tmp"
-
 print -P "\n%F{14}%B============================================================%b%f"
 
 if (( failed_benchmarks > 0 )); then

@@ -16,7 +16,6 @@ source "${ZLINE_DIR}/lib/render.zsh"
 source "${ZLINE_DIR}/lib/worker.zsh"
 source "${ZLINE_DIR}/lib/osc.zsh"
 source "${ZLINE_DIR}/lib/transient.zsh"
-source "${ZLINE_DIR}/lib/instant.zsh"
 source "${ZLINE_DIR}/lib/doctor.zsh"
 source "${ZLINE_DIR}/lib/configure.zsh"
 source "${ZLINE_DIR}/lib/compile.zsh"
@@ -46,7 +45,6 @@ _zline_parse_flags() {
       --transient-dir) _zline_transient=1; _zline_transient_show_dir=1 ;;
       --no-transient) _zline_transient=0; _zline_transient_show_dir=0 ;;
       --no-osc) _zline_osc=0 ;;
-      --no-instant) _zline_instant_enabled=0 ;;
       --transient-symbol) shift; _zline_transient_symbol="$1" ;;
       --transient-color) shift; _zline_transient_color="$1" ;;
       --ascii) _zline_mode="ascii" ;;
@@ -143,14 +141,11 @@ zline() {
       ;;
     init)
       (( _zline_user_ps )) && setopt prompt_subst
-      setopt prompt_percent
       zline_compile
       _zline_hooks_install
       _zline_worker_start
-      _zline_instant_restore
       _zline_transient_install
       zline_render
-      _zline_instant_save
       ;;
     bench)
       if [[ "$1" == "--startup" ]]; then

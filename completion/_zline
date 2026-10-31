@@ -93,7 +93,7 @@ _zline() {
         bench)
           _arguments \
             '--profile[Run per-segment micro-profiling latency benchmark]' \
-            '--startup[Run shell launch and instant prompt latency benchmark]' \
+            '--startup[Run shell launch latency benchmark]' \
             '1:iterations:(100 500 1000 5000)'
           ;;
         configure)

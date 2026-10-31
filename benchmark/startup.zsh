@@ -1,5 +1,5 @@
 #!/usr/bin/env zsh
-# Startup latency benchmark measuring shell launch and instant prompt restoration
+# Startup latency benchmark measuring shell launch time
 
 set -e
 
@@ -43,15 +43,6 @@ bench_startup() {
 # 1. Baseline zsh -f process spawn
 bench_startup "Baseline (zsh -f exit)" 'zsh -f -c "exit" >/dev/null 2>&1'
 
-# 2. Instant Prompt Load
-typeset inst_tmp=$(mktemp "${TMPDIR:-/tmp}/zline-inst-bench.XXXXXX")
-print 'PROMPT="%F{4}~/src/zline%f %F{2}main%f %F{10}❯%f "' > "$inst_tmp"
-bench_startup "Shell + Instant Prompt Snapshot" "zsh -f -c 'source \"$inst_tmp\"' >/dev/null 2>&1"
-rm -f "$inst_tmp"
-
-# 3. Full zline initialization
+# 2. Full zline initialization
 bench_startup "Shell + Full zline init" "zsh -f -c 'source \"${REPO_ROOT}/zline.zsh\" && zline preset powerline --no-osc && zline init' >/dev/null 2>&1"
 
-print -P "\n%F{14}%B================================================================%b%f"
-print -P "%F{10}%BInstant prompt restores your shell interface in under 0.1 ms.%b%f"
-print -P "%F{14}%B================================================================%b%f"

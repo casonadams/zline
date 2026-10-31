@@ -55,17 +55,6 @@ _zline_doctor_check_terminal() {
   _zline_doctor_print_status "ok" "Terminal Capabilities" "${term_info} (${col_info})"
 }
 
-_zline_doctor_check_cache() {
-  local cdir="${_zline_instant_cache_dir:-${XDG_CACHE_HOME:-$HOME/.cache}/zline}"
-  if [[ -d "$cdir" && -w "$cdir" ]]; then
-    _zline_doctor_print_status "ok" "Cache Directory" "${cdir} (writable)"
-  elif mkdir -p "$cdir" 2>/dev/null; then
-    _zline_doctor_print_status "ok" "Cache Directory" "${cdir} (created successfully)"
-  else
-    _zline_doctor_print_status "warn" "Cache Directory" "${cdir} (cannot write, instant prompt disabled)"
-  fi
-}
-
 _zline_doctor_check_worker() {
   if (( _zline_worker_pid > 0 )); then
     _zline_doctor_print_status "ok" "Async Worker" "PID ${_zline_worker_pid} active (req_fd: ${_zline_worker_req_fd}, res_fd: ${_zline_worker_res_fd})"
@@ -119,7 +108,6 @@ zline_doctor() {
   _zline_doctor_check_zsh
   _zline_doctor_check_locale
   _zline_doctor_check_terminal
-  _zline_doctor_check_cache
   _zline_doctor_check_worker
   _zline_doctor_check_segments
   _zline_doctor_check_latency

@@ -1,5 +1,5 @@
 #!/usr/bin/env zsh
-# Test suite for Slice 4: Instant Prompt, Transient Prompt & Modern Terminal Protocols
+# Test suite for Slice 4: Transient Prompt & Modern Terminal Protocols
 
 set -e
 
@@ -44,42 +44,6 @@ assert_eq "$REPLY" "" "Disabling OSC produces empty prefix"
 _zline_osc_prompt_suffix
 assert_eq "$REPLY" "" "Disabling OSC produces empty suffix"
 _zline_osc=1
-
-# 2. Instant Prompt Caching & Restore
-typeset test_cache_dir=$(mktemp -d "${TMPDIR:-/tmp}/zline-test-instant.XXXXXX")
-_zline_instant_cache_dir="$test_cache_dir"
-_zline_instant_file="${test_cache_dir}/instant-test.zsh"
-_zline_instant_enabled=1
-
-PROMPT="TEST_PROMPT_CONTENT"
-RPROMPT="TEST_RPROMPT_CONTENT"
-_zline_instant_save
-
-typeset -i file_exists=0
-[[ -f "$_zline_instant_file" ]] && file_exists=1
-assert_eq "$file_exists" "1" "Instant prompt cache file created"
-
-# Source the instant prompt cache file and measure latency (< 1ms)
-zmodload zsh/datetime
-typeset -F t0=$EPOCHREALTIME
-source "$_zline_instant_file" >/dev/null
-typeset -F t1=$EPOCHREALTIME
-typeset -F dur_ms=$(( (t1 - t0) * 1000.0 ))
-
-assert_eq "$_ZLINE_INSTANT_ACTIVE" "1" "Sourcing instant cache sets _ZLINE_INSTANT_ACTIVE=1"
-assert_eq "$PROMPT" "TEST_PROMPT_CONTENT" "Sourcing instant cache restores PROMPT"
-assert_eq "$RPROMPT" "TEST_RPROMPT_CONTENT" "Sourcing instant cache restores RPROMPT"
-
-if (( dur_ms < 10.0 )); then
-  assert_eq "fast" "fast" "Instant prompt loaded in ${dur_ms} ms (< 10.0 ms)"
-else
-  assert_eq "slow (${dur_ms} ms)" "fast" "Instant prompt loading took too long"
-fi
-
-_zline_instant_restore
-assert_eq "$_ZLINE_INSTANT_ACTIVE" "0" "Instant restore resets _ZLINE_INSTANT_ACTIVE"
-
-rm -rf "$test_cache_dir"
 
 # 3. Transient Prompt
 _zline_transient=1

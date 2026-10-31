@@ -42,9 +42,6 @@ assert_eq "$_zline_doctor_errors" "0" "Zsh version check passes for current shel
 _zline_doctor_check_locale
 assert_eq "$_zline_doctor_errors" "0" "Locale check passes without error"
 
-_zline_doctor_check_cache
-assert_eq "$_zline_doctor_errors" "0" "Cache directory check passes"
-
 # 3. Warning on unregistered segment
 _zline_compiled_left_names+=("totally_invalid_segment_xyz")
 _zline_doctor_warnings=0
