@@ -1,3 +1,4 @@
+zmodload -F zsh/datetime p:EPOCHSECONDS 2>/dev/null
 zmodload -F zsh/system b:sysopen 2>/dev/null
 
 typeset -g _zline_worker_pid=0
@@ -6,7 +7,9 @@ typeset -g _zline_worker_res_fd=-1
 typeset -g _zline_worker_tmpdir=""
 typeset -gi _zline_worker_seq=0
 typeset -gi _zline_worker_last_acked=0
-typeset -gi _zline_worker_pending=0
+typeset -gi _zline_worker_sent_at=0
+typeset -gi _zline_worker_timeout=5
+typeset -gi _zline_worker_redraw_pending=0
 typeset -g _zline_worker_pending_dir=""
 typeset -g _zline_git_provider="cli"
 
@@ -65,8 +68,12 @@ _zline_worker_loop() {
   exec 3<"$req_pipe"
   exec 4>"$res_pipe"
 
-  local line
+  local line next
   while read -u 3 -r line; do
+    while read -t 0 -u 3 -r next; do
+      line="$next"
+      [[ "$line" == "quit" ]] && break
+    done
     [[ "$line" == "quit" ]] && break
     local seq="${line%%:*}"
     local rest="${line#*:}"
@@ -105,8 +112,9 @@ _zline_worker_start() {
     { exec {_zline_worker_res_fd}<"$res_pipe" } 2>/dev/null || { _zline_worker_stop; return 0; }
   fi
 
-  if [[ -o interactive ]] && (( $+widgets[zle-line-init] || $+functions[zle] )); then
+  if _zline_has_zle; then
     zle -F "$_zline_worker_res_fd" _zline_worker_zle_handler 2>/dev/null
+    autoload -Uz add-zle-hook-widget 2>/dev/null && add-zle-hook-widget line-pre-redraw _zline_worker_redraw_hook 2>/dev/null
   fi
 }
 
@@ -118,8 +126,9 @@ _zline_worker_stop() {
   fi
 
   if (( _zline_worker_res_fd >= 0 )); then
-    if [[ -o interactive ]] && (( $+functions[zle] )); then
+    if _zline_has_zle; then
       zle -F "$_zline_worker_res_fd" 2>/dev/null
+      (( $+functions[add-zle-hook-widget] )) && add-zle-hook-widget -d line-pre-redraw _zline_worker_redraw_hook 2>/dev/null
     fi
     exec {_zline_worker_res_fd}<&-
     _zline_worker_res_fd=-1
@@ -138,39 +147,46 @@ _zline_worker_stop() {
 
 zline_hook add zshexit _zline_worker_stop
 
+_zline_worker_restart() {
+  _zline_worker_stop
+  _zline_worker_last_acked=$_zline_worker_seq
+  _zline_worker_start --force
+  (( _zline_worker_req_fd >= 0 ))
+}
+
 _zline_worker_send() {
   local type="$1"
   local dir="$2"
   (( _zline_worker_req_fd < 0 )) && return 1
 
-  if (( _zline_worker_pending == 1 )) && [[ "$dir" == "$_zline_worker_pending_dir" ]]; then
-    return 0
+  if (( _zline_worker_seq > _zline_worker_last_acked )); then
+    if (( EPOCHSECONDS - _zline_worker_sent_at > _zline_worker_timeout )); then
+      _zline_worker_restart || return 1
+    elif [[ "$dir" == "$_zline_worker_pending_dir" ]]; then
+      return 0
+    fi
   fi
 
   (( _zline_worker_seq += 1 ))
-  _zline_worker_pending=1
   _zline_worker_pending_dir="$dir"
+  _zline_worker_sent_at=$EPOCHSECONDS
   print -u "$_zline_worker_req_fd" -r -- "${_zline_worker_seq}:${type}:${dir}"
 }
 
 _zline_worker_apply_reply() {
   local reply="$1"
-  local -a parts=("${(s/:/)reply}")
+  local -a parts=("${(@s/:/)reply}")
   local -i seq="${parts[1]}"
   local type="${parts[2]}"
 
-  local pending_dir="$_zline_worker_pending_dir"
-  _zline_worker_pending=0
-  _zline_worker_pending_dir=""
-
-  if (( seq < _zline_worker_last_acked )); then
-    return 0
-  fi
+  REPLY=0
+  (( seq < _zline_worker_last_acked )) && return 0
   _zline_worker_last_acked=$seq
 
   local -i has_changed=0
   if [[ "$type" == "git" ]]; then
-    local n_dir="${parts[10]:-$pending_dir}"
+    local n_dir="${reply#*:*:*:*:*:*:*:*:*:}"
+    [[ "$n_dir" == "$reply" || -z "$n_dir" ]] && n_dir="$_zline_worker_pending_dir"
     local n_branch="${parts[3]}"
     local n_staged="${parts[4]:-0}"
     local n_unstaged="${parts[5]:-0}"
@@ -200,6 +216,7 @@ _zline_worker_apply_reply() {
     _zline_git_cache_behind="$n_behind"
     _zline_git_cache_conflicts="$n_conflicts"
     _zline_git_cache_valid=1
+    (( seq >= _zline_worker_seq )) && _zline_git_cache_stale=0
   fi
   REPLY=$has_changed
 }
@@ -212,6 +229,18 @@ _zline_worker_poll() {
   fi
 }
 
+_zline_worker_redraw() {
+  zline_render
+  zle reset-prompt 2>/dev/null
+}
+
+_zline_worker_redraw_hook() {
+  (( _zline_worker_redraw_pending )) || return 0
+  [[ "$KEYMAP" == (main|viins|vicmd|) ]] || return 0
+  _zline_worker_redraw_pending=0
+  _zline_worker_redraw
+}
+
 _zline_worker_zle_handler() {
   local fd="$1"
   local reply=""
@@ -219,11 +248,11 @@ _zline_worker_zle_handler() {
     _zline_worker_apply_reply "$reply"
     local -i has_changed=$REPLY
     zline_hook run async_reply "git"
-    if (( has_changed == 1 )); then
-      if [[ "$KEYMAP" == "main" || "$KEYMAP" == "viins" || "$KEYMAP" == "vicmd" || -z "$KEYMAP" ]]; then
-        zline_render
-        zle reset-prompt 2>/dev/null
-      fi
+    (( has_changed == 1 )) || return 0
+    if [[ "$KEYMAP" == (main|viins|vicmd|) ]]; then
+      _zline_worker_redraw
+    else
+      _zline_worker_redraw_pending=1
     fi
   fi
 }

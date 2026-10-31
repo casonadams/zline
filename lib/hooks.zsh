@@ -68,10 +68,22 @@ _zline_on_zshexit() {
   zline_hook run zshexit "$@"
 }
 
+_zline_has_zle() {
+  [[ -o interactive ]] && (( $+builtins[zle] ))
+}
+
+typeset -g _zline_orig_trapwinch=""
+if (( $+functions[TRAPWINCH] )) && [[ "${functions[TRAPWINCH]}" != *_zline_orig_trapwinch* ]]; then
+  _zline_orig_trapwinch="${functions[TRAPWINCH]}"
+fi
+
 TRAPWINCH() {
-  if [[ -o interactive ]] && (( $+functions[zle] )); then
+  if _zline_has_zle && zle; then
     zline_render
-    zle reset-prompt 2>/dev/null
+    zle reset-prompt
+  fi
+  if [[ -n "$_zline_orig_trapwinch" ]]; then
+    eval "$_zline_orig_trapwinch"
   fi
 }
 

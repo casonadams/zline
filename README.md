@@ -30,6 +30,7 @@
 - 🛠️ **58 Built-In Segments**: Rich ecosystem covering cloud (AWS, GCP, Azure, K8s, Terraform, Docker, Helm, Pulumi), runtimes (Node, Bun, Deno, Rust, Go, Python, Ruby, PHP, Java, .NET, Lua, Zig, Elixir, Crystal, Haskell, Scala, Kotlin, Swift, Dart, Julia, OCaml, Clojure, Erlang, Perl, R, Solidity), build tools (CMake, Meson, Bazel), version control (Git, Jujutsu / jj), environments (Mise, Nix, Direnv, OS/Distro, Containers, Shell Depth), text badges (`text`), modal editing (Vi-Mode), system metrics (RAM, Load, Battery), and universal `.tool-versions` detection.
 - 🚀 **Instant Prompt (< 0.1 ms)**: Pre-compiled static snapshot displayed immediately upon terminal launch before `.zshrc` finishes executing.
 - 🧼 **Transient Prompt**: Automatically collapses multi-line prompts down to a minimal `❯` symbol on Enter, keeping your terminal scrollback pristine.
+- 📐 **Responsive Layout**: Re-renders on terminal resize and shrinks in stages on narrow terminals (shorter paths, truncated branches, then dropping low-priority segments). Right prompt placement honors `ZLE_RPROMPT_INDENT`; cached git details stay visible while a background refresh runs.
 - 🌐 **Modern Terminal Protocols**: Native OSC 133 semantic shell integration, OSC 7 directory inheritance, OSC 8 hyperlinks, and OSC 777 / OSC 9 long-command desktop notifications.
 
 ---

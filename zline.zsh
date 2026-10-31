@@ -38,7 +38,56 @@ for _zline_seg in "${ZLINE_DIR}"/segments/*.zsh(N); do
 done
 unset _zline_seg _zline_seg_name
 
+_zline_parse_flags() {
+  emulate -L zsh
+  while (( $# > 0 )); do
+    case "$1" in
+      --transient) _zline_transient=1 ;;
+      --transient-dir) _zline_transient=1; _zline_transient_show_dir=1 ;;
+      --no-transient) _zline_transient=0; _zline_transient_show_dir=0 ;;
+      --no-osc) _zline_osc=0 ;;
+      --no-instant) _zline_instant_enabled=0 ;;
+      --transient-symbol) shift; _zline_transient_symbol="$1" ;;
+      --transient-color) shift; _zline_transient_color="$1" ;;
+      --ascii) _zline_mode="ascii" ;;
+      --nerdfont) _zline_mode="nerdfont" ;;
+      --no-icons) _zline_icons=0 ;;
+      --icons) _zline_icons=1 ;;
+      --title) _zline_title_enabled=1 ;;
+      --no-title) _zline_title_enabled=0 ;;
+      --notify)
+        _zline_notify_enabled=1
+        if [[ -n "$2" && "$2" == <-> ]]; then
+          shift
+          _zline_notify_threshold="$1"
+        fi
+        ;;
+      --no-notify) _zline_notify_enabled=0 ;;
+      --title-format) shift; _zline_title_format="$1" ;;
+      --hyperlinks) _zline_osc_hyperlinks=1 ;;
+      --no-hyperlinks) _zline_osc_hyperlinks=0 ;;
+      --frame) shift; _zline_frame="$1" ;;
+      --frame-shape) shift; _zline_frame_shape="$1" ;;
+      --connect)
+        shift
+        case "$1" in
+          solid) _zline_connect_char="─" ;;
+          dashed) _zline_connect_char="┄" ;;
+          dotted) _zline_connect_char="┈" ;;
+          none) _zline_connect_char="" ;;
+          *) _zline_connect_char="$1" ;;
+        esac
+        ;;
+      --connect-color) shift; _zline_connect_color="$1" ;;
+      --rprompt-line) shift; _zline_rprompt_line="$1" ;;
+    esac
+    shift
+  done
+}
+
 zline() {
+  local -i _zline_user_ps=0
+  [[ -o promptsubst ]] && _zline_user_ps=1
   emulate -L zsh
   local cmd="$1"
   shift
@@ -82,139 +131,18 @@ zline() {
         print -u2 -r -- "zline: unknown preset: $preset_name"
         return 1
       fi
-      while (( $# > 0 )); do
-        case "$1" in
-          --transient) _zline_transient=1 ;;
-          --transient-dir) _zline_transient=1; _zline_transient_show_dir=1 ;;
-          --no-transient) _zline_transient=0; _zline_transient_show_dir=0 ;;
-          --no-osc) _zline_osc=0 ;;
-          --no-instant) _zline_instant_enabled=0 ;;
-          --ascii) _zline_mode="ascii" ;;
-          --nerdfont) _zline_mode="nerdfont" ;;
-          --no-icons) _zline_icons=0 ;;
-          --icons) _zline_icons=1 ;;
-          --frame) shift; _zline_frame="$1" ;;
-          --frame-shape) shift; _zline_frame_shape="$1" ;;
-          --title) _zline_title_enabled=1 ;;
-          --no-title) _zline_title_enabled=0 ;;
-          --notify)
-            _zline_notify_enabled=1
-            if [[ -n "$2" && "$2" == <-> ]]; then
-              shift
-              _zline_notify_threshold="$1"
-            fi
-            ;;
-          --no-notify) _zline_notify_enabled=0 ;;
-          --hyperlinks) _zline_osc_hyperlinks=1 ;;
-          --no-hyperlinks) _zline_osc_hyperlinks=0 ;;
-          --connect) shift; _zline_connect_char="$1" ;;
-          --connect-color) shift; _zline_connect_color="$1" ;;
-          --rprompt-line) shift; _zline_rprompt_line="$1" ;;
-        esac
-        shift
-      done
+      _zline_parse_flags "$@"
+      _zline_set_style_separators
       ;;
     style)
       local style_name="$1"
       shift
       _zline_style="$style_name"
-      while (( $# > 0 )); do
-        case "$1" in
-          --transient)
-            _zline_transient=1
-            ;;
-          --transient-dir)
-            _zline_transient=1
-            _zline_transient_show_dir=1
-            ;;
-          --no-transient)
-            _zline_transient=0
-            _zline_transient_show_dir=0
-            ;;
-          --no-osc)
-            _zline_osc=0
-            ;;
-          --no-instant)
-            _zline_instant_enabled=0
-            ;;
-          --transient-symbol)
-            shift
-            _zline_transient_symbol="$1"
-            ;;
-          --transient-color)
-            shift
-            _zline_transient_color="$1"
-            ;;
-          --ascii)
-            _zline_mode="ascii"
-            ;;
-          --nerdfont)
-            _zline_mode="nerdfont"
-            ;;
-          --no-icons)
-            _zline_icons=0
-            ;;
-          --icons)
-            _zline_icons=1
-            ;;
-          --title)
-            _zline_title_enabled=1
-            ;;
-          --no-title)
-            _zline_title_enabled=0
-            ;;
-          --notify)
-            _zline_notify_enabled=1
-            if [[ -n "$2" && "$2" == <-> ]]; then
-              shift
-              _zline_notify_threshold="$1"
-            fi
-            ;;
-          --no-notify)
-            _zline_notify_enabled=0
-            ;;
-          --title-format)
-            shift
-            _zline_title_format="$1"
-            ;;
-          --hyperlinks)
-            _zline_osc_hyperlinks=1
-            ;;
-          --no-hyperlinks)
-            _zline_osc_hyperlinks=0
-            ;;
-          --frame)
-            shift
-            _zline_frame="$1"
-            ;;
-          --frame-shape)
-            shift
-            _zline_frame_shape="$1"
-            ;;
-          --connect)
-            shift
-            case "$1" in
-              solid) _zline_connect_char="─" ;;
-              dashed) _zline_connect_char="┄" ;;
-              dotted) _zline_connect_char="┈" ;;
-              none) _zline_connect_char="" ;;
-              *) _zline_connect_char="$1" ;;
-            esac
-            ;;
-          --connect-color)
-            shift
-            _zline_connect_color="$1"
-            ;;
-          --rprompt-line)
-            shift
-            _zline_rprompt_line="$1"
-            ;;
-        esac
-        shift
-      done
+      _zline_parse_flags "$@"
+      _zline_set_style_separators
       ;;
     init)
-      setopt prompt_subst
+      (( _zline_user_ps )) && setopt prompt_subst
       setopt prompt_percent
       zline_compile
       _zline_hooks_install

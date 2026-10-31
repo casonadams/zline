@@ -27,7 +27,7 @@ _zline_transient_line_finish() {
       "$orig_fn" "$@"
     fi
   fi
-  if [[ -o interactive ]] && (( $+functions[zle] )); then
+  if _zline_has_zle; then
     zle reset-prompt 2>/dev/null
   fi
 }
@@ -48,13 +48,13 @@ _zline_vi_keymap_select() {
       "$orig_fn" "$@"
     fi
   fi
-  if [[ -o interactive ]] && (( $+functions[zle] )); then
+  if _zline_has_zle; then
     zle reset-prompt 2>/dev/null
   fi
 }
 
 _zline_transient_install() {
-  if [[ -o interactive ]] && (( $+functions[zle] )); then
+  if _zline_has_zle; then
     if (( $+widgets[zle-line-finish] )) && [[ "$widgets[zle-line-finish]" != "user:_zline_transient_line_finish" ]]; then
       _zline_orig_zle_line_finish="$widgets[zle-line-finish]"
     fi
@@ -67,7 +67,7 @@ _zline_transient_install() {
 }
 
 _zline_transient_uninstall() {
-  if [[ -o interactive ]] && (( $+functions[zle] )); then
+  if _zline_has_zle; then
     if [[ -n "$_zline_orig_zle_line_finish" ]]; then
       zle -N zle-line-finish "${_zline_orig_zle_line_finish#user:}" 2>/dev/null
       _zline_orig_zle_line_finish=""

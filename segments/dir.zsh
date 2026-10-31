@@ -159,7 +159,7 @@ zline_segment_dir() {
     -last:=opts -max-depth:=opts \
     -format:=opts -alias+:=alias_arr
 
-  local opts_key="$*|${alias_arr[*]}"
+  local opts_key="$*|${alias_arr[*]}|${_zline_shrink}"
   if [[ "$PWD" == "$_zline_dir_cache_pwd" && "$opts_key" == "$_zline_dir_cache_opts" ]]; then
     _zline_ret_content="$_zline_dir_cache_res"
   elif [[ -n "${opts[--format]}" && $+functions[${opts[--format]}] -eq 1 ]]; then
@@ -170,13 +170,17 @@ zline_segment_dir() {
     _zline_dir_cache_res="$_zline_ret_content"
   else
     local ln="${opts[--last]:-${opts[--max-depth]:-0}}"
+    local -i sh="${opts[--shorten]:-0}"
+    (( _zline_shrink >= 1 && sh < 1 )) && sh=1
+    (( _zline_shrink >= 2 )) && ln=1
     _zline_dir_format_path "$PWD" \
-      "${opts[--shorten]:-0}" \
+      "$sh" \
       "${opts[--keep-last]:-1}" \
       "${opts[--anchor]:-none}" \
       alias_arr \
       "$ln"
 
+    _zline_escape "$REPLY"
     _zline_ret_content="$REPLY"
     _zline_dir_cache_pwd="$PWD"
     _zline_dir_cache_opts="$opts_key"

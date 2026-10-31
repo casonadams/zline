@@ -34,7 +34,7 @@ zline_segment_vi_mode() {
   _zline_ret_fg="${opts[--color]:-$col}"
   _zline_ret_bg="${opts[--bg]:-$col}"
 
-  if [[ "$_zline_style" == "powerline" || "$_zline_style" == "rainbow" ]]; then
+  if (( _zline_is_pl )); then
     _zline_ret_fg="${opts[--fg]:-0}"
   fi
 

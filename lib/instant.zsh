@@ -20,7 +20,7 @@ _zline_instant_save() {
     print -r -- "typeset -g _ZLINE_INSTANT_ACTIVE=1"
     print -r -- "PROMPT='${PROMPT//\'/\'\\\'\'}'"
     print -r -- "RPROMPT='${RPROMPT//\'/\'\\\'\'}'"
-    print -r -- "print -P -n -- \"\$PROMPT\""
+    print -r -- "print -rP -n -- \"\$PROMPT\""
   } >! "$_zline_instant_file" 2>/dev/null
 }
 

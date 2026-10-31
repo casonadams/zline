@@ -6,10 +6,11 @@ typeset -gi _zline_git_cache_ahead=0
 typeset -gi _zline_git_cache_behind=0
 typeset -gi _zline_git_cache_conflicts=0
 typeset -gi _zline_git_cache_valid=0
+typeset -gi _zline_git_cache_stale=0
 typeset -g _zline_git_cache_dir=""
 
 _zline_git_on_change() {
-  _zline_git_cache_valid=0
+  _zline_git_cache_stale=1
 }
 zline_hook add preexec _zline_git_on_change
 zline_hook add chpwd _zline_git_on_change
@@ -138,6 +139,26 @@ _zline_git_format_details() {
   REPLY="${(j: :)items}"
 }
 
+_zline_git_refresh() {
+  local git_root="$1"
+  [[ -n "$_zline_git_cache_dir" && "$git_root" != "$_zline_git_cache_dir" ]] && _zline_git_cache_valid=0
+  if (( _zline_git_cache_valid == 0 || _zline_git_cache_stale == 1 )) || [[ "$git_root" != "$_zline_git_cache_dir" ]]; then
+    _zline_worker_send "git" "$git_root" 2>/dev/null || true
+  fi
+}
+
+_zline_git_display_branch() {
+  local branch="$1"
+  if (( _zline_shrink >= 3 && ${#branch} > 16 )); then
+    if [[ "$_zline_mode" == "ascii" ]]; then
+      branch="${branch[1,13]}..."
+    else
+      branch="${branch[1,15]}…"
+    fi
+  fi
+  _zline_escape "$branch"
+}
+
 zline_segment_git() {
   emulate -L zsh
   local -A opts=()
@@ -169,9 +190,7 @@ zline_segment_git() {
     fi
   fi
 
-  if (( _zline_git_cache_valid == 0 )) || [[ "$git_root" != "$_zline_git_cache_dir" ]]; then
-    _zline_worker_send "git" "$git_root" 2>/dev/null || true
-  fi
+  _zline_git_refresh "$git_root"
 
   local details=""
   local -i is_dirty=0
@@ -195,7 +214,10 @@ zline_segment_git() {
     fi
   fi
 
-  if [[ -n "$details" ]]; then
+  _zline_git_display_branch "$branch"
+  branch="$REPLY"
+
+  if [[ -n "$details" ]] && (( _zline_shrink < 4 )); then
     _zline_ret_content="${branch} ${details}"
   else
     _zline_ret_content="${branch}"
@@ -212,7 +234,7 @@ zline_segment_git() {
     status_col="$ahead_col"
   fi
 
-  if [[ "$_zline_style" == "powerline" || "$_zline_style" == "rainbow" ]]; then
+  if (( _zline_is_pl )); then
     _zline_ret_bg="${opts[--bg]:-${status_col}}"
     _zline_ret_fg="${opts[--fg]:-0}"
   else

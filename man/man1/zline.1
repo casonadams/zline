@@ -304,6 +304,14 @@ cyan / bright-cyan (cloud environments)
 .IP "7 / 15"
 white / bright-white (primary prompt symbol)
 
+.SH RESPONSIVE LAYOUT
+When the left prompt is wider than the terminal, \fBzline\fR shrinks it in stages:
+shorten \fBdir\fR, truncate long git branch names, drop git details, then drop the
+lowest-priority segments (rightmost first). \fBdir\fR, \fBprompt_char\fR and \fBvi_mode\fR are never dropped.
+The right prompt drops segments from the left and honors \fBZLE_RPROMPT_INDENT\fR.
+The prompt is re-rendered on terminal resize. Git status is refreshed asynchronously;
+cached details stay visible while a refresh is pending.
+
 .SH MODERN TERMINAL PROTOCOLS
 \fBzline\fR natively integrates modern terminal standards:
 .TP

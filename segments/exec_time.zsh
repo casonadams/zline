@@ -66,18 +66,5 @@ zline_segment_exec_time() {
 
   _zline_format_duration "$_zline_last_duration" "${opts[--precision]:-1}"
   _zline_ret_content="$REPLY"
-  _zline_ret_fg="${opts[--color]:-11}"
-  _zline_ret_bg="${opts[--bg]:-3}"
-
-  if [[ "$_zline_style" == "powerline" || "$_zline_style" == "rainbow" ]]; then
-    _zline_ret_fg="${opts[--fg]:-0}"
-  fi
-
-  if [[ -n "${opts[(i)--icon]}" ]]; then
-    _zline_ret_icon="${opts[--icon]}"
-  elif [[ "$_zline_mode" == "ascii" ]]; then
-    _zline_ret_icon="s:"
-  else
-    _zline_ret_icon=$'\uF252 '
-  fi
+  _zline_segment_finish 11 3 0 "s:" $'\uF252 '
 }

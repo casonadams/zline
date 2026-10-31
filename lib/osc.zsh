@@ -12,7 +12,7 @@ _zline_osc_hyperlink() {
     return 0
   fi
 
-  local open_seq=$'\e]8;;'${url}$'\e\\'
+  local open_seq=$'\e]8;;'${url//\%/%%25}$'\e\\'
   local close_seq=$'\e]8;;\e\\'
   REPLY="%{${open_seq}%}${text}%{${close_seq}%}"
 }

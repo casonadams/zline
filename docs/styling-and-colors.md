@@ -69,6 +69,19 @@ zline style powerline --frame full --frame-shape rounded --connect dashed --conn
 
 ---
 
+## Responsive Layout
+
+When the left prompt is wider than the terminal, zline shrinks it in stages until it fits:
+
+1. `dir` shortens ancestors, then collapses to `.../last`.
+2. Git branch names longer than 16 characters are truncated with `…`.
+3. Git status details are dropped (the branch stays).
+4. Remaining segments are dropped lowest-priority first (rightmost first on ties). `dir`, `prompt_char` and `vi_mode` are never dropped; `status` and `git` rank above most others.
+
+The right prompt drops segments from the left and respects `ZLE_RPROMPT_INDENT`. The prompt is re-rendered on terminal resize. Git status loads in the background; cached details stay visible while a refresh is pending, so they can be briefly out of date after a command.
+
+---
+
 ## 4. Font Modes
 
 - **Nerd Fonts v3 (Default)**: Uses official Nerd Font symbols (` `, ``, `❯`).

@@ -48,7 +48,7 @@ zline_segment_battery() {
     return 0
   fi
 
-  _zline_ret_content="${cap}%"
+  _zline_ret_content="${cap}%%"
 
   local -i pct=cap
   local col="${opts[--color]:-10}"
@@ -61,7 +61,7 @@ zline_segment_battery() {
   _zline_ret_fg="$col"
   _zline_ret_bg="${opts[--bg]:-0}"
 
-  if [[ "$_zline_style" == "powerline" || "$_zline_style" == "rainbow" ]]; then
+  if (( _zline_is_pl )); then
     _zline_ret_fg="${opts[--fg]:-15}"
   fi
 

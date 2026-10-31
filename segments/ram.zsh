@@ -68,7 +68,7 @@ zline_segment_ram() {
   _zline_ret_fg="$col"
   _zline_ret_bg="${opts[--bg]:-0}"
 
-  if [[ "$_zline_style" == "powerline" || "$_zline_style" == "rainbow" ]]; then
+  if (( _zline_is_pl )); then
     _zline_ret_fg="${opts[--fg]:-15}"
   fi
 
