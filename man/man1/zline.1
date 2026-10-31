@@ -13,8 +13,8 @@ zline \- fast, modern, and flexible pure-Zsh prompt engine
 .br
 .B zline init
 .SH DESCRIPTION
-\fBzline\fR is an ultra-fast, modern, and flexible pure-Zsh prompt engine designed as a streamlined replacement for Powerlevel10k.
-It delivers sub-millisecond synchronous rendering (< 0.7 ms) with zero subprocess forks on the critical prompt path,
+\fBzline\fR is a fast, modern, and flexible pure-Zsh prompt engine.
+It renders in under 1 ms (typically 0.6\-0.7 ms) with zero subprocess forks on the critical prompt path,
 relying exclusively on native Zsh parameter expansions, built-in modules, and an event-driven architecture.
 .PP
 Heavy background operations (such as full Git working tree status) are computed asynchronously
@@ -311,6 +311,9 @@ lowest-priority segments (rightmost first). \fBdir\fR, \fBprompt_char\fR and \fB
 The right prompt drops segments from the left and honors \fBZLE_RPROMPT_INDENT\fR.
 The prompt is re-rendered on terminal resize. Git status is refreshed asynchronously;
 cached details stay visible while a refresh is pending.
+Segment drop order is controlled by the \fB_zline_segment_priority\fR associative array
+(default 50; 100 or more is never dropped). Set \fB_zline_git_untracked=no\fR before \fBzline init\fR
+to skip untracked file scanning in very large repositories.
 
 .SH MODERN TERMINAL PROTOCOLS
 \fBzline\fR natively integrates modern terminal standards:

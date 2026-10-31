@@ -1,6 +1,6 @@
 # Configuration Syntax
 
-`zline` replaces Powerlevel10k's 1,600 lines of uppercase global variables (`POWERLEVEL9K_*`) with a concise, declarative, composable configuration model based on native Zsh arrays.
+`zline` is configured with concise, declarative, composable native Zsh arrays instead of long lists of global variables.
 
 ---
 

@@ -6,14 +6,14 @@
 
 <p align="center">
   <b>Fast, modern, and flexible pure-Zsh prompt engine.</b><br>
-  A streamlined replacement for Powerlevel10k with zero subshell forks, Base16 palette harmony, and declarative array configuration.
+  Sub-millisecond synchronous rendering, zero subshell forks, Base16 palette harmony, and declarative array configuration.
 </p>
 
 <p align="center">
   <a href="https://github.com/casonadams/zline/actions/workflows/ci.yml"><img src="https://github.com/casonadams/zline/actions/workflows/ci.yml/badge.svg" alt="CI Status" /></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License: MIT" /></a>
   <img src="https://img.shields.io/badge/zsh-5.8%2B-blueviolet.svg" alt="Zsh 5.8+" />
-  <img src="https://img.shields.io/badge/render-%3C%200.7ms-success.svg" alt="Sub-millisecond render" />
+  <img src="https://img.shields.io/badge/render-%3C%201ms-success.svg" alt="Sub-millisecond render" />
   <img src="https://img.shields.io/badge/subshells-0-brightgreen.svg" alt="Zero subshells" />
 </p>
 
@@ -21,9 +21,9 @@
 
 ## Highlights
 
-- ⚡ **Sub-Millisecond Synchronous Rendering**: Renders prompts in under **0.7 ms** with **0 subshell forks** on the critical path.
+- ⚡ **Sub-Millisecond Rendering**: A prompt renders in under **1 ms** (typically 0.6–0.7 ms) with **0 subshell forks** on the critical path.
 - 📦 **100% Pure Zsh**: Zero compiled C++ daemons or binary downloads. Runs anywhere Zsh 5.8+ is installed (macOS, Linux, BSDs, Alpine/musl, Termux).
-- 🧩 **Declarative Array Syntax**: Replaces 1,600 lines of uppercase global environment variables (`POWERLEVEL9K_*`) with concise, composable Zsh arrays.
+- 🧩 **Declarative Array Syntax**: Configure with concise, composable Zsh arrays instead of long lists of global variables.
 - 🎨 **Base16 / Term16 Palette First**: Standardizes on ANSI 0–15 colors, adapting harmoniously to any terminal theme (Catppuccin, Tokyo Night, Gruvbox, Nord, Dracula).
 - 📁 **Smart Path Shortening**: Intermediate directory shortening (`~/s/g/c/zline`), tail shortening (`--last 2`), path aliases, project root anchoring, and custom formatters.
 - 🌿 **Two-Phase Git Status**: Synchronous branch detection in **0.07 ms** + non-blocking background worker with granular per-state icons (`--staged-icon`, `--ahead-icon`).
@@ -96,7 +96,7 @@ List all presets with `zline preset list` or inspect preset code with `zline pre
 
 ## Performance Benchmarks
 
-Measured on macOS (Apple Silicon arm64, Zsh 5.9):
+Measured on macOS (Apple Silicon arm64, Zsh 5.9). Numbers vary a little with machine load:
 
 ```
 ============================================================
@@ -105,13 +105,15 @@ Measured on macOS (Apple Silicon arm64, Zsh 5.9):
 
 Benchmark                        Iterations       Per Op     Target   Status
 -------------------------------- ---------- ------------ ---------- --------
-Sync Prompt Render (Powerline)         1000      0.66 ms  < 1.50 ms     PASS
-Sync Prompt Render (Lean)              1000      0.52 ms  < 1.00 ms     PASS
-Directory Shortening & Anchor          1000      0.10 ms  < 0.15 ms     PASS
-Synchronous Git HEAD Reader            1000     0.072 ms  < 0.15 ms     PASS
+Sync Prompt Render (Powerline)         1000      0.71 ms  < 2.50 ms PASS
+Sync Prompt Render (Lean)              1000      0.62 ms  < 2.00 ms PASS
+Directory Shortening & Anchor          1000      0.11 ms  < 0.40 ms PASS
+Synchronous Git HEAD Reader            1000     0.072 ms  < 0.40 ms PASS
 ============================================================
 ALL BENCHMARKS PASSED!
 ```
+
+Sourcing zline and running `zline init` adds roughly **10 ms** to shell startup (`zsh benchmark/startup.zsh`).
 
 Run benchmarks locally:
 ```zsh

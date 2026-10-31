@@ -80,6 +80,8 @@ When the left prompt is wider than the terminal, zline shrinks it in stages unti
 
 The right prompt drops segments from the left and respects `ZLE_RPROMPT_INDENT`. The prompt is re-rendered on terminal resize. Git status loads in the background; cached details stay visible while a refresh is pending, so they can be briefly out of date after a command.
 
+Segment priorities live in the `_zline_segment_priority` associative array (default `50` for segments not listed; `100` or more is never dropped). Override entries in your `.zshrc`, for example `_zline_segment_priority[exec_time]=95` to keep the duration visible longer.
+
 ---
 
 ## 4. Font Modes

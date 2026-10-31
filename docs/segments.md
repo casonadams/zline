@@ -33,6 +33,8 @@ dir --shorten 1 --alias github.com=gith --anchor git --color 4
 
 Fast, two-phase Git status: instant synchronous branch detection (< 0.1 ms) + non-blocking async dirty checking.
 
+Set `_zline_git_untracked=no` in your `.zshrc` (before `zline init`) to skip scanning untracked files in very large repositories; the untracked count then stays at zero.
+
 ```zsh
 git --clean 2 --dirty 3 --ahead 12
 ```
