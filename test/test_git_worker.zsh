@@ -171,7 +171,7 @@ assert_eq "$(<"$test_err_tmp")" "STDERR_INTACT" "Worker start preserves standard
 rm -f "$test_err_tmp"
 
 _zline_worker_send "git" "$REPO_ROOT"
-_zline_worker_poll
+read -t 3 -u "$_zline_worker_res_fd" -r reply && _zline_worker_apply_reply "$reply"
 assert_eq "$_zline_git_cache_valid" "1" "Worker response received and applied to cache"
 assert_eq "$_zline_git_cache_branch" "main" "Worker reported correct branch name 'main'"
 

@@ -63,6 +63,15 @@ my_custom_formatter() {
 zline_segment_dir --format my_custom_formatter
 assert_eq "$_zline_ret_content" "CUSTOM:${PWD:t}" "Custom formatter overrides path formatting via \$REPLY"
 
+# Home substitution only applies on a path boundary and ignores glob characters in HOME
+typeset saved_home="$HOME"
+HOME="/tmp/zline[home]"
+_zline_tilde_path "/tmp/zline[home]/proj"
+assert_eq "$REPLY" "~/proj" "tilde replaces a HOME containing glob characters"
+_zline_tilde_path "/tmp/zline[home]2/proj"
+assert_eq "$REPLY" "/tmp/zline[home]2/proj" "tilde is not applied to a sibling sharing the HOME prefix"
+HOME="$saved_home"
+
 # 5. Caching and chpwd invalidation
 typeset expected_content
 _zline_dir_format_path "$PWD" 1 1 "git" test_aliases

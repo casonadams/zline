@@ -36,6 +36,14 @@ _zline_find_project_root() {
   return 1
 }
 
+_zline_tilde_path() {
+  local p="$1"
+  if [[ -n "$HOME" && ( "$p" == "$HOME" || "$p" == "$HOME"/* ) ]]; then
+    p="~${p#"$HOME"}"
+  fi
+  REPLY="$p"
+}
+
 _zline_dir_format_path() {
   emulate -L zsh
   local raw="$1"
@@ -52,7 +60,8 @@ _zline_dir_format_path() {
     last_n="${6:-0}"
   fi
 
-  local p="${raw/#$HOME/~}"
+  _zline_tilde_path "$raw"
+  local p="$REPLY"
   if [[ "$p" == "~" || "$p" == "/" || -z "$p" ]]; then
     REPLY="$p"
     return 0
@@ -81,16 +90,14 @@ _zline_dir_format_path() {
   done
 
   local git_rel=""
-  if [[ "$anchor" == "git" ]]; then
-    _zline_find_git_root "$raw" || true
-    if [[ -n "$REPLY" ]]; then
-      git_rel="${REPLY/#$HOME/~}"
-    fi
-  elif [[ "$anchor" == "project" ]]; then
-    _zline_find_project_root "$raw" || true
-    if [[ -n "$REPLY" ]]; then
-      git_rel="${REPLY/#$HOME/~}"
-    fi
+  case "$anchor" in
+    git) _zline_find_git_root "$raw" || true ;;
+    project) _zline_find_project_root "$raw" || true ;;
+    *) REPLY="" ;;
+  esac
+  if [[ -n "$REPLY" ]]; then
+    _zline_tilde_path "$REPLY"
+    git_rel="$REPLY"
   fi
 
   local -a parts=("${(s:/:)p}")

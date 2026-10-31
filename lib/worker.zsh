@@ -9,7 +9,6 @@ typeset -gi _zline_worker_seq=0
 typeset -gi _zline_worker_last_acked=0
 typeset -gi _zline_worker_sent_at=0
 typeset -gi _zline_worker_timeout=5
-typeset -gi _zline_worker_redraw_pending=0
 typeset -g _zline_worker_pending_dir=""
 typeset -g _zline_git_provider="cli"
 
@@ -26,7 +25,7 @@ _zline_worker_git_task() {
   local branch=""
 
   local raw
-  raw=$(git -C "$dir" status --porcelain=v2 --branch 2>/dev/null) || {
+  raw=$(GIT_OPTIONAL_LOCKS=0 git -C "$dir" status --porcelain=v2 --branch 2>/dev/null) || {
     print -r -- "${seq}:git:none:0:0:0:0:0:0:${dir}"
     return 0
   }
@@ -114,7 +113,6 @@ _zline_worker_start() {
 
   if _zline_has_zle; then
     zle -F "$_zline_worker_res_fd" _zline_worker_zle_handler 2>/dev/null
-    autoload -Uz add-zle-hook-widget 2>/dev/null && add-zle-hook-widget line-pre-redraw _zline_worker_redraw_hook 2>/dev/null
   fi
 }
 
@@ -128,7 +126,6 @@ _zline_worker_stop() {
   if (( _zline_worker_res_fd >= 0 )); then
     if _zline_has_zle; then
       zle -F "$_zline_worker_res_fd" 2>/dev/null
-      (( $+functions[add-zle-hook-widget] )) && add-zle-hook-widget -d line-pre-redraw _zline_worker_redraw_hook 2>/dev/null
     fi
     exec {_zline_worker_res_fd}<&-
     _zline_worker_res_fd=-1
@@ -221,38 +218,15 @@ _zline_worker_apply_reply() {
   REPLY=$has_changed
 }
 
-_zline_worker_poll() {
-  (( _zline_worker_res_fd < 0 )) && return 1
-  local reply=""
-  if read -t 0.5 -u "$_zline_worker_res_fd" -r reply 2>/dev/null; then
-    [[ -n "$reply" ]] && _zline_worker_apply_reply "$reply"
-  fi
-}
-
-_zline_worker_redraw() {
-  zline_render
-  zle reset-prompt 2>/dev/null
-}
-
-_zline_worker_redraw_hook() {
-  (( _zline_worker_redraw_pending )) || return 0
-  [[ "$KEYMAP" == (main|viins|vicmd|) ]] || return 0
-  _zline_worker_redraw_pending=0
-  _zline_worker_redraw
-}
-
 _zline_worker_zle_handler() {
   local fd="$1"
   local reply=""
   if read -u "$fd" -r reply; then
     _zline_worker_apply_reply "$reply"
     local -i has_changed=$REPLY
-    zline_hook run async_reply "git"
-    (( has_changed == 1 )) || return 0
-    if [[ "$KEYMAP" == (main|viins|vicmd|) ]]; then
-      _zline_worker_redraw
-    else
-      _zline_worker_redraw_pending=1
+    if (( has_changed == 1 )); then
+      zline_render
+      zle reset-prompt 2>/dev/null
     fi
   fi
 }
