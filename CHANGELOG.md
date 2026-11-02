@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.1.2](https://github.com/casonadams/zline/compare/v0.1.1...v0.1.2) (2026-11-02)
+
+
+### Features
+
+* **bench:** compare render and git status latency against Powerlevel10k ([3851cd0](https://github.com/casonadams/zline/commit/3851cd0930fa503a983ab53a596bf7dda9914809))
+* **presets:** add classic preset with thin separators and framed grey blocks ([0a49773](https://github.com/casonadams/zline/commit/0a497739cb73141287babcb7400e0bf9ec98b648))
+* **presets:** align lean, powerline, rainbow, and pure defaults with p10k profiles ([ce6009c](https://github.com/casonadams/zline/commit/ce6009c3b9a3ac0417c926f3244f859bbc4e7a17))
+* **presets:** remove curated themes, adopt Base16 terminal-adaptive palette model ([bee0dfe](https://github.com/casonadams/zline/commit/bee0dfe61e8919e3e8687d9878db9d8ca5055bf0))
+
+
+### Bug Fixes
+
+* **render:** re-render on resize, escape untrusted prompt text, fit narrow terminals ([b03608d](https://github.com/casonadams/zline/commit/b03608dfc3555a1484b8a2c38394b0f2d6875c5f))
+* **worker:** avoid index lock contention, drop dead code; fix home substitution ([15b4a52](https://github.com/casonadams/zline/commit/15b4a52dbe2adbbe795adab54627e31cc9272983))
+* **worker:** stop in-flight git on restart, make stop errexit-safe, add untracked opt-out ([b0294a6](https://github.com/casonadams/zline/commit/b0294a6dcc5cee56fede0111c35ea01f56bf0ad4))
+
 ## [0.1.1](https://github.com/casonadams/zline/compare/v0.1.0...v0.1.1) (2026-09-30)
 
 
