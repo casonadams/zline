@@ -120,6 +120,21 @@ Run benchmarks locally:
 zsh benchmark/bench.zsh
 ```
 
+Compare against Powerlevel10k (set `P10K_DIR` to a checkout, or clone to `~/powerlevel10k`):
+```zsh
+zsh benchmark/compare.zsh        # per-prompt render cost
+zsh benchmark/git_latency.zsh    # git status latency on a large repo
+```
+
+Background git status latency (synthetic repo, Apple Silicon). Both backends run off the render path; this is how long the git segment takes to update:
+
+| Tracked files | zline worker (`git status`) | gitstatusd (p10k) |
+| ---: | ---: | ---: |
+| 30,000 | 69 ms | 34 ms |
+| 100,000 | 165 ms | 92 ms |
+
+gitstatusd is roughly 2x faster on large repos. zline trades that for zero compiled dependencies; the render itself never waits on it.
+
 Run quality linting and specification verification gates:
 ```zsh
 ./scripts/lint

@@ -110,7 +110,7 @@ You can customize prompt behavior using flags on `zline preset` or `zline style`
 | `zline style <name>` | Configures visual styling flags (`--transient`, `--ascii`, `--no-osc`, `--frame`, `--connect`). |
 | `zline init` | Compiles segment arguments and installs Zsh hooks. |
 | `zline bench [--profile\|--startup] [N]` | Runs prompt latency benchmarks, shell startup benchmarks, or per-segment micro-profiling over `N` iterations. |
-| `zline compare` | Executes comparative benchmark against subshell-based and standard prompt designs. |
+| `zline compare` | Executes comparative benchmark against subshell-based and standard prompt designs, and against Powerlevel10k when found in `$P10K_DIR`, `~/powerlevel10k`, or `~/.powerlevel10k` (requires `script`). |
 | `zline doctor` | Comprehensive health check (shell version, UTF-8 locale, cache directory, valid segments). |
 | `zline configure` | Interactive setup wizard for generating a custom configuration. |
 | `zline migrate <p10k_file>` | Automatically translates Powerlevel10k configurations into idiomatic `zline` syntax. |

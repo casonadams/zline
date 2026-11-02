@@ -74,6 +74,30 @@ if (( $+commands[starship] )); then
   printf "%-32s %10d %10.2f ms %12s\n" "Starship (Rust binary)" 50 "$star_per_ms" "$speedup_star"
 fi
 
+# 6. Powerlevel10k (lean config, gitstatusd) if found; set P10K_DIR to override
+typeset p10k_dir=""
+for p10k_dir in "${P10K_DIR:-}" "$HOME/powerlevel10k" "$HOME/.powerlevel10k"; do
+  [[ -n "$p10k_dir" && -f "$p10k_dir/powerlevel10k.zsh-theme" ]] && break
+  p10k_dir=""
+done
+if [[ -n "$p10k_dir" ]] && (( $+commands[script] )); then
+  typeset p10k_cmd="zsh -fi ${(q)SCRIPT_DIR}/p10k_render.zsh ${(q)p10k_dir} ${(q)PWD} 300"
+  typeset p10k_out
+  if [[ "$OSTYPE" == darwin* || "$OSTYPE" == *bsd* ]]; then
+    p10k_out=$(script -q /dev/null zsh -c "$p10k_cmd" 2>&1 </dev/null)
+  else
+    p10k_out=$(script -qec "$p10k_cmd" /dev/null 2>&1 </dev/null)
+  fi
+  if [[ "$p10k_out" =~ 'P10K_RESULT ([0-9]+) ([0-9.]+)' ]]; then
+    typeset -a p10k_fields=( "${match[1]}" "${match[2]}" )
+    typeset -F p10k_per_ms=${p10k_fields[2]}
+    printf "%-32s %10d %10.3f ms %12s\n" "Powerlevel10k (lean, gitstatusd)" "${p10k_fields[1]}" "$p10k_per_ms" "$(printf '%.0fx faster' "$(( subshell_per_ms / p10k_per_ms ))")"
+    printf "%-32s %10s %10.2fx %12s\n" "  zline Lean vs p10k" "" "$(( p10k_per_ms / lean_per_ms ))" "(p10k / zline)"
+  else
+    print -P "%F{11}p10k found at ${p10k_dir} but benchmark produced no result (needs a pty).%f"
+  fi
+fi
+
 print -P "\n%F{14}%B================================================================%b%f"
 print -P "%F{10}%Bzline delivers sub-millisecond rendering with zero subprocess forks.%b%f"
 print -P "%F{14}%B================================================================%b%f"
