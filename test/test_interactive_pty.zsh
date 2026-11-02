@@ -36,6 +36,7 @@ print -r -- "ref: refs/heads/main" > "${tmp_dir}/repo/.git/HEAD"
 typeset log="${tmp_dir}/render.log"
 typeset staged="${tmp_dir}/staged"
 print 1 > "$staged"
+print -r -- "unsetopt GLOBAL_RCS" > "${tmp_dir}/.zshenv"
 
 cat > "${tmp_dir}/.zshrc" <<EOF
 PS1='> '
