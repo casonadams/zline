@@ -102,6 +102,7 @@ zline() {
           local desc="Custom preset"
           case "$name" in
             powerline) desc="Classic background blocks joined by Powerline arrows" ;;
+            classic) desc="Grey blocks with thin separators and a ╭─ ╰─ frame (p10k classic)" ;;
             lean) desc="Modern, flat, space-separated layout" ;;
             rainbow) desc="Vivid high-contrast colored blocks" ;;
             pure) desc="Minimalist two-line layout" ;;
@@ -124,6 +125,8 @@ zline() {
       local theme_file="${ZLINE_DIR}/themes/${preset_name}.zsh"
       if [[ -r "$theme_file" ]]; then
         _zline_connect_char=""
+        _zline_frame=""
+        _zline_sep_soft_color=""
         source "$theme_file"
       else
         print -u2 -r -- "zline: unknown preset: $preset_name"

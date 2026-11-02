@@ -86,6 +86,7 @@ zline init
 | Preset | Description | Command |
 | :--- | :--- | :--- |
 | **Powerline** | Multi-colored background blocks with Powerline arrow glyphs (``, ``) | `zline preset powerline` |
+| **Classic** | Uniform grey blocks with thin separators and a `╭─` / `╰─` frame, like p10k classic | `zline preset classic` |
 | **Lean** | Modern, flat, space-separated layout with crisp foreground colors | `zline preset lean` |
 | **Rainbow** | High-contrast vivid blocks for rapid visual parsing | `zline preset rainbow` |
 | **Pure** | Minimalist two-line prompt inspired by Sindre Sorhus's Pure prompt | `zline preset pure` |

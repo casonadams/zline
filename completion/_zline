@@ -19,6 +19,7 @@ _zline() {
 
   local -a presets=(
     'powerline:Classic background blocks with Powerline arrow glyphs'
+    'classic:Grey blocks with thin separators and a frame (p10k classic)'
     'lean:Modern, flat, space-separated layout'
     'rainbow:High-contrast vivid color blocks'
     'pure:Minimalist two-line prompt'
@@ -66,7 +67,7 @@ _zline() {
           ;;
         style)
           _arguments \
-            '1:style:(powerline lean rainbow pure)' \
+            '1:style:(powerline classic lean rainbow pure)' \
             '--transient[Enable transient prompt]' \
             '--transient-dir[Enable transient prompt retaining directory]' \
             '--no-transient[Disable transient prompt]' \
@@ -98,7 +99,7 @@ _zline() {
           ;;
         configure)
           _arguments \
-            '--style[Set preset style]:style:(powerline lean rainbow pure)' \
+            '--style[Set preset style]:style:(powerline classic lean rainbow pure)' \
             '--shorten[Set path shortening level]:level:(0 1 2)' \
             '--anchor[Set Git anchor]:anchor:(git none)' \
             '--transient[Enable transient prompt]' \

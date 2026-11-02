@@ -104,7 +104,7 @@ You can customize prompt behavior using flags on `zline preset` or `zline style`
 
 | Command | Description |
 | :--- | :--- |
-| `zline preset <name>` | Loads a built-in layout preset (`powerline`, `lean`, `rainbow`, `pure`). |
+| `zline preset <name>` | Loads a built-in layout preset (`powerline`, `classic`, `lean`, `rainbow`, `pure`). |
 | `zline preset list` | Displays all available layout presets. |
 | `zline preset show <name>` | Dumps the full source definition of a preset. |
 | `zline style <name>` | Configures visual styling flags (`--transient`, `--ascii`, `--no-osc`, `--frame`, `--connect`). |

@@ -115,6 +115,7 @@ typeset -g _zline_connect_char=""
 typeset -g _zline_connect_color="8"
 typeset -gi _zline_rprompt_line=1
 typeset -g _zline_frame_shape="rounded"
+typeset -g _zline_sep_soft_color=""
 
 _zline_visual_len() {
   local s="$1"
@@ -341,11 +342,17 @@ _zline_render_left_segment_powerline() {
   if [[ "$last_bg" != "none" ]]; then
     local sep_fg=""
     local sep_bg=""
-    _zline_fg "$last_bg"
+    local sep_glyph="${_zline_sep_left}"
+    if [[ "$last_bg" == "$bg" ]]; then
+      _zline_fg "${_zline_sep_soft_color:-${fg:-7}}"
+      sep_glyph="${_zline_sep_left_soft}"
+    else
+      _zline_fg "$last_bg"
+    fi
     sep_fg="$REPLY"
     _zline_bg "$bg"
     sep_bg="$REPLY"
-    out+="${sep_bg}${sep_fg}${_zline_sep_left}%f"
+    out+="${sep_bg}${sep_fg}${sep_glyph}%f"
   fi
 
   out+="${bg_code}${fg_code} "
@@ -498,7 +505,13 @@ _zline_render_right_segment_powerline() {
   _zline_bg "${bg:-0}"
   bg_code="$REPLY"
 
-  _zline_fg "$bg"
+  local sep_glyph="${_zline_sep_right}"
+  if [[ "$last_bg" == "$bg" ]]; then
+    _zline_fg "${_zline_sep_soft_color:-${fg:-7}}"
+    sep_glyph="${_zline_sep_right_soft}"
+  else
+    _zline_fg "$bg"
+  fi
   sep_fg="$REPLY"
   if [[ "$last_bg" == "none" ]]; then
     sep_bg="%k"
@@ -507,7 +520,7 @@ _zline_render_right_segment_powerline() {
     sep_bg="$REPLY"
   fi
 
-  out+="${sep_bg}${sep_fg}${_zline_sep_right}%f"
+  out+="${sep_bg}${sep_fg}${sep_glyph}%f"
   out+="${bg_code}${fg_code} "
   [[ -n "$icon" ]] && out+="${icon} "
   out+="${content} %f"

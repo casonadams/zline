@@ -27,7 +27,7 @@ The built-in presets follow the layout of the profiles offered by `p10k configur
 | p10k profile | `zline` preset | Notes |
 | :--- | :--- | :--- |
 | lean | `lean` | Same left layout; right side shows `status`, `exec_time` (3 s), `jobs`, `direnv`, `venv` |
-| classic | `powerline` | Same segments as `lean` on colored blocks; no grey `╭─`/`╰─` frame by default (use `--frame`) |
+| classic | `classic` | Grey Base16 blocks (color 8), thin sub-separators, `╭─`/`╰─` frame with connecting line; segments as in `lean`. `powerline` is the colored-block variant |
 | rainbow | `rainbow` | Per-segment block colors, same right-side segments as `lean` |
 | pure | `pure` | `user_host` (SSH/root only), `dir`, `git`, `exec_time` (5 s) on line 1; `venv` and prompt char on line 2 |
 

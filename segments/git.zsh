@@ -236,7 +236,8 @@ zline_segment_git() {
 
   if (( _zline_is_pl )); then
     _zline_ret_bg="${opts[--bg]:-${status_col}}"
-    _zline_ret_fg="${opts[--fg]:-0}"
+    _zline_ret_fg="${opts[--fg]:-${opts[--bg]:+${status_col}}}"
+    _zline_ret_fg="${_zline_ret_fg:-0}"
   else
     _zline_ret_fg="${opts[--color]:-${status_col}}"
     _zline_ret_bg="none"
