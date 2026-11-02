@@ -78,6 +78,7 @@ zpty -w zl 'print -r -- "W=${widgets[zle-line-finish]}"'
 typeset -i widget_ok=0
 pty_wait out "*W=user:_zline_transient_line_finish*" 10 && widget_ok=1
 assert_eq "$widget_ok" "1" "transient prompt widget is installed in the line editor"
+(( widget_ok )) || print -r -- "  pty output: ${(V)pty_out[-1500,-1]}"$'\n'"  render log: ${(V)$(<"$log")[-800,-1]}"
 
 # 2. A resize at the idle prompt re-renders inside the line editor with the new width
 : > "$log"
