@@ -9,5 +9,8 @@ zline_left=(
 
 zline_right=(
   'status --hide-zero'
-  'exec_time --min 2'
+  'exec_time --min 3'
+  jobs
+  direnv
+  venv
 )

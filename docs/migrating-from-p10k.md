@@ -20,6 +20,21 @@ Migrating from Powerlevel10k to `zline` replaces up to 1,600 lines of `~/.p10k.z
 
 ---
 
+## Default Profile Alignment
+
+The built-in presets follow the layout of the profiles offered by `p10k configure`. Colors are intentionally Base16 (ANSI 0-15) instead of p10k's 256-color values, so they follow your terminal theme.
+
+| p10k profile | `zline` preset | Notes |
+| :--- | :--- | :--- |
+| lean | `lean` | Same left layout; right side shows `status`, `exec_time` (3 s), `jobs`, `direnv`, `venv` |
+| classic | `powerline` | Same segments as `lean` on colored blocks; no grey `╭─`/`╰─` frame by default (use `--frame`) |
+| rainbow | `rainbow` | Per-segment block colors, same right-side segments as `lean` |
+| pure | `pure` | `user_host` (SSH/root only), `dir`, `git`, `exec_time` (5 s) on line 1; `venv` and prompt char on line 2 |
+
+p10k enables many more right-side segments by default (`asdf`, `nvm`, `kubecontext`, `aws`, `terraform`, ...). Add them to `zline_right` as needed.
+
+---
+
 ## Translating Your Configuration
 
 ### In Powerlevel10k:

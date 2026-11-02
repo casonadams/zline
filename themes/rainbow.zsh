@@ -8,7 +8,9 @@ zline_left=(
 )
 
 zline_right=(
-  'venv --bg 5 --fg 15'
   'status --hide-zero --bg 1 --fg 15'
-  'exec_time --min 2 --bg 3 --fg 0'
+  'exec_time --min 3 --bg 3 --fg 0'
+  jobs
+  direnv
+  'venv --bg 5 --fg 15'
 )
