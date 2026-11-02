@@ -22,8 +22,7 @@ Describe 'zline extended segments & compilation'
   Describe 'frame connectors'
     It 'renders top and bottom frame glyphs'
       _test_frame() {
-        _zline_frame="left"
-        zline preset powerline --no-osc
+        zline preset powerline --no-osc --frame left
         zline init
         _zline_hooks_uninstall
         _zline_frame="none"
